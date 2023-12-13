@@ -1,0 +1,41 @@
+{
+  "theme_color": "#6d28d9",
+  "background_color": "#18181b",
+  "display": "fullscreen",
+  "scope": "/",
+  "start_url": "/",
+  "name": "ChordSeqAI",
+  "short_name": "ChordSeqAI",
+  "description": "Compose beautiful chord progressions in your browser, with the help of AI, for free. Open-source project, code available on GitHub.",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot.jpg",
+      "sizes": "1920x879",
+      "type": "image/gif",
+      "form_factor": "wide",
+      "label": "ChordSeqAI App"
+    }
+  ]
+}

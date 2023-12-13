@@ -25,3 +25,25 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+/* For decay factor slider */
+.range-slider::-webkit-slider-thumb {
+  background: #5b21b6;
+  border: none;
+}
+
+.range-slider::-moz-range-thumb {
+  background: #5b21b6;
+  border: none;
+  height: 100%;
+}
+
+/* For search bar label */
+.visually-hidden {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
