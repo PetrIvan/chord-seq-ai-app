@@ -3,7 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useStore } from "@/state/use_store";
 
 import { predict } from "@/models/models";
-import { detokenize } from "@/models/utils";
+import { tokenToChord } from "@/data/token_to_chord";
+import { chordToNotes } from "@/data/chord_to_notes";
 
 import { shallow } from "zustand/shallow";
 import { isEqual } from "lodash";
@@ -11,17 +12,32 @@ import { playChord } from "@/playback/player";
 
 import SearchBar from "./search_bar";
 import Decay from "./decay";
+import Chord from "./chord";
 
 interface Props {
-  chords: [number, number, number][];
-  replaceChord: (chord: number) => void;
+  chords: {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[];
+  replaceChord: (token: number, variant: number) => void;
   selectedChord: number;
   modelPath: string;
   selectedGenres: number[];
   selectedDecades: number[];
   decayFactor: number;
   searchQuery: string;
+  searchNotes: number[];
   enabledShortcuts: boolean;
+  suggestionsIncludeVariants: boolean;
+  setVariantsOpen: (open: boolean) => void;
+  setSelectedToken: (token: number) => void;
+  setSelectedVariant: (variant: number) => void;
+  setIsVariantsOpenFromSuggestions: (
+    isVariantsOpenFromSuggestions: boolean
+  ) => void;
+  defaultVariants: number[];
 }
 
 // This logic is quite complex, but given that the rerendering
@@ -33,25 +49,43 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
   }
 
   // Short-circuit when we change from unknown to known chord (or vice versa)
-  const prevUnknown = prevProps.chords[prevProps.selectedChord][1] === -1;
-  const newUnknown = newProps.chords[newProps.selectedChord][1] === -1;
+  const prevUnknown = prevProps.chords[prevProps.selectedChord].token === -1;
+  const newUnknown = newProps.chords[newProps.selectedChord].token === -1;
   if ((prevUnknown && !newUnknown) || (!prevUnknown && newUnknown)) {
+    return false;
+  }
+
+  // Compare generic props
+  if (
+    prevProps.modelPath !== newProps.modelPath ||
+    prevProps.decayFactor !== newProps.decayFactor ||
+    prevProps.searchQuery !== newProps.searchQuery ||
+    prevProps.enabledShortcuts !== newProps.enabledShortcuts ||
+    prevProps.suggestionsIncludeVariants !== newProps.suggestionsIncludeVariants
+  ) {
     return false;
   }
 
   // Compare the data the model actually uses (only up to selectedChord; empty chords (those denoted
   // by "?" i.e. token === -1) are not considered; consequent chords are collapsed; duration is not used)
-  function collapseChords(chords: [number, number, number][]) {
+  function collapseChords(
+    chords: {
+      index: number;
+      token: number;
+      duration: number;
+      variant: number;
+    }[]
+  ) {
     const collapsedChords: number[] = [];
     for (let i = 0; i < chords.length; i++) {
       // Skip empty chords or repeated chords
       if (
-        chords[i][1] === collapsedChords[collapsedChords.length - 1] ||
-        chords[i][1] === -1
+        chords[i].token === collapsedChords[collapsedChords.length - 1] ||
+        chords[i].token === -1
       )
         continue;
 
-      collapsedChords.push(chords[i][1]);
+      collapsedChords.push(chords[i].token);
     }
     return collapsedChords;
   }
@@ -66,12 +100,10 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
   // Compare final the states
   return (
     isEqual(prevChords, newChords) &&
-    prevProps.modelPath === newProps.modelPath &&
     isEqual(prevProps.selectedGenres, newProps.selectedGenres) &&
     isEqual(prevProps.selectedDecades, newProps.selectedDecades) &&
-    prevProps.decayFactor === newProps.decayFactor &&
-    prevProps.searchQuery === newProps.searchQuery &&
-    prevProps.enabledShortcuts === newProps.enabledShortcuts
+    isEqual(prevProps.searchNotes, newProps.searchNotes) &&
+    isEqual(prevProps.defaultVariants, newProps.defaultVariants)
   );
 }
 
@@ -86,7 +118,14 @@ export default function Suggestions() {
     selectedDecades,
     decayFactor,
     searchQuery,
+    searchNotes,
     enabledShortcuts,
+    suggestionsIncludeVariants,
+    setVariantsOpen,
+    setSelectedToken,
+    setSelectedVariant,
+    setIsVariantsOpenFromSuggestions,
+    defaultVariants,
   ] = useStore(
     (state) => [
       state.chords,
@@ -97,7 +136,14 @@ export default function Suggestions() {
       state.selectedDecades,
       state.decayFactor,
       state.searchQuery,
+      state.searchNotes,
       state.enabledShortcuts,
+      state.includeVariants,
+      state.setVariantsOpen,
+      state.setSelectedToken,
+      state.setSelectedVariant,
+      state.setIsVariantsOpenFromSuggestions,
+      state.defaultVariants,
     ],
     shallow
   );
@@ -112,7 +158,14 @@ export default function Suggestions() {
       selectedDecades={selectedDecades}
       decayFactor={decayFactor}
       searchQuery={searchQuery}
+      searchNotes={searchNotes}
       enabledShortcuts={enabledShortcuts}
+      suggestionsIncludeVariants={suggestionsIncludeVariants}
+      setVariantsOpen={setVariantsOpen}
+      setSelectedToken={setSelectedToken}
+      setSelectedVariant={setSelectedVariant}
+      setIsVariantsOpenFromSuggestions={setIsVariantsOpenFromSuggestions}
+      defaultVariants={defaultVariants}
     />
   );
 }
@@ -126,7 +179,14 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   selectedDecades,
   decayFactor,
   searchQuery,
+  searchNotes,
   enabledShortcuts,
+  suggestionsIncludeVariants,
+  setVariantsOpen,
+  setSelectedToken,
+  setSelectedVariant,
+  setIsVariantsOpenFromSuggestions,
+  defaultVariants,
 }: Props) {
   /* Prediction states */
   const [chordProbsLoading, setChordProbsLoading] = useState(false);
@@ -216,7 +276,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         number - 1 < chordProbsRef.current.length &&
         !chordProbsLoadingRef.current
       ) {
-        replaceChord(chordProbsRef.current[number - 1].token);
+        replaceChord(chordProbsRef.current[number - 1].token, 0);
       }
     }
   }
@@ -230,16 +290,6 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }, []);
 
   /* Rendering */
-  // Interpolate between violet and black
-  const color = (t: number) => {
-    const violet = [139, 92, 246];
-    const black = [0, 0, 0];
-    const r = violet[0] * (1 - t) + black[0] * t;
-    const g = violet[1] * (1 - t) + black[1] * t;
-    const b = violet[2] * (1 - t) + black[2] * t;
-    return `rgb(${r}, ${g}, ${b})`;
-  };
-
   // Render the suggestions
   function getChordsList() {
     let chordsList = [];
@@ -247,33 +297,54 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
       let { token, prob } = chordProbs[i];
 
       // Filter out chords that don't match the search query
-      if (
-        !detokenize(token).toLowerCase().includes(searchQuery.toLowerCase())
-      ) {
-        continue;
+      let variant = 0;
+      if (suggestionsIncludeVariants) {
+        let anyMatch = false;
+        for (let j = 0; j < tokenToChord[token].length; j++) {
+          if (
+            tokenToChord[token][j]
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase())
+          ) {
+            anyMatch = true;
+            variant = j;
+            break;
+          }
+        }
+        if (!anyMatch) continue;
+      } else {
+        variant = defaultVariants[token];
+        if (
+          !tokenToChord[token][variant]
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+        )
+          continue;
+      }
+
+      // Filter out chords that don't contain the search notes
+      if (searchNotes.length > 0) {
+        const notes = chordToNotes[tokenToChord[token][variant]].map(
+          (note) => note % 12
+        );
+        if (!searchNotes.every((note) => notes.includes(note % 12))) continue;
       }
 
       chordsList.push(
-        <button
-          className="flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw]"
-          style={{
-            // Interpolate between violet and black logarithmically
-            backgroundColor: color(
-              1 - (Math.log(prob) + decayFactor) / decayFactor
-            ),
-            minHeight: "5dvw",
-          }}
-          key={i}
-          title={`Replace selected with ${detokenize(token)} (${(
-            prob * 100
-          ).toFixed(2)}%)`}
-          onClick={() => {
-            playChord(detokenize(token));
-            replaceChord(token);
-          }}
-        >
-          {detokenize(token)}
-        </button>
+        <Chord
+          key={token}
+          index={i}
+          token={token}
+          variant={variant}
+          prob={prob}
+          decayFactor={decayFactor}
+          playChord={playChord}
+          replaceChord={replaceChord}
+          setSelectedToken={setSelectedToken}
+          setSelectedVariant={setSelectedVariant}
+          setVariantsOpen={setVariantsOpen}
+          setIsVariantsOpenFromSuggestions={setIsVariantsOpenFromSuggestions}
+        />
       );
     }
     return chordsList;

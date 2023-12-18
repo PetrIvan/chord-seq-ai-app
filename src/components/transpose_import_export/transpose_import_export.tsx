@@ -15,15 +15,17 @@ import TransposeDropdown from "./transpose_dropdown";
 import ExportDropdown from "./export_dropdown";
 
 export default function TransposeImportExport() {
-  const [chords, setChords, signature, setSignature] = useStore(
-    (state) => [
-      state.chords,
-      state.setChords,
-      state.signature,
-      state.setSignature,
-    ],
-    shallow
-  );
+  const [chords, setChords, signature, setSignature, setSelectedChord] =
+    useStore(
+      (state) => [
+        state.chords,
+        state.setChords,
+        state.signature,
+        state.setSignature,
+        state.setSelectedChord,
+      ],
+      shallow
+    );
 
   /* Transposition */
   function transposeChords(delta: number) {
@@ -32,10 +34,10 @@ export default function TransposeImportExport() {
     delta %= 12;
 
     const newChords = chords.map((chord) => {
-      if (chord[1] === -1) return chord;
+      if (chord.token === -1) return chord;
 
       let newChord = cloneDeep(chord);
-      newChord[1] = transpositionMap[chord[1]][delta];
+      newChord.token = transpositionMap[chord.token][delta];
       return newChord;
     });
 
@@ -92,8 +94,49 @@ export default function TransposeImportExport() {
           const importedChords = data.chords;
           const importedSignature = data.signature;
 
-          setChords(importedChords);
-          setSignature(importedSignature);
+          // Assert that the imported chords are valid
+          if (
+            !Array.isArray(importedChords) ||
+            importedChords.some(
+              (chord: any) =>
+                typeof chord.index !== "number" ||
+                typeof chord.token !== "number" ||
+                typeof chord.duration !== "number" ||
+                typeof chord.variant !== "number"
+            )
+          ) {
+            throw new Error();
+          }
+
+          for (let i = 0; i < importedChords.length; i++) {
+            if (
+              importedChords[i].index !== i ||
+              importedChords[i].token > transpositionMap.length ||
+              importedChords[i].token < -1 ||
+              importedChords[i].duration < 0 ||
+              importedChords[i].variant < 0
+            ) {
+              throw new Error();
+            }
+          }
+
+          // Assert that the imported signature is valid
+          if (
+            !Array.isArray(importedSignature) ||
+            importedSignature.length !== 2 ||
+            typeof importedSignature[0] !== "number" ||
+            typeof importedSignature[1] !== "number" ||
+            importedSignature[0] < 2 ||
+            importedSignature[0] > 16 ||
+            importedSignature[1] < 1 ||
+            importedSignature[1] > 32
+          ) {
+            throw new Error();
+          }
+
+          setSelectedChord(-1);
+          setChords(importedChords as typeof chords);
+          setSignature(importedSignature as typeof signature);
         } catch (error) {
           setChords(prevChords);
           setSignature(prevSignature);

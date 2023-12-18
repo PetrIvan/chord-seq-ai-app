@@ -1,6 +1,6 @@
 import * as Tone from "tone";
 import { chordToNotes } from "@/data/chord_to_notes";
-import { detokenize } from "@/models/utils";
+import { tokenToChord } from "@/data/token_to_chord";
 
 let synth: Tone.Sampler;
 let metronomeSynth: Tone.Sampler;
@@ -51,6 +51,24 @@ function MIDIsToFreq(midi: number[]) {
   return midi.map((note) => MIDIToFreq(note));
 }
 
+export function playNotes(notes: number[]) {
+  if (playing) return;
+
+  // Limit the number of calls to triggerAttackRelease
+  if (lastStartPlaying + 100 > Date.now()) return;
+  lastStartPlaying = Date.now();
+
+  notes = MIDIsToFreq(notes);
+
+  Tone.loaded().then(() => {
+    const now = Tone.now();
+    notes.forEach((note) => {
+      synth.triggerAttack(note, now);
+    });
+    synth.triggerRelease(notes, now + 0.5);
+  });
+}
+
 export function playChord(chord: string) {
   if (chord === "?" || playing) return;
 
@@ -70,7 +88,7 @@ export function playChord(chord: string) {
 }
 
 export function playSequence(
-  chords: [number, number, number][],
+  chords: { index: number; token: number; duration: number; variant: number }[],
   playheadPosition: number,
   setPlayheadPosition: (position: number) => void,
   setPlaying: (playing: boolean) => void,
@@ -80,19 +98,21 @@ export function playSequence(
   timeNoteDuration = [];
   let totalTime = 0;
   for (const chord of chords) {
-    const duration = chord[2] / (bpm / 60); // Duration in seconds
+    const duration = chord.duration / (bpm / 60); // Duration in seconds
 
-    if (chord[1] === -1) {
+    if (chord.token === -1) {
       totalTime += duration;
       continue;
     }
 
-    const notes = MIDIsToFreq(chordToNotes[detokenize(chord[1])]);
+    const freqs = MIDIsToFreq(
+      chordToNotes[tokenToChord[chord.token][chord.variant]]
+    );
 
-    for (const note of notes) {
+    for (const freq of freqs) {
       timeNoteDuration.push({
         time: totalTime,
-        note: note,
+        note: freq,
         duration: duration,
       });
     }

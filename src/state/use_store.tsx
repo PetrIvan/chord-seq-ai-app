@@ -6,6 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import isEqual from "lodash/isEqual";
 
 import { genres, decades } from "@/data/conditions";
+import { tokenToChord } from "@/data/token_to_chord";
 
 const deepCompareUpdate = (partial: any, state: any) => {
   if (partial.chords && isEqual(partial.chords, state.chords)) {
@@ -16,23 +17,33 @@ const deepCompareUpdate = (partial: any, state: any) => {
 };
 
 interface Data {
-  chords: [number, number, number][];
+  chords: { index: number; token: number; duration: number; variant: number }[];
   signature: [number, number];
   selected: number;
 }
 
 interface StoreState {
   // Chords
-  chords: [number, number, number][]; // [index, chord, duration]
+  chords: { index: number; token: number; duration: number; variant: number }[];
   setChords: (
-    state: [number, number, number][],
+    state: {
+      index: number;
+      token: number;
+      duration: number;
+      variant: number;
+    }[],
     ignoreStateWindow?: boolean
   ) => void;
   selectedChord: number; // Index of the selected chord
   setSelectedChord: (state: number, ignoreStateWindow?: boolean) => void;
-  addChord: () => [number, number, number][];
+  addChord: () => {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[];
   deleteChord: () => void;
-  replaceChord: (chord: number) => void;
+  replaceChord: (token: number, variant: number) => void;
 
   // Timeline
   resizingChord: boolean; // Whether the user is resizing any chord
@@ -76,6 +87,27 @@ interface StoreState {
   setDecayFactor: (decay: number) => void;
   searchQuery: string;
   setSearchQuery: (searchQuery: string) => void;
+  searchNotes: number[];
+  setSearchNotes: (searchNotes: number[]) => void;
+  includeVariants: boolean;
+  setIncludeVariants: (includeVariants: boolean) => void;
+
+  // Variants
+  variantsOpen: boolean;
+  setVariantsOpen: (variantsOpen: boolean) => void;
+  isVariantsOpenFromSuggestions: boolean;
+  setIsVariantsOpenFromSuggestions: (
+    isVariantsOpenFromSuggestions: boolean
+  ) => void;
+  selectedVariant: number;
+  setSelectedVariant: (variant: number) => void;
+  selectedToken: number;
+  setSelectedToken: (token: number) => void;
+  selectedChordVariants: number;
+  setSelectedChordVariants: (chord: number) => void;
+  defaultVariants: number[];
+  setDefaultVariants: (defaultVariants: number[]) => void;
+  replaceDefaultVariant: (token: number, defaultVariant: number) => void;
 }
 
 export const useStore = createWithEqualityFn<StoreState>()(
@@ -84,7 +116,12 @@ export const useStore = createWithEqualityFn<StoreState>()(
       // Chords
       chords: [],
       setChords: (
-        chords: [number, number, number][],
+        chords: {
+          index: number;
+          token: number;
+          duration: number;
+          variant: number;
+        }[],
         ignoreStateWindow?: boolean
       ) => {
         set((state) => deepCompareUpdate({ chords }, state));
@@ -103,22 +140,24 @@ export const useStore = createWithEqualityFn<StoreState>()(
 
         if (get().selectedChord === -1) {
           // Append to the end
-          chords.push([
-            chords.length,
-            -1,
-            (get().signature[0] / get().signature[1]) * 4,
-          ]);
+          chords.push({
+            index: chords.length,
+            token: -1,
+            duration: (get().signature[0] / get().signature[1]) * 4,
+            variant: 0,
+          });
         } else {
           // Insert at the selected index
-          chords.splice(get().selectedChord + 1, 0, [
-            get().selectedChord + 1,
-            -1,
-            (get().signature[0] / get().signature[1]) * 4,
-          ]);
+          chords.splice(get().selectedChord + 1, 0, {
+            index: get().selectedChord + 1,
+            token: -1,
+            duration: (get().signature[0] / get().signature[1]) * 4,
+            variant: 0,
+          });
 
           // Reindex
           for (let i = 0; i < chords.length; i++) {
-            chords[i][0] = i;
+            chords[i].index = i;
           }
         }
 
@@ -130,11 +169,11 @@ export const useStore = createWithEqualityFn<StoreState>()(
         // Delete the selected chord
         let chords = cloneDeep(get().chords);
 
-        chords = chords.filter((chord) => chord[0] !== get().selectedChord);
+        chords = chords.filter((chord) => chord.index !== get().selectedChord);
 
         // Reindex
         for (let i = 0; i < chords.length; i++) {
-          chords[i][0] = i;
+          chords[i].index = i;
         }
 
         if (get().selectedChord > chords.length - 1) {
@@ -142,11 +181,12 @@ export const useStore = createWithEqualityFn<StoreState>()(
         }
         get().setChords(chords);
       },
-      replaceChord: (chord: number) => {
+      replaceChord: (token: number, variant: number) => {
         // Used in suggestions
         if (get().selectedChord === -1) return;
         let chords = cloneDeep(get().chords);
-        chords[get().selectedChord][1] = chord;
+        chords[get().selectedChord].token = token;
+        chords[get().selectedChord].variant = variant;
         get().setChords(chords);
       },
 
@@ -243,10 +283,41 @@ export const useStore = createWithEqualityFn<StoreState>()(
       enabledShortcuts: true,
       setEnabledShortcuts: (enabledShortcuts: boolean) =>
         set({ enabledShortcuts }),
-      decayFactor: 6,
+      decayFactor: 6, // Middle of the slider (3-9)
       setDecayFactor: (decayFactor: number) => set({ decayFactor }),
       searchQuery: "",
       setSearchQuery: (searchQuery: string) => set({ searchQuery }),
+      searchNotes: [],
+      setSearchNotes: (searchNotes: number[]) => set({ searchNotes }),
+      includeVariants: false,
+      setIncludeVariants: (includeVariants: boolean) =>
+        set({ includeVariants }),
+
+      // Variants
+      variantsOpen: false,
+      setVariantsOpen: (variantsOpen: boolean) => set({ variantsOpen }),
+      isVariantsOpenFromSuggestions: false,
+      setIsVariantsOpenFromSuggestions: (
+        isVariantsOpenFromSuggestions: boolean
+      ) => set({ isVariantsOpenFromSuggestions }),
+      selectedVariant: 0,
+      setSelectedVariant: (selectedVariant: number) => set({ selectedVariant }),
+      selectedToken: -1,
+      setSelectedToken: (selectedToken: number) => set({ selectedToken }),
+      selectedChordVariants: -1,
+      setSelectedChordVariants: (selectedChordVariants: number) =>
+        set({ selectedChordVariants }),
+      defaultVariants: Array.from(
+        { length: Object.keys(tokenToChord).length },
+        (value, key) => 0
+      ),
+      setDefaultVariants: (defaultVariants: number[]) =>
+        set({ defaultVariants }),
+      replaceDefaultVariant: (token: number, defaultVariant: number) => {
+        let defaultVariants = cloneDeep(get().defaultVariants);
+        defaultVariants[token] = defaultVariant;
+        get().setDefaultVariants(defaultVariants);
+      },
     }),
     {
       // Saving
@@ -258,6 +329,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         selectedGenres: state.selectedGenres,
         selectedDecades: state.selectedDecades,
         bpm: state.bpm,
+        defaultVariants: state.defaultVariants,
       }),
     }
   )

@@ -3,16 +3,17 @@ import React, { useState, useEffect, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
-import { detokenize } from "@/models/utils";
+import { tokenToChord } from "@/data/token_to_chord";
 import { playChord } from "@/playback/player";
 
 interface Props {
+  index: number;
   token: number;
   duration: number;
-  id: number;
+  variant: number;
 }
 
-export default function Chord({ token, duration, id }: Props) {
+export default function Chord({ index, token, duration, variant }: Props) {
   const [
     chords,
     setChords,
@@ -22,6 +23,11 @@ export default function Chord({ token, duration, id }: Props) {
     zoom,
     resizingAnyChord,
     setResizingChord,
+    setVariantsOpen,
+    setSelectedToken,
+    setSelectedVariant,
+    setSelectedChordVariants,
+    setIsVariantsOpenFromSuggestions,
   ] = useStore(
     (state) => [
       state.chords,
@@ -32,6 +38,11 @@ export default function Chord({ token, duration, id }: Props) {
       state.zoom,
       state.resizingChord,
       state.setResizingChord,
+      state.setVariantsOpen,
+      state.setSelectedToken,
+      state.setSelectedVariant,
+      state.setSelectedChordVariants,
+      state.setIsVariantsOpenFromSuggestions,
     ],
     shallow
   );
@@ -110,8 +121,17 @@ export default function Chord({ token, duration, id }: Props) {
       );
 
       const newChords = [...chordsRef.current];
-      const [_, prevSymbol, prevDuration] = newChords[id];
-      newChords[id] = [id, prevSymbol, newDuration];
+      const {
+        token: prevToken,
+        duration: prevDuration,
+        variant: prevVariant,
+      } = newChords[index];
+      newChords[index] = {
+        index: index,
+        token: prevToken,
+        duration: newDuration,
+        variant: prevVariant,
+      };
 
       if (newDuration !== prevDuration) {
         setChords(newChords);
@@ -163,20 +183,57 @@ export default function Chord({ token, duration, id }: Props) {
     (duration * 100 * zoom * denominator) / 4 / numerator - chordPadding * 2;
 
   function changeSelected() {
-    playChord(detokenize(token));
-    if (selectedChord === id) setSelectedChord(-1);
-    else setSelectedChord(id);
+    if (token !== -1) playChord(tokenToChord[token][variant]);
+    if (selectedChord === index) setSelectedChord(-1);
+    else setSelectedChord(index);
   }
+
+  /* Variants */
+  // Open variants on right click
+  const tokenRef = useRef(token);
+  const variantRef = useRef(variant);
+
+  useEffect(() => {
+    tokenRef.current = token;
+  }, [token]);
+
+  useEffect(() => {
+    variantRef.current = variant;
+  }, [variant]);
+
+  useEffect(() => {
+    const element = chordElementRef.current;
+    if (!element) return;
+
+    const handleContextMenu = (e: MouseEvent) => {
+      if (tokenRef.current === -1) return;
+
+      e.preventDefault();
+      if (e.button === 2) {
+        setSelectedToken(tokenRef.current);
+        setSelectedVariant(variantRef.current);
+        setSelectedChordVariants(index);
+        setIsVariantsOpenFromSuggestions(false);
+        setVariantsOpen(true);
+      }
+    };
+
+    element.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      element.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
 
   return (
     <div className="h-full" style={{ paddingInline: `${chordPadding}px` }}>
       <button
         className={`${
           token === -1
-            ? selectedChord === id
+            ? selectedChord === index
               ? "bg-zinc-700 text-white"
               : "bg-zinc-800 text-zinc-200"
-            : selectedChord === id
+            : selectedChord === index
             ? "bg-violet-500 text-white"
             : "bg-violet-700 text-zinc-200"
         } ${
@@ -191,8 +248,13 @@ export default function Chord({ token, duration, id }: Props) {
               }
         }
         ref={chordElementRef}
+        title={`${
+          selectedChord === index ? "Des" : "S"
+        }elect this chord/right click to open variants`}
       >
-        <p className="select-none overflow-hidden">{detokenize(token)}</p>
+        <p className="select-none overflow-hidden">
+          {token === -1 ? "?" : tokenToChord[token][variant]}
+        </p>
       </button>
     </div>
   );

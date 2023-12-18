@@ -13,18 +13,25 @@ let currentSession: ort.InferenceSession | null = null;
 let prevModelPath = "";
 
 // Process the chords into a tensor that can be fed into the model
-function process_chords(chords: [number, number, number][]) {
+function process_chords(
+  chords: {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[]
+) {
   const data = new BigInt64Array(256).fill(BigInt(0));
 
   data[0] = BigInt(numTokens - 2); // Start token
   let i = 1;
   for (let j = 0; j < chords.length; j++) {
-    const [id, token, duration] = chords[j];
-    if (token === -1 || BigInt(token) === data[i - 1]) continue;
+    if (chords[j].token === -1 || BigInt(chords[j].token) === data[i - 1])
+      continue;
     if (i >= 255) {
       throw new Error("sequence is too long");
     }
-    data[i] = BigInt(token);
+    data[i] = BigInt(chords[j].token);
     i++;
   }
   // End token is not included
@@ -57,13 +64,18 @@ function softmax(arr: Float32Array) {
 }
 
 export async function predict(
-  chords: [number, number, number][],
+  chords: {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[],
   modelPath: string,
   style?: number[]
 ) {
   // Process data
   if (chords.length === 0) {
-    chords = [[0, -1, 0]];
+    chords = [{ index: 0, token: -1, duration: 1, variant: 0 }];
   }
   const [numChords, data] = process_chords(chords);
 
@@ -114,7 +126,7 @@ export async function predict(
   // Zero out the start and end tokens, as well as the previous chord
   column[numTokens - 1] = -Infinity;
   column[numTokens - 2] = -Infinity;
-  column[chords[chords.length - 1][1]] = -Infinity;
+  column[chords[chords.length - 1].token] = -Infinity;
 
   // Get the softmax probabilities
   const probs = softmax(column);
@@ -122,7 +134,7 @@ export async function predict(
   // Convert it to the wanted format, skip the start and end tokens
   const chordProbs = [];
   for (let i = 0; i < probs.length - 2; i++) {
-    if (i == chords[chords.length - 1][1]) continue;
+    if (i == chords[chords.length - 1].token) continue;
 
     chordProbs.push({ token: i, prob: probs[i] });
   }

@@ -9,7 +9,7 @@ import Ticks from "../ticks";
 import Signature from "./signature";
 import TimelineControls from "./timeline_controls";
 import Playhead from "../playhead";
-import Chords from "../chords";
+import Chords from "./chords";
 
 export default function TimelineEditor() {
   const [

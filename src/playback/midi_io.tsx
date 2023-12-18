@@ -3,23 +3,29 @@ import MidiWriter from "midi-writer-js";
 
 import { chordToNotes } from "@/data/chord_to_notes";
 import { tokenToChord } from "@/data/token_to_chord";
-import { detokenize } from "@/models/utils";
 
 // Create a MIDI file from a list of chords
-export function getMidiBlob(chords: [number, number, number][]): Blob {
+export function getMidiBlob(
+  chords: {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[]
+): Blob {
   const track = new MidiWriter.Track();
 
   // Create a track
   let restDuration = 0;
   for (const chord of chords) {
-    const duration = Math.round(chord[2] * 128); // 128 ticks per quarter note
+    const duration = Math.round(chord.duration * 128); // 128 ticks per quarter note
 
-    if (chord[1] === -1) {
+    if (chord.token === -1) {
       restDuration += duration;
       continue;
     }
 
-    let notes = chordToNotes[detokenize(chord[1])];
+    let notes = chordToNotes[tokenToChord[chord.token][chord.variant]];
     track.addEvent(
       new MidiWriter.NoteEvent({
         pitch: notes,
@@ -84,10 +90,25 @@ function getPitchClassRep(notes: number[]): string {
   return normalizedChord.join(",");
 }
 
+// To enable import/export with variants, does not always work (e.g. with duplicate notes)
+function getVariantRep(notes: number[]): string {
+  // Push the notes to the lowest octave
+  let min = Math.min(...notes);
+  let offset = min - (min % 12);
+  let normalizedChord = notes
+    .map((note) => note - offset)
+    .sort((a, b) => a - b);
+  // Remove duplicates
+  normalizedChord = normalizedChord.filter(
+    (note, i) => normalizedChord.indexOf(note) === i
+  );
+  return normalizedChord.join(",");
+}
+
 // Convert a list of notes to a list of chords
 export function getChordsFromNotes(
   notes: { name: string; duration: number; time: number }[]
-): [number, number, number][] {
+): { index: number; token: number; duration: number; variant: number }[] {
   // Group notes into chords
   let [prevTime, prevDuration] = [-1, 1]; // To account for the first chord
   let groupedNotes: { duration: number; notes: number[] }[] = [];
@@ -126,11 +147,21 @@ export function getChordsFromNotes(
   }
 
   // Find the chord tokens
-  let chords: [number, number, number][] = [];
+  let chords: {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[] = [];
   for (const group of groupedNotes) {
     // Unknown chords act as rests
     if (group.notes.length === 0) {
-      chords.push([chords.length, -1, group.duration * 2]);
+      chords.push({
+        index: chords.length,
+        token: -1,
+        duration: group.duration * 2,
+        variant: 0,
+      });
       continue;
     }
 
@@ -140,7 +171,24 @@ export function getChordsFromNotes(
     let foundToken = false;
     for (let i = 0; i < tokenToPitchClass.length; i++) {
       if (tokenToPitchClass[i] === pitchClassGroup) {
-        chords.push([chords.length, i, group.duration * 2]);
+        // Find the variant
+        let variant = 0; // Default variant if not found
+        for (let j = 0; j < tokenToChord[i].length; j++) {
+          if (
+            getVariantRep(group.notes) ===
+            getVariantRep(chordToNotes[tokenToChord[i][j]])
+          ) {
+            variant = j;
+            break;
+          }
+        }
+
+        chords.push({
+          index: chords.length,
+          token: i,
+          duration: group.duration * 2,
+          variant: variant,
+        });
         foundToken = true;
         break;
       }
@@ -148,7 +196,12 @@ export function getChordsFromNotes(
 
     // Fallback to an unknown token
     if (!foundToken) {
-      chords.push([chords.length, -1, group.duration * 2]);
+      chords.push({
+        index: chords.length,
+        token: -1,
+        duration: group.duration * 2,
+        variant: 0,
+      });
     }
   }
 

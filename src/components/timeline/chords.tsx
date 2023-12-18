@@ -3,7 +3,7 @@ import React from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
-import Chord from "./timeline/chord";
+import Chord from "./chord";
 
 export default function Chords() {
   const [chords, timelinePosition] = useStore(
@@ -12,9 +12,15 @@ export default function Chords() {
   );
 
   const chordList = chords.map((chord) => {
-    const [id, token, duration] = chord;
-
-    return <Chord key={id} token={token} duration={duration} id={id} />;
+    return (
+      <Chord
+        key={chord.index}
+        index={chord.index}
+        token={chord.token}
+        duration={chord.duration}
+        variant={chord.variant}
+      />
+    );
   });
 
   return (

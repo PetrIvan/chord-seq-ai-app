@@ -4,7 +4,6 @@ import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 import * as Tone from "tone";
 
-import { detokenize } from "@/models/utils";
 import {
   playChord,
   playSequence,
@@ -14,6 +13,7 @@ import {
 } from "@/playback/player";
 
 import SettingsDropdown from "./settings_dropdown";
+import { tokenToChord } from "@/data/token_to_chord";
 
 interface Props {
   timelineWidth: number;
@@ -144,7 +144,8 @@ export default function TimelineControls({
 
     setSelectedChord(newValue);
 
-    if (newValue !== -1) playChord(detokenize(chords[newValue][1]));
+    if (newValue !== -1)
+      playChord(tokenToChord[chords[newValue].token][chords[newValue].variant]);
   }
 
   // Scroll to the selected chord when the selection changes
@@ -160,11 +161,19 @@ export default function TimelineControls({
     timelineWidthRef.current = timelineWidth;
   }, [timelineWidth]);
 
-  function scrollToChord(currChords: [number, number, number][], id: number) {
+  function scrollToChord(
+    currChords: {
+      index: number;
+      token: number;
+      duration: number;
+      variant: number;
+    }[],
+    id: number
+  ) {
     // Calculate the total duration of all chords before the selected chord
     let totalChordsDuration = 0;
     for (let i = 0; i < currChords.length; i++) {
-      totalChordsDuration += currChords[i][2];
+      totalChordsDuration += currChords[i].duration;
       if (i === id) break;
     }
 
@@ -172,7 +181,7 @@ export default function TimelineControls({
     const totalChordsSize =
       (totalChordsDuration / 4 / signature[0]) * zoom * 100 * signature[1];
     const currentChordsSize =
-      (currChords[id][2] / 4 / signature[0]) * zoom * 100 * signature[1];
+      (currChords[id].duration / 4 / signature[0]) * zoom * 100 * signature[1];
 
     // If the chord is out of view, scroll to it
     if (totalChordsSize > -timelinePosition + timelineWidthRef.current) {
