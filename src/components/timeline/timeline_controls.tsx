@@ -144,7 +144,7 @@ export default function TimelineControls({
 
     setSelectedChord(newValue);
 
-    if (newValue !== -1)
+    if (newValue !== -1 && chords[newValue].token !== -1)
       playChord(tokenToChord[chords[newValue].token][chords[newValue].variant]);
   }
 

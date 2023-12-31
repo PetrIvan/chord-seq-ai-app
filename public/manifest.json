@@ -32,7 +32,7 @@
   "screenshots": [
     {
       "src": "/screenshot.jpg",
-      "sizes": "1920x879",
+      "sizes": "1920x878",
       "type": "image/gif",
       "form_factor": "wide",
       "label": "ChordSeqAI App"

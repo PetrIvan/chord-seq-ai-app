@@ -132,7 +132,7 @@ function ShowableVariantOverlay({
     setVariantsOpen(false);
   }
 
-  function useOnce() {
+  function variantUseOnce() {
     replaceChord(token, variant);
     setVariantsOpen(false);
   }
@@ -193,7 +193,7 @@ function ShowableVariantOverlay({
             <button
               className="flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw] bg-zinc-800"
               onClick={() => {
-                variantsFromSuggestions ? useOnce() : applyOnce();
+                variantsFromSuggestions ? variantUseOnce() : applyOnce();
               }}
             >
               {variantsFromSuggestions ? "Use once" : "Apply once"}
