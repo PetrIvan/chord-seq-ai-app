@@ -14,7 +14,7 @@ const nextConfig = {
 module.exports = {
   ...nextConfig,
   reactStrictMode: true,
-  distDir: "build",
+  output: "export",
   webpack: (config, {  }) => {
 
     config.resolve.extensions.push(".ts", ".tsx");
