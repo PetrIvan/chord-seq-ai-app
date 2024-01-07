@@ -35,6 +35,16 @@ module.exports = {
             //to: "static/chunks/app/app", // dev
           },
           {
+            from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
+            //to: "static/chunks", // build / deploy
+            to: "static/chunks/app/app", // dev
+          },
+          {
+            from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
+            //to: "static/chunks", // build / deploy
+            to: "static/chunks/app/app", // dev
+          },
+          {
             from: "./public/models",
             to: "static/chunks/app",
           },
