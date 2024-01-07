@@ -26,13 +26,13 @@ module.exports = {
         patterns: [
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
-            //to: "static/chunks", // build / deploy
-            to: "static/chunks/app/app", // dev
+            to: "static/chunks", // build / deploy
+            //to: "static/chunks/app/app", // dev
           },
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
-            //to: "static/chunks", // build / deploy
-            to: "static/chunks/app/app", // dev
+            to: "static/chunks", // build / deploy
+            //to: "static/chunks/app/app", // dev
           },
           {
             from: "./public/models",
