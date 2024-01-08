@@ -393,7 +393,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     if (errorOccured) text = "An error has occurred";
     else if (isLoadingSession) text = "Loading session...";
     else if (isDownloadingModel)
-      text = "Loading model... " + percentageDownloaded * 100 + "%";
+      text = "Loading model... " + Math.round(percentageDownloaded * 100) + "%";
     else if (chordProbsLoading) text = "Predicting suggestions...";
 
     content = (
