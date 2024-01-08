@@ -1,5 +1,6 @@
 import * as ort from "onnxruntime-web";
 import { tokenToChord } from "@/data/token_to_chord";
+import { useStore } from "@/state/use_store";
 
 // Add a special token for the start and end of the sequence
 const numTokens = Object.keys(tokenToChord).length + 2;
@@ -94,7 +95,7 @@ export async function predict(
 
   // Load the model (if necessary)
   if (modelPath !== prevModelPath) {
-    currentSession = await ort.InferenceSession.create(modelPath);
+    await loadModel(modelPath);
     prevModelPath = modelPath;
   }
 
@@ -149,4 +150,45 @@ export async function predict(
   }
 
   return chordProbs;
+}
+
+async function loadModel(modelPath: string) {
+  useStore.getState().setPercentageDownloaded(0);
+  useStore.getState().setIsDownloadingModel(true);
+
+  const response = await fetch(modelPath);
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch model: ${response.statusText}.`);
+  }
+
+  const contentLength = response.headers.get("content-length");
+  if (!contentLength) {
+    throw new Error("Failed to get content length from response headers.");
+  }
+
+  const total = parseInt(contentLength, 10);
+  let loaded = 0;
+
+  const reader = response?.body?.getReader();
+  let chunks = [];
+
+  if (!reader) {
+    throw new Error("Failed to get response body reader.");
+  }
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    loaded += value.byteLength;
+    useStore.getState().setPercentageDownloaded(loaded / total);
+    chunks.push(value);
+  }
+
+  const blob = new Blob(chunks);
+  const buffer = await blob.arrayBuffer();
+  useStore.getState().setIsDownloadingModel(false);
+
+  useStore.getState().setIsLoadingSession(true);
+  currentSession = await ort.InferenceSession.create(buffer);
+  useStore.getState().setIsLoadingSession(false);
 }

@@ -38,6 +38,9 @@ interface Props {
     isVariantsOpenFromSuggestions: boolean
   ) => void;
   defaultVariants: number[];
+  isDownloadingModel: boolean;
+  percentageDownloaded: number;
+  isLoadingSession: boolean;
 }
 
 // This logic is quite complex, but given that the rerendering
@@ -61,7 +64,11 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
     prevProps.decayFactor !== newProps.decayFactor ||
     prevProps.searchQuery !== newProps.searchQuery ||
     prevProps.enabledShortcuts !== newProps.enabledShortcuts ||
-    prevProps.suggestionsIncludeVariants !== newProps.suggestionsIncludeVariants
+    prevProps.suggestionsIncludeVariants !==
+      newProps.suggestionsIncludeVariants ||
+    prevProps.isDownloadingModel !== newProps.isDownloadingModel ||
+    prevProps.percentageDownloaded !== newProps.percentageDownloaded ||
+    prevProps.isLoadingSession !== newProps.isLoadingSession
   ) {
     return false;
   }
@@ -126,6 +133,9 @@ export default function Suggestions() {
     setSelectedVariant,
     setIsVariantsOpenFromSuggestions,
     defaultVariants,
+    isDownloadingModel,
+    percentageDownloaded,
+    isLoadingSession,
   ] = useStore(
     (state) => [
       state.chords,
@@ -144,6 +154,9 @@ export default function Suggestions() {
       state.setSelectedVariant,
       state.setIsVariantsOpenFromSuggestions,
       state.defaultVariants,
+      state.isDownloadingModel,
+      state.percentageDownloaded,
+      state.isLoadingSession,
     ],
     shallow
   );
@@ -166,6 +179,9 @@ export default function Suggestions() {
       setSelectedVariant={setSelectedVariant}
       setIsVariantsOpenFromSuggestions={setIsVariantsOpenFromSuggestions}
       defaultVariants={defaultVariants}
+      isDownloadingModel={isDownloadingModel}
+      percentageDownloaded={percentageDownloaded}
+      isLoadingSession={isLoadingSession}
     />
   );
 }
@@ -187,6 +203,9 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   setSelectedVariant,
   setIsVariantsOpenFromSuggestions,
   defaultVariants,
+  isDownloadingModel,
+  percentageDownloaded,
+  isLoadingSession,
 }: Props) {
   /* Prediction states */
   const [chordProbsLoading, setChordProbsLoading] = useState(false);
@@ -242,13 +261,19 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         switch (error.message) {
           case "model not loaded":
             alert(
-              "Model not loaded. Please reload the page, your progress is saved."
+              "Model not loaded, probably due to timeout. Please reload the page, your progress is saved."
             );
             break;
           case "sequence is too long":
             alert("Maximum number of chords reached. Please start a new song.");
             break;
           default:
+            if ("no available backend found" in error.message) {
+              alert(
+                "No backend found. Please reload the page, your progress is saved. If the problem persists, try using a different browser."
+              );
+            }
+
             alert(
               `An error has occurred, try reloading the page. Your progress is saved.\n${error}`
             );
@@ -358,20 +383,22 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         Select a chord to see suggestions based on context
       </p>
     );
-  } else if (errorOccured) {
+  } else if (
+    errorOccured ||
+    isLoadingSession ||
+    isDownloadingModel ||
+    chordProbsLoading
+  ) {
+    let text = "Loading...";
+    if (errorOccured) text = "An error has occurred";
+    else if (isLoadingSession) text = "Loading session...";
+    else if (isDownloadingModel)
+      text = "Loading model... " + percentageDownloaded * 100 + "%";
+    else if (chordProbsLoading) text = "Predicting suggestions...";
+
     content = (
       <div className="h-full flex flex-col items-center justify-center">
-        <p className="text-zinc-500 truncate text-[2dvw]">
-          An error has occurred
-        </p>
-      </div>
-    );
-  } else if (chordProbsLoading) {
-    content = (
-      <div className="h-full flex flex-col items-center justify-center">
-        <p className="text-zinc-500 truncate text-[2dvw]">
-          Predicting suggestions...
-        </p>
+        <p className="text-zinc-500 truncate text-[2dvw]">{text}</p>
       </div>
     );
   } else {

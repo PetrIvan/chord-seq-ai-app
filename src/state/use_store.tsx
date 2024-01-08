@@ -76,6 +76,14 @@ interface StoreState {
   selectedDecades: number[]; // Weighted values
   setSelectedDecades: (decades: number[]) => void;
 
+  // Model loading
+  isDownloadingModel: boolean;
+  setIsDownloadingModel: (downloadingModel: boolean) => void;
+  isLoadingSession: boolean;
+  setIsLoadingSession: (isLoadingSession: boolean) => void;
+  percentageDownloaded: number;
+  setPercentageDownloaded: (percentageDownloaded: number) => void;
+
   // Playback
   bpm: number;
   setBpm: (bpm: number) => void;
@@ -274,6 +282,17 @@ export const useStore = createWithEqualityFn<StoreState>()(
       selectedDecades: Array(decades.length).fill(0),
       setSelectedDecades: (selectedDecades: number[]) =>
         set({ selectedDecades }),
+
+      // Model loading
+      isDownloadingModel: false,
+      setIsDownloadingModel: (isDownloadingModel: boolean) =>
+        set({ isDownloadingModel }),
+      isLoadingSession: false,
+      setIsLoadingSession: (isLoadingSession: boolean) =>
+        set({ isLoadingSession }),
+      percentageDownloaded: 0,
+      setPercentageDownloaded: (percentageDownloaded: number) =>
+        set({ percentageDownloaded }),
 
       // Playback
       bpm: 120,
