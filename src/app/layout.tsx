@@ -1,3 +1,4 @@
+import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -9,6 +10,12 @@ export const metadata: Metadata = {
   icons: { icon: "/icon-512x512.png" },
 };
 
+const openSans = Open_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-opensans",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <>
-      <html lang="en">
+      <html lang="en" className={`${openSans.variable}`}>
         <body className="font-sans text-white">{children}</body>
       </html>
     </>
