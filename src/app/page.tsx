@@ -38,6 +38,7 @@ export default function Home() {
                 src="/showcase-add.mp4"
                 className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-r-lg"
                 autoPlay
+                muted
                 loop
               />
             </div>
@@ -58,6 +59,7 @@ export default function Home() {
                 src="/showcase-style.mp4"
                 className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-r-lg"
                 autoPlay
+                muted
                 loop
               />
             </div>
@@ -78,6 +80,7 @@ export default function Home() {
                 src="/showcase-export.mp4"
                 className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-r-lg"
                 autoPlay
+                muted
                 loop
               />
             </div>
