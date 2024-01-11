@@ -1,3 +1,25 @@
+# Table of Contents
+
+1. [Introduction](#introduction)
+2. [Getting Started](#getting-started)
+   - 2.1. [Prerequisites](#prerequisites)
+   - 2.2. [Installation](#installation)
+   - 2.3. [Running the App](#running-the-app)
+3. [Support](#support)
+4. [Usage](#usage)
+   - 4.1. [Adding and Deleting Chords](#adding-and-deleting-chords)
+   - 4.2. [Suggestions](#suggestions)
+   - 4.3. [Timeline Controls](#timeline-controls)
+   - 4.4. [Specifying Duration](#specifying-duration)
+   - 4.5. [Customizing Signature](#customizing-signature)
+   - 4.6. [Playback](#playback)
+   - 4.7. [Selecting Models and Styles](#selecting-models-and-styles)
+   - 4.8. [Transpose, Import, Export](#transpose-import-export)
+   - 4.9. [Chord Variants](#chord-variants)
+5. [FAQ](#faq)
+6. [Web Stack](#web-stack)
+7. [License](#license)
+
 # ChordSeqAI Web App
 
 ## Introduction
@@ -6,7 +28,11 @@ The ChordSeqAI Web App is a dynamic and user-friendly interface for interactions
 
 ![App screenshot](./public/screenshot.jpg)
 
+This app originates from the [ChordSeqAI graduate project](https://github.com/StudentTraineeCenter/chord-seq-ai), development is continued in this new repository.
+
 ## Getting Started
+
+This section describes how to run the app locally. If you want to instead use a deployed version, visit [chordseqai.com](https://chordseqai.com).
 
 ### Prerequisites
 
@@ -20,7 +46,7 @@ Before you begin, ensure you have the following installed:
 1. Navigate to the place where you want the app to be downloaded in Command Prompt.
 
 2. Clone the repository:
-   `git clone https://github.com/StudentTraineeCenter/chord-seq-ai-app.git`
+   `git clone https://github.com/PetrIvan/chord-seq-ai-app.git`
 3. Navigate to the project directory:
    `cd chord-seq-ai-app`
 4. Install NPM packages:
@@ -33,8 +59,6 @@ To run the application locally:
 1. Start the development server:
    `npm run dev`
 2. Open http://localhost:3000 in your browser to view the app.
-
-If you want to build or deploy this app, the next.config.js file has to be modified by commenting and uncommenting a part of the code. This is because of the way ONNX runtime (which runs the AI models) works with Next.js 13+.
 
 ## Support
 
@@ -119,10 +143,6 @@ For a list of all available features, check out section 4.3 in the [technical re
 ## Web Stack
 
 This is a Next.js 14 app. Tailwind CSS is used as the library for styling, Zustand serves as the state management library, ONNX runtime is employed to run the AI models, and Tone.js does the job of an audio playback library for the composed chord progressions.
-
-## Other resources
-
-The machine learning code, datasets, and additional files together with the technical report for this project can be found in the [ChordSeqAI repository](https://github.com/StudentTraineeCenter/chord-seq-ai).
 
 ## License
 

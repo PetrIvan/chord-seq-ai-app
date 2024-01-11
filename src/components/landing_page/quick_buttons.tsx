@@ -25,7 +25,7 @@ export default function QuickButtons() {
       )}
 
       <a
-        href="https://github.com/StudentTraineeCenter/chord-seq-ai-app"
+        href="https://github.com/PetrIvan/chord-seq-ai-app"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center justify-center bg-white text-black py-7 px-6 rounded-full shadow-md border-2 border-zinc-900 text-xl md:text-2xl font-medium transition duration-300 ease-in-out hover:brightness-90 w-48 h-12"
