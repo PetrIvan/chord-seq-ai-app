@@ -1,6 +1,7 @@
 "use client";
 import ModelSelection from "@/components/model_selection/model_selection";
 import TransposeImportExport from "@/components/transpose_import_export/transpose_import_export";
+import GetHelp from "@/components/get_help";
 import TimelineEditor from "@/components/timeline/timeline_editor";
 import Suggestions from "@/components/suggestions/suggestions";
 import VariantOverlay from "./variant_overlay";
@@ -35,6 +36,7 @@ export default function App() {
         <div className="flex flex-row space-x-[1dvw] w-full min-h-0">
           <ModelSelection />
           <TransposeImportExport />
+          <GetHelp />
         </div>
         <TimelineEditor />
         <Suggestions />
