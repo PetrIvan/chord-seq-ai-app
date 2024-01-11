@@ -21,7 +21,7 @@ export default function Home() {
         <div className="absolute bottom-0 z-10 w-full h-[15dvh] bg-gradient-to-b from-transparent to-zinc-950" />
       </div>
       <div className="flex flex-col bg-zinc-950">
-        <div className="flex-grow flex flex-col items-start justify-center text-center space-y-5 md:space-y-10 backdrop-blur-[0.1dvw] p-5 md:p-20">
+        <div className="flex-grow flex flex-col items-center justify-center text-center space-y-5 md:space-y-10 backdrop-blur-[0.1dvw] p-5 md:p-20">
           <div className="flex flex-col lg:flex-row items-center justify-center rounded-lg bg-zinc-900 shadow-lg w-full min-h-fit">
             <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-5">
               <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
@@ -34,10 +34,11 @@ export default function Home() {
               </p>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
-              <img
-                src="/screenshot.jpg"
-                alt="Demo"
+              <video
+                src="/showcase-add.mp4"
                 className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-r-lg"
+                autoPlay
+                loop
               />
             </div>
           </div>
@@ -53,10 +54,11 @@ export default function Home() {
               </p>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
-              <img
-                src="/screenshot.jpg"
-                alt="Demo"
-                className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-l-lg"
+              <video
+                src="/showcase-style.mp4"
+                className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-r-lg"
+                autoPlay
+                loop
               />
             </div>
           </div>
@@ -72,16 +74,14 @@ export default function Home() {
               </p>
             </div>
             <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
-              <img
-                src="/screenshot.jpg"
-                alt="Demo"
+              <video
+                src="/showcase-export.mp4"
                 className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-r-lg"
+                autoPlay
+                loop
               />
             </div>
           </div>
-
-          {/* App demo (youtube video), model overview (table?), more about project (platform support, support the project,
-           how it was made, limitations, ...), links to documentation, community? (bugs, request features) */}
         </div>
       </div>
     </div>
