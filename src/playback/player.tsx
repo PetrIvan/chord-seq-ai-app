@@ -128,22 +128,25 @@ export function playSequence(
     const part = new Tone.Part((time, value) => {
       synth.triggerAttackRelease(value.note, value.duration, time);
     }, timeNoteDuration);
+
     part.loop = false;
     part.loopEnd = "1m";
-
-    Tone.Transport.start();
     part.start();
 
     // Start the metronome
-    metronomePart = new Tone.Part(
-      (time) => {
-        metronomeSynth.triggerAttackRelease("C4", "8n", time);
-      },
-      [0]
-    );
-    metronomePart.loop = true;
-    metronomePart.loopEnd = 1 / (bpm / 60);
+    let metronomeBeats = Array.from(
+      { length: totalTime * (bpm / 60) + 1 },
+      (value, key) => key
+    ).map((i) => i / (bpm / 60));
+    metronomePart = new Tone.Part((time) => {
+      metronomeSynth.triggerAttackRelease("C4", "8n", time);
+    }, metronomeBeats);
+
+    metronomePart.loop = false;
+    metronomePart.loopEnd = "1m";
     metronomePart.start();
+
+    Tone.Transport.start();
 
     // Offset the current time by the playhead position
     const timePosition = playheadPosition / (bpm / 60);
