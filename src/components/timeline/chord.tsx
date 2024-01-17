@@ -238,7 +238,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
             : "bg-violet-700 text-zinc-200"
         } ${
           resizingAnyChord ? "" : "hover:filter hover:brightness-110"
-        } flex justify-center items-center py-[2dvh] rounded-[0.5dvw] overflow-hidden outline-none h-full min-h-0`}
+        } flex justify-center items-center py-[2dvh] rounded-[0.5dvw] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
         style={{ width: `${width}px` }}
         onClick={
           resizingThisChordRef.current
