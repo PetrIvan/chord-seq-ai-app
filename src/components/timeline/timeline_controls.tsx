@@ -277,7 +277,7 @@ export default function TimelineControls({
         </button>
         <button
           className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-          title="Play (Space)"
+          title={`${playing ? "Pause" : "Play"} (Space)`}
           onClick={() => changePlaying()}
         >
           <img
