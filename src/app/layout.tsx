@@ -1,3 +1,4 @@
+import Script from "next/script";
 import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -25,6 +26,11 @@ export default function RootLayout({
     <>
       <html lang="en" className={`${openSans.variable}`}>
         <body className="font-sans text-white">{children}</body>
+        <Script
+          defer
+          src="https://eu.umami.is/script.js"
+          data-website-id="0e11269e-4e8c-494b-929c-1f4798eac395"
+        />
       </html>
     </>
   );

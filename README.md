@@ -136,9 +136,13 @@ For a list of all available features, check out section 4.3 in the [technical re
 
 **A:** There can be a maximum of 255 chords (after removing duplicates and empty chords) due to the restrictions of the models.
 
-**Q:** Is any user data stored and is AI trained on my artworks?
+**Q:** Is AI trained on my artworks?
 
 **A:** Your data remains private and is not used for training our AI models. All processing occurs locally in your browser.
+
+**Q:** What kind of user data does ChordSeqAI track?
+
+**A:** ChordSeqAI employs [Umami Analytics](https://umami.is) for basic usage statistics, focusing on privacy and anonymity. We collect minimal, anonymized data solely to enhance app functionality and user experience. No personal or detailed usage data is tracked.
 
 ## Web Stack
 
