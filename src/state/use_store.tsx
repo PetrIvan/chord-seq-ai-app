@@ -116,6 +116,12 @@ interface StoreState {
   defaultVariants: number[];
   setDefaultVariants: (defaultVariants: number[]) => void;
   replaceDefaultVariant: (token: number, defaultVariant: number) => void;
+
+  // Welcome overlay
+  welcomeFirstTime: boolean;
+  setWelcomeFirstTime: (welcomeFirstTime: boolean) => void;
+  isWelcomeOverlayOpen: boolean;
+  setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) => void;
 }
 
 export const useStore = createWithEqualityFn<StoreState>()(
@@ -337,6 +343,14 @@ export const useStore = createWithEqualityFn<StoreState>()(
         defaultVariants[token] = defaultVariant;
         get().setDefaultVariants(defaultVariants);
       },
+
+      // Welcome overlay
+      welcomeFirstTime: true,
+      setWelcomeFirstTime: (welcomeFirstTime: boolean) =>
+        set({ welcomeFirstTime }),
+      isWelcomeOverlayOpen: false,
+      setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) =>
+        set({ isWelcomeOverlayOpen }),
     }),
     {
       // Saving
@@ -349,6 +363,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         selectedDecades: state.selectedDecades,
         bpm: state.bpm,
         defaultVariants: state.defaultVariants,
+        welcomeFirstTime: state.welcomeFirstTime,
       }),
     }
   )
