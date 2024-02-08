@@ -75,7 +75,7 @@ function ShowableWelcomeOverlay({ setIsWelcomeOverlayOpen }: Props) {
           <p className="text-[2.5dvh] max-w-[75%] text-justify">
             Get started quickly by watching our short tutorial video below. It
             covers the main features of the app and how to use them. If you want
-            to learn more about the app, you can also check out the{" "}
+            to dive deeper, you can also check out the{" "}
             <a
               className="text-blue-400 hover:underline"
               href="https://github.com/PetrIvan/chord-seq-ai-app/wiki"
@@ -88,7 +88,7 @@ function ShowableWelcomeOverlay({ setIsWelcomeOverlayOpen }: Props) {
           </p>
           <iframe
             className="h-full aspect-video"
-            src="https://www.youtube-nocookie.com/embed/fNk_zzaMoSs?si=dv2LlMAOlR1v3OZb" /* TODO: Replace with the official video */
+            src="https://www.youtube.com/embed/szCteqz7bMA?si=pgevC3rqdIfVCTfq"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />
