@@ -4,9 +4,26 @@ export default function Home() {
   return (
     <div>
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
-        <header className="w-full flex flew-row justify-start items-center backdrop-blur-md p-2 cursor-default">
-          <img src="/app-icon.svg" alt="Logo" className="h-15 w-15 mr-1" />
-          <h1 className="text-3xl text-white">ChordSeqAI</h1>
+        <header className="w-full flex flew-row justify-start items-center backdrop-blur-md p-2 cursor-default pr-2">
+          <div className="w-full flex flex-row justify-start items-center">
+            <img src="/app-icon.svg" alt="Logo" className="h-15 w-15 mr-1" />
+            <h1 className="text-3xl text-white">ChordSeqAI</h1>
+          </div>
+
+          {/* Only visible on desktop devices */}
+          <a
+            href="https://patreon.com/XenoMuse"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="max-md:hidden whitespace-nowrap flex items-center justify-center text-white py-7 px-6 text-2xl transition duration-300 ease-in-out hover:brightness-90 w-48 h-12"
+          >
+            <img
+              src="/patreon-logo.svg"
+              alt="Patreon"
+              className="mr-2 h-6 w-6"
+            />
+            Support us
+          </a>
         </header>
         <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
           <h2 className="text-3xl md:text-5xl text-white font-semibold mb-5 max-w-xl">
@@ -175,6 +192,21 @@ export default function Home() {
                 rel="noopener noreferrer"
               >
                 petr.ivan.junior@gmail.com
+              </a>
+              .
+            </p>
+
+            {/* Only visible on mobile devices */}
+            <p className="md:hidden text-lg md:text-xl text-gray-200 pb-5">
+              If you want to support the development of this app, you can do so
+              on{" "}
+              <a
+                className="text-blue-400 hover:underline"
+                href="https://patreon.com/XenoMuse"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Patreon
               </a>
               .
             </p>
