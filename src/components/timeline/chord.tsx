@@ -248,9 +248,9 @@ export default function Chord({ index, token, duration, variant }: Props) {
               }
         }
         ref={chordElementRef}
-        title={`${
-          selectedChord === index ? "Des" : "S"
-        }elect this chord/right click to open variants`}
+        title={`${selectedChord === index ? "Des" : "S"}elect this chord${
+          token === -1 ? "" : "/right click to open variants"
+        }`}
       >
         <p className="select-none overflow-hidden">
           {token === -1 ? "?" : tokenToChord[token][variant]}
