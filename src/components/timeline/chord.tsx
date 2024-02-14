@@ -232,10 +232,10 @@ export default function Chord({ index, token, duration, variant }: Props) {
           token === -1
             ? selectedChord === index
               ? "bg-zinc-700 text-white"
-              : "bg-zinc-800 text-zinc-200"
+              : "bg-zinc-800 text-zinc-100"
             : selectedChord === index
             ? "bg-violet-500 text-white"
-            : "bg-violet-700 text-zinc-200"
+            : "bg-violet-700 text-zinc-100"
         } ${
           resizingAnyChord ? "" : "hover:filter hover:brightness-110"
         } flex justify-center items-center py-[2dvh] rounded-[0.5dvw] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}

@@ -31,11 +31,11 @@ export default function Playhead({ timelineStart }: Props) {
         transform: `translateX(-50%) translateX(${timelinePosition}px)`,
       }}
     >
-      <svg viewBox="0 0 27 24" className="fill-sky-600 h-[1dvw] w-[1dvw]">
+      <svg viewBox="0 0 27 24" className="fill-blue-400 h-[1dvw] w-[1dvw]">
         <path d="M13.5 24L0.0 0L27.0 0L13.5 24Z" />
       </svg>
-      <div className="border-r-[0.2dvw] border-sky-600 h-full" />
-      <svg viewBox="0 0 27 24" className="fill-sky-600 h-[1dvw] w-[1dvw]">
+      <div className="border-r-[0.2dvw] border-blue-400 h-full" />
+      <svg viewBox="0 0 27 24" className="fill-blue-400 h-[1dvw] w-[1dvw]">
         <path d="M13.5 0L27.0 24H0.0L13.5 0Z" />
       </svg>
     </div>
