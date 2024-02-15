@@ -70,7 +70,7 @@ export default function SearchBar() {
         </label>
         <input
           id="search"
-          className="flex-1 h-full bg-zinc-800 text-white text-[1.2dvw] rounded-[1dvw] placeholder-zinc-500 placeholder-opacity-50 border-transparent focus:border-transparent focus:ring-0"
+          className="flex-1 h-full bg-zinc-800 text-white text-[2.5dvh] rounded-[1dvw] placeholder-zinc-500 placeholder-opacity-50 border-transparent focus:border-transparent focus:ring-0"
           type="text"
           placeholder="Search a chord..."
           autoComplete="off"
@@ -141,7 +141,7 @@ export default function SearchBar() {
         </button>
         {isPianoOpen && (
           <div
-            className="absolute top-[100%] bg-zinc-950 p-[1dvw] pb-[2dvw] rounded-[1dvw] flex flex-row items-center justify-center"
+            className="absolute top-[100%] bg-zinc-950 p-[1dvw] pb-[2dvw] rounded-[0.5dvw] flex flex-row items-center justify-center"
             ref={pianoRef}
           >
             <Piano

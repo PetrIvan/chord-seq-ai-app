@@ -288,7 +288,7 @@ export default function TimelineControls({
         </button>
         <button
           className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-          title="Settings"
+          title="Playback settings"
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
           ref={openDropdownButtonRef}
         >

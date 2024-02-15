@@ -30,12 +30,15 @@ body {
 .range-slider::-webkit-slider-thumb {
   background: #5b21b6;
   border: none;
+  height: 1dvw;
+  width: 1dvw;
 }
 
 .range-slider::-moz-range-thumb {
   background: #5b21b6;
   border: none;
-  height: 100%;
+  height: 1dvw;
+  width: 1dvw;
 }
 
 /* For search bar label */

@@ -28,10 +28,10 @@ export default function SettingsDropdown({ dropdownRef }: Props) {
       className="absolute z-[15] top-full mt-[0.5dvw] bg-zinc-950 rounded-[0.5dvw] flex flex-row items-center justify-between p-[1dvw] shadow-lg shadow-zinc-950"
       ref={dropdownRef}
     >
-      <label className="select-none text-[1.2dvw] mr-[1dvw]">BPM:</label>
+      <label className="select-none text-[2.5dvh] mr-[1dvw]">BPM:</label>
       <input
         type="number"
-        className="w-[5dvw] h-[3dvw] bg-zinc-800 rounded-[0.5dvw] text-[1.2dvw]"
+        className="w-[5dvw] h-[3dvw] bg-zinc-800 rounded-[0.5dvw] text-[2.5dvh]"
         value={localBpm}
         onChange={handleNumeratorChange}
       />

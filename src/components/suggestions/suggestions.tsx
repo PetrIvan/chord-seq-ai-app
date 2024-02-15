@@ -402,17 +402,30 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
       </div>
     );
   } else {
-    content = (
-      <div
-        className="grid gap-[1dvw] overflow-y-auto"
-        style={{
-          gridTemplateColumns: "repeat(auto-fit, minmax(10dvw, 1fr))",
-          minHeight: "0",
-        }}
-      >
-        {getChordsList()}
-      </div>
-    );
+    const chordList = getChordsList();
+
+    if (chordList.length === 0) {
+      content = (
+        <div className="h-full flex flex-col items-center justify-center">
+          <p className="text-zinc-500 text-center text-[2dvw] max-w-[50%]">
+            Haven't found what you're looking for? Try enabling variants or
+            changing the search query.
+          </p>
+        </div>
+      );
+    } else {
+      content = (
+        <div
+          className="grid gap-[1dvw] overflow-y-auto"
+          style={{
+            gridTemplateColumns: "repeat(auto-fit, minmax(10dvw, 1fr))",
+            minHeight: "0",
+          }}
+        >
+          {chordList}
+        </div>
+      );
+    }
   }
 
   return (
