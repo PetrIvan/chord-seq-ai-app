@@ -408,8 +408,8 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
       content = (
         <div className="h-full flex flex-col items-center justify-center">
           <p className="text-zinc-500 text-center text-[2dvw] max-w-[50%]">
-            Haven't found what you're looking for? Try enabling variants or
-            changing the search query.
+            Haven&apos;t found what you&apos;re looking for? Try enabling
+            variants or changing the search query.
           </p>
         </div>
       );
