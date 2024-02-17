@@ -3,6 +3,28 @@ import { Open_Sans } from "next/font/google";
 import type { Metadata } from "next";
 import "./globals.css";
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "ChordSeqAI",
+  applicationCategory: "Music Composition",
+  applicationSubCategory: "AI Music Composition for Chord Progressions",
+  url: "https://chordseqai.com",
+  operatingSystem: "Web",
+  description:
+    "Compose beautiful chord progressions in your browser, with the help of AI, for free. Open-source project, code available on GitHub.",
+  screenshot: "https://chordseqai.com/screenshot.jpg",
+  creator: {
+    "@type": "Person",
+    name: "XenoMuse",
+    description:
+      "A passionate developer and AI enthusiast, who focuses on blending technology and music.",
+    url: "https://patreon.com/xenomuse",
+  },
+  keywords:
+    "chord progression, music composition, AI, machine learning, open-source",
+};
+
 export const metadata: Metadata = {
   title: "ChordSeqAI: Your Open-Source Chord Progression AI Copilot",
   description:
@@ -36,6 +58,10 @@ export default function RootLayout({
           defer
           src="https://eu.umami.is/script.js"
           data-website-id="0e11269e-4e8c-494b-929c-1f4798eac395"
+        />
+        <Script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </html>
     </>
