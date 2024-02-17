@@ -61,6 +61,7 @@ export default function RootLayout({
           data-website-id="0e11269e-4e8c-494b-929c-1f4798eac395"
         />
         <Script
+          id="json-ld"
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
