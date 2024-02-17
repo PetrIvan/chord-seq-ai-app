@@ -26,6 +26,7 @@ const jsonLd = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://chordseqai.com"),
   title: "ChordSeqAI: Your Open-Source Chord Progression AI Copilot",
   description:
     "Compose beautiful chord progressions in your browser, with the help of AI, for free. Open-source project, code available on GitHub.",
