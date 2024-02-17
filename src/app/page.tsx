@@ -1,8 +1,11 @@
 import QuickButtons from "@/components/landing_page/quick_buttons";
+import SupportUsButton from "@/components/landing_page/support_us_button";
+import SupportUsOverlay from "@/components/landing_page/support_us_overlay";
 
 export default function Home() {
   return (
     <div>
+      <SupportUsOverlay />
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
         <header className="w-full flex flew-row justify-start items-center backdrop-blur-md p-2 cursor-default pr-2">
           <div className="w-full flex flex-row justify-start items-center">
@@ -10,20 +13,7 @@ export default function Home() {
             <h1 className="text-3xl text-white">ChordSeqAI</h1>
           </div>
 
-          {/* Only visible on desktop devices */}
-          <a
-            href="https://patreon.com/XenoMuse"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="max-md:hidden whitespace-nowrap flex items-center justify-center text-white py-7 px-6 text-2xl transition duration-300 ease-in-out hover:brightness-90 w-48 h-12"
-          >
-            <img
-              src="/patreon-logo.svg"
-              alt="Patreon"
-              className="mr-2 h-6 w-6"
-            />
-            Support us
-          </a>
+          <SupportUsButton />
         </header>
         <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
           <h2 className="text-3xl md:text-5xl text-white font-semibold mb-5 max-w-xl">
@@ -202,11 +192,20 @@ export default function Home() {
               on{" "}
               <a
                 className="text-blue-400 hover:underline"
-                href="https://patreon.com/XenoMuse"
+                href="https://patreon.com/xenomuse"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 Patreon
+              </a>
+              , or if you prefer a one-time donation, you can use{" "}
+              <a
+                className="text-blue-400 hover:underline"
+                href="https://paypal.me/xenomuse"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PayPal
               </a>
               .
             </p>

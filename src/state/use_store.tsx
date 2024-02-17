@@ -122,6 +122,10 @@ interface StoreState {
   setWelcomeFirstTime: (welcomeFirstTime: boolean) => void;
   isWelcomeOverlayOpen: boolean;
   setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) => void;
+
+  // Support us overlay
+  isSupportUsOverlayOpen: boolean;
+  setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) => void;
 }
 
 export const useStore = createWithEqualityFn<StoreState>()(
@@ -351,6 +355,11 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isWelcomeOverlayOpen: false,
       setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) =>
         set({ isWelcomeOverlayOpen }),
+
+      // Support us overlay
+      isSupportUsOverlayOpen: false,
+      setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) =>
+        set({ isSupportUsOverlayOpen }),
     }),
     {
       // Saving
