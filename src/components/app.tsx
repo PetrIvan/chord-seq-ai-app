@@ -18,6 +18,7 @@ export default function App() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    document.title = "ChordSeqAI"; // Change the title when the page loads
     const userAgent = navigator.userAgent;
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
