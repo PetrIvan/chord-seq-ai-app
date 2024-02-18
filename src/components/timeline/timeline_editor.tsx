@@ -20,6 +20,7 @@ export default function TimelineEditor() {
     setZoom,
     setPlayheadPosition,
     stateWindow,
+    initializeStateWindow,
   ] = useStore(
     (state) => [
       state.signature,
@@ -29,9 +30,16 @@ export default function TimelineEditor() {
       state.setZoom,
       state.setPlayheadPosition,
       state.stateWindow,
+      state.initializeStateWindow,
     ],
     shallow
   );
+
+  /* State window logic */
+  useEffect(() => {
+    // Once the app starts, initialize the state window
+    initializeStateWindow();
+  }, []);
 
   /* Timeline position logic */
   const timelinePositionRef = useRef(timelinePosition);

@@ -13,6 +13,7 @@ import {
 } from "@/playback/player";
 
 import SettingsDropdown from "./settings_dropdown";
+import DeleteAllDropdown from "./delete_all_dropdown";
 import { tokenToChord } from "@/data/token_to_chord";
 
 interface Props {
@@ -233,26 +234,44 @@ export default function TimelineControls({
     setBpm(bpm);
   }, [bpm]);
 
-  /* Playback settings */
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const isDropdownOpenRef = useRef(isDropdownOpen);
+  /* Dropdowns */
+  const [isPlaybackSettingsOpen, setIsPlaybackSettingsOpen] = useState(false);
+  const isPlaybackSettingsOpenRef = useRef(isPlaybackSettingsOpen);
 
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const openDropdownButtonRef = useRef<HTMLButtonElement>(null);
+  const playbackSettingsRef = useRef<HTMLDivElement>(null);
+  const openPlaybackSettingsButtonRef = useRef<HTMLButtonElement>(null);
+
+  const [isDeleteAllOpen, setIsDeleteAllOpen] = useState(false);
+  const isDeleteAllOpenRef = useRef(isDeleteAllOpen);
+
+  const deleteAllRef = useRef<HTMLDivElement>(null);
+  const openDeleteAllButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    isDropdownOpenRef.current = isDropdownOpen;
-  }, [isDropdownOpen]);
+    isPlaybackSettingsOpenRef.current = isPlaybackSettingsOpen;
+  }, [isPlaybackSettingsOpen]);
+
+  useEffect(() => {
+    isDeleteAllOpenRef.current = isDeleteAllOpen;
+  }, [isDeleteAllOpen]);
 
   useEffect(() => {
     // Hide the dropdown on click outside
     const handleClickOutside = (e: MouseEvent) => {
       if (
-        isDropdownOpenRef.current &&
-        !openDropdownButtonRef.current?.contains(e.target as Node) &&
-        !dropdownRef.current?.contains(e.target as Node)
+        isPlaybackSettingsOpenRef.current &&
+        !openPlaybackSettingsButtonRef.current?.contains(e.target as Node) &&
+        !playbackSettingsRef.current?.contains(e.target as Node)
       ) {
-        setIsDropdownOpen(false);
+        setIsPlaybackSettingsOpen(false);
+      }
+
+      if (
+        isDeleteAllOpenRef.current &&
+        !openDeleteAllButtonRef.current?.contains(e.target as Node) &&
+        !deleteAllRef.current?.contains(e.target as Node)
+      ) {
+        setIsDeleteAllOpen(false);
       }
     };
 
@@ -289,14 +308,16 @@ export default function TimelineControls({
         <button
           className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title="Playback settings"
-          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          ref={openDropdownButtonRef}
+          onClick={() => setIsPlaybackSettingsOpen(!isPlaybackSettingsOpen)}
+          ref={openPlaybackSettingsButtonRef}
         >
           <img src="/settings.svg" alt="Settings" className="h-full w-full" />
         </button>
-        {isDropdownOpen && <SettingsDropdown dropdownRef={dropdownRef} />}
+        {isPlaybackSettingsOpen && (
+          <SettingsDropdown dropdownRef={playbackSettingsRef} />
+        )}
       </div>
-      <div className="bg-zinc-950 rounded-t-[0.5dvw] grow-[9] flex flex-row justify-evenly p-[2dvh]">
+      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[9] flex flex-row justify-evenly p-[2dvh]">
         <button
           className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex <= 0}
@@ -316,8 +337,13 @@ export default function TimelineControls({
         <button
           className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={selectedChord === -1}
-          title="Delete chord (Del)"
+          title="Delete chord (Del)/right click to delete all"
           onClick={() => deleteChord()}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            setIsDeleteAllOpen(!isDeleteAllOpen);
+          }}
+          ref={openDeleteAllButtonRef}
         >
           <img src="/trash.svg" alt="Delete" className="h-full w-full" />
         </button>
@@ -328,6 +354,12 @@ export default function TimelineControls({
         >
           <img src="/plus.svg" alt="Add" className="h-full w-full" />
         </button>
+        {isDeleteAllOpen && (
+          <DeleteAllDropdown
+            dropdownRef={deleteAllRef}
+            setIsOpen={setIsDeleteAllOpen}
+          />
+        )}
       </div>
     </div>
   );
