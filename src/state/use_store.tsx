@@ -44,6 +44,7 @@ interface StoreState {
   }[];
   deleteChord: () => void;
   replaceChord: (token: number, variant: number) => void;
+  clearChords: () => void;
 
   // Timeline
   resizingChord: boolean; // Whether the user is resizing any chord
@@ -65,6 +66,7 @@ interface StoreState {
   setStateWindowIndex: (stateWindowIndex: number) => void;
   saveStateWindow: () => void;
   loadStateWindow: (index: number) => void;
+  initializeStateWindow: () => void;
   undo: () => void;
   redo: () => void;
 
@@ -207,6 +209,11 @@ export const useStore = createWithEqualityFn<StoreState>()(
         chords[get().selectedChord].variant = variant;
         get().setChords(chords);
       },
+      clearChords: () => {
+        if (get().chords.length === 0) return;
+        get().setSelectedChord(-1, true);
+        get().setChords([]);
+      },
 
       // Timeline
       resizingChord: false,
@@ -238,8 +245,8 @@ export const useStore = createWithEqualityFn<StoreState>()(
       saveStateWindow: () => {
         const currStateWindow = [...get().stateWindow];
 
-        // Prevent saving if there are no chords or if the user is resizing a chord
-        if (get().chords.length === 0 || get().resizingChord) return;
+        // Prevent saving if the user is resizing a chord
+        if (get().resizingChord) return;
 
         // Whether to overwrite the future states (when we change something after undoing)
         if (get().stateWindowIndex < get().stateWindow.length - 1) {
@@ -272,6 +279,10 @@ export const useStore = createWithEqualityFn<StoreState>()(
         get().setChords(data.chords, true);
         get().setSignature(data.signature, true);
         get().setSelectedChord(data.selected, true);
+      },
+      initializeStateWindow: () => {
+        // Save the initial state so that we can undo to it
+        if (get().stateWindow.length === 0) get().saveStateWindow();
       },
       undo: () => {
         if (get().stateWindowIndex > 0) {

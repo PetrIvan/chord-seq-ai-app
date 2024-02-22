@@ -88,7 +88,7 @@ function ShowableWelcomeOverlay({ setIsWelcomeOverlayOpen }: Props) {
           </p>
           <iframe
             className="h-full aspect-video"
-            src="https://www.youtube.com/embed/szCteqz7bMA?si=pgevC3rqdIfVCTfq"
+            src="https://www.youtube.com/embed/YbTd2QBZqOk?si=DoGTRXT7tJnu_ReV"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen
           />

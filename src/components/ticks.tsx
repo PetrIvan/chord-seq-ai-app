@@ -46,7 +46,7 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
         style={tickStyle}
       >
         {/* To make the tick width not influence the distribution while being visible */}
-        <div className="absolute h-full w-full border-r-[0.15dvw] border-zinc-100" />
+        <div className="absolute h-full w-full border-r-[0.15dvw] border-white" />
       </div>
     );
   };

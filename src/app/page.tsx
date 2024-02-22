@@ -7,19 +7,22 @@ export default function Home() {
     <div>
       <SupportUsOverlay />
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
-        <header className="w-full flex flew-row justify-start items-center backdrop-blur-md p-2 cursor-default pr-2">
-          <div className="w-full flex flex-row justify-start items-center">
-            <img src="/app-icon.svg" alt="Logo" className="h-15 w-15 mr-1" />
-            <h1 className="text-3xl text-white">ChordSeqAI</h1>
-          </div>
-
+        <header className="w-full flex flew-row justify-between items-center backdrop-blur-md p-2 cursor-default">
+          <h1>
+            <img
+              src="/logo.svg"
+              alt="Compose with ChordSeqAI: Your AI Chord Progression Assistant"
+              className="h-15 w-15 mr-1"
+            />
+          </h1>
+          
           <SupportUsButton />
         </header>
         <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
           <h2 className="text-3xl md:text-5xl text-white font-semibold mb-5 max-w-xl">
             Your AI-powered chord progression copilot
           </h2>
-          <p className="text-lg md:text-xl text-gray-300 max-w-2xl pb-5">
+          <p className="text-lg md:text-xl text-zinc-300 max-w-2xl pb-5">
             Compose beautiful chord progressions in your browser, with the help
             of AI, for free. Open-source project, code available on GitHub.
           </p>
@@ -34,7 +37,7 @@ export default function Home() {
               <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
                 Add a chord and get the next one suggested
               </h3>
-              <p className="text-lg md:text-xl text-gray-300 pb-5">
+              <p className="text-lg md:text-xl text-zinc-300 pb-5">
                 ChordSeqAI uses neural networks to predict the next chord in a
                 progression. It was trained on a large dataset of chord
                 sequences from popular music.
@@ -56,7 +59,7 @@ export default function Home() {
               <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
                 Specify the style of your chord progression
               </h3>
-              <p className="text-lg md:text-xl text-gray-300 pb-5">
+              <p className="text-lg md:text-xl text-zinc-300 pb-5">
                 You can specify the genre and the musical period with
                 conditional models.
               </p>
@@ -77,7 +80,7 @@ export default function Home() {
               <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
                 Integrate with your favorite DAW
               </h3>
-              <p className="text-lg md:text-xl text-gray-300 pb-5">
+              <p className="text-lg md:text-xl text-zinc-300 pb-5">
                 You can export your chord progressions as MIDI files and import
                 them into FL Studio, Ableton Live, Logic Pro, or any other DAW.
               </p>
@@ -99,7 +102,7 @@ export default function Home() {
             <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
               Model Overview
             </h3>
-            <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-gray-200 pb-5">
+            <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-zinc-300 pb-5">
               <li>
                 <b>Recurrent Network.</b> A simple network for low-end devices.
               </li>
@@ -123,7 +126,7 @@ export default function Home() {
             <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
               Learn more
             </h3>
-            <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-gray-200 pb-5">
+            <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-zinc-300 pb-5">
               <li>
                 <b>Documentation.</b> You can view all of the available features{" "}
                 <a
@@ -164,7 +167,7 @@ export default function Home() {
             <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
               Contact Us
             </h3>
-            <p className="text-lg md:text-xl text-gray-200 pb-5">
+            <p className="text-lg md:text-xl text-zinc-300 pb-5">
               To report bugs or request features, use either{" "}
               <a
                 className="text-blue-400 hover:underline"

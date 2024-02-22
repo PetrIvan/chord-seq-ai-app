@@ -7,6 +7,7 @@ export default function QuickButtons() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    document.title = "ChordSeqAI"; // Change the title when the page loads
     const userAgent = navigator.userAgent;
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
@@ -19,7 +20,7 @@ export default function QuickButtons() {
       }`}
     >
       {isMobile && (
-        <p className="text-lg md:text-xl text-gray-300 px-5">
+        <p className="text-lg md:text-xl text-zinc-300 px-5">
           Currently available only on desktop devices.
         </p>
       )}
@@ -36,7 +37,7 @@ export default function QuickButtons() {
 
       {!isMobile && (
         <a
-          className="flex items-center justify-center py-7 px-6 rounded-full shadow-md border-2 text-xl md:text-2xl font-medium w-48 h-12 border-zinc-200 text-zinc-200 bg-gradient-to-bl from-[#8C205C] to-[#5C51A6] transition duration-300 ease-in-out hover:brightness-90"
+          className="flex items-center justify-center py-7 px-6 rounded-full shadow-md border-2 text-xl md:text-2xl font-medium w-48 h-12 border-white text-white bg-gradient-to-bl from-[#8C205C] to-[#5C51A6] transition duration-300 ease-in-out hover:brightness-90"
           href="/app"
         >
           Launch App

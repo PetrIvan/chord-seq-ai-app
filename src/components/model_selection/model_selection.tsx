@@ -131,7 +131,7 @@ export default function ModelSelection() {
       </button>
       {models[selectedModel][0].includes("Conditional") && (
         <>
-          <div className="border-r-[0.2dvw] border-zinc-100 self-stretch" />
+          <div className="border-r-[0.2dvw] border-white self-stretch" />
           {style()}
         </>
       )}
