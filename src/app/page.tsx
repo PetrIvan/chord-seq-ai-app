@@ -15,7 +15,7 @@ export default function Home() {
               className="h-15 w-15 mr-1"
             />
           </h1>
-          
+
           <SupportUsButton />
         </header>
         <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
@@ -190,7 +190,7 @@ export default function Home() {
             </p>
 
             {/* Only visible on mobile devices */}
-            <p className="md:hidden text-lg md:text-xl text-gray-200 pb-5">
+            <p className="md:hidden text-lg md:text-xl text-zinc-300 pb-5">
               If you want to support the development of this app, you can do so
               on{" "}
               <a
