@@ -1,10 +1,13 @@
 import QuickButtons from "@/components/landing_page/quick_buttons";
+import SupportUsButton from "@/components/landing_page/support_us_button";
+import SupportUsOverlay from "@/components/landing_page/support_us_overlay";
 
 export default function Home() {
   return (
     <div>
+      <SupportUsOverlay />
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
-        <header className="w-full flex flew-row justify-start items-center backdrop-blur-md p-2 cursor-default">
+        <header className="w-full flex flew-row justify-between items-center backdrop-blur-md p-2 cursor-default">
           <h1>
             <img
               src="/logo.svg"
@@ -12,6 +15,8 @@ export default function Home() {
               className="h-15 w-15 mr-1"
             />
           </h1>
+          
+          <SupportUsButton />
         </header>
         <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
           <h2 className="text-3xl md:text-5xl text-white font-semibold mb-5 max-w-xl">
@@ -180,6 +185,30 @@ export default function Home() {
                 rel="noopener noreferrer"
               >
                 petr.ivan.junior@gmail.com
+              </a>
+              .
+            </p>
+
+            {/* Only visible on mobile devices */}
+            <p className="md:hidden text-lg md:text-xl text-gray-200 pb-5">
+              If you want to support the development of this app, you can do so
+              on{" "}
+              <a
+                className="text-blue-400 hover:underline"
+                href="https://patreon.com/xenomuse"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Patreon
+              </a>
+              , or if you prefer a one-time donation, you can use{" "}
+              <a
+                className="text-blue-400 hover:underline"
+                href="https://paypal.me/xenomuse"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                PayPal
               </a>
               .
             </p>
