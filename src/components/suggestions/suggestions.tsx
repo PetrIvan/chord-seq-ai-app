@@ -316,6 +316,23 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
 
   /* Rendering */
   // Render the suggestions
+  function variantMatches(token: number, variantIndex: number) {
+    // If the search query is empty, all chords match
+    if (searchQuery === "") return true;
+
+    const normalizedSearchQuery = searchQuery.toLowerCase();
+    const name = tokenToChord[token][variantIndex].toLowerCase();
+
+    // Exact match
+    if (normalizedSearchQuery.includes(`"${name}"`)) {
+      return true;
+    }
+
+    // Check whether contains all keywords (space-separated)
+    const keywords = normalizedSearchQuery.split(/\s+/);
+    return keywords.every((keyword) => name.includes(keyword));
+  }
+
   function getChordsList() {
     let chordsList = [];
     for (let i = 0; i < chordProbs.length; i++) {
@@ -324,27 +341,22 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
       // Filter out chords that don't match the search query
       let variant = 0;
       if (suggestionsIncludeVariants) {
+        // Check if any variant matches
         let anyMatch = false;
         for (let j = 0; j < tokenToChord[token].length; j++) {
-          if (
-            tokenToChord[token][j]
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase())
-          ) {
+          if (variantMatches(token, j)) {
             anyMatch = true;
             variant = j;
             break;
           }
         }
+
+        // Skip if no match
         if (!anyMatch) continue;
       } else {
+        // Skip if the default variant doesn't match
         variant = defaultVariants[token];
-        if (
-          !tokenToChord[token][variant]
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-        )
-          continue;
+        if (!variantMatches(token, variant)) continue;
       }
 
       // Filter out chords that don't contain the search notes
