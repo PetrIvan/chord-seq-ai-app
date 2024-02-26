@@ -1,5 +1,6 @@
 import * as ort from "onnxruntime-web";
 import { tokenToChord } from "@/data/token_to_chord";
+import { transpositionMap } from "@/data/transposition_map";
 import { useStore } from "@/state/use_store";
 
 // Add a special token for the start and end of the sequence
@@ -133,11 +134,17 @@ export async function predict(
   const probs = softmax(column);
 
   // Convert it to the wanted format, skip the start and end tokens
-  const chordProbs = [];
+  let chordProbs = [];
   for (let i = 0; i < probs.length - 2; i++) {
     chordProbs.push({ token: i, prob: probs[i] });
   }
-  chordProbs.sort((a, b) => b.prob - a.prob);
+
+  // Process or sort the predictions
+  if (numChords === 1) {
+    chordProbs = processFirstPreds(chordProbs);
+  } else {
+    chordProbs.sort((a, b) => b.prob - a.prob);
+  }
 
   // Cache the result
   predictionCache.set(strData, chordProbs);
@@ -148,6 +155,58 @@ export async function predict(
   }
 
   return chordProbs;
+}
+
+// Tokens that are transpositions of one another should have the same probability, so we average them and sort
+function processFirstPreds(
+  chordProbs: { token: number; prob: number }[]
+): { token: number; prob: number }[] {
+  const newChordProbs: { token: number; prob: number }[] = [];
+  for (let i = 0; i < chordProbs.length; i++) {
+    const chord = chordProbs[i];
+
+    // If the token is already in the new list, skip it
+    if (newChordProbs.find((c) => c.token === chord.token)) continue;
+
+    // Average the probabilities of the transpositions
+    let summedProb = 0;
+    for (let j = 0; j < transpositionMap[chord.token].length; j++) {
+      const transposedToken = transpositionMap[chord.token][j];
+      summedProb +=
+        chordProbs.find((c) => c.token === transposedToken)?.prob || 0;
+    }
+
+    for (let j = 0; j < transpositionMap[chord.token].length; j++) {
+      if (
+        newChordProbs.find((c) => c.token === transpositionMap[chord.token][j])
+      )
+        continue;
+      newChordProbs.push({
+        token: transpositionMap[chord.token][j],
+        prob: summedProb / 12,
+      });
+    }
+  }
+
+  // Sort the new list by probability, else sort by name
+  newChordProbs.sort((a, b) => {
+    if (a.prob === b.prob) {
+      return getRootNoteValue(a.token) - getRootNoteValue(b.token);
+    }
+    return b.prob - a.prob;
+  });
+
+  return newChordProbs;
+}
+
+function getRootNoteValue(token: number) {
+  const noteOrder = ["C", "D", "E", "F", "G", "A", "B"];
+  const rootNote = tokenToChord[token][0][0];
+  // Sharp notes are offset by 1 instead of using custom checks (the implementation is easier this way)
+  return (
+    noteOrder.indexOf(rootNote) * 2 +
+    (tokenToChord[token][0][1] === "#" ? 1 : 0)
+  );
 }
 
 async function loadModel(modelPath: string) {
