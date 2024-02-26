@@ -82,7 +82,7 @@ export default function Chord({
       style={{
         // Interpolate between violet and black logarithmically
         backgroundColor: color(
-          1 - (Math.log(prob) + decayFactor) / decayFactor
+          1 - (Math.log(prob + Number.EPSILON) + decayFactor) / decayFactor
         ),
         minHeight: "5dvw",
       }}
@@ -90,6 +90,8 @@ export default function Chord({
         prob * 100
       ).toFixed(2)}%${
         variant !== 0 ? `; variant of ${tokenToChord[token][0]}` : ""
+      }${
+        prob === 0 ? "; same as previous" : "" // The probability can be 0 only in that case (because of model's softmax function)
       }), right click to open variants`}
       onClick={() => {
         playChord(tokenToChord[token][variant]);

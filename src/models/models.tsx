@@ -135,8 +135,6 @@ export async function predict(
   // Convert it to the wanted format, skip the start and end tokens
   const chordProbs = [];
   for (let i = 0; i < probs.length - 2; i++) {
-    if (i == chords[chords.length - 1].token) continue;
-
     chordProbs.push({ token: i, prob: probs[i] });
   }
   chordProbs.sort((a, b) => b.prob - a.prob);
