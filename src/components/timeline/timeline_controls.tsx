@@ -10,6 +10,7 @@ import {
   stopPlayback,
   setMuteMetronome,
   setBpm,
+  setLoop,
 } from "@/playback/player";
 
 import SettingsDropdown from "./settings_dropdown";
@@ -45,6 +46,8 @@ export default function TimelineControls({
     undo,
     redo,
     bpm,
+    loop,
+    setStateLoop,
     enabledShortcuts,
   ] = useStore(
     (state) => [
@@ -63,6 +66,8 @@ export default function TimelineControls({
       state.undo,
       state.redo,
       state.bpm,
+      state.loop,
+      state.setLoop,
       state.enabledShortcuts,
     ],
     shallow
@@ -230,9 +235,14 @@ export default function TimelineControls({
     setMetronome(!metronome);
   }
 
+  // Update the BPM and loop state of the player
   useEffect(() => {
     setBpm(bpm);
   }, [bpm]);
+
+  useEffect(() => {
+    setLoop(loop);
+  }, [loop]);
 
   /* Dropdowns */
   const [isPlaybackSettingsOpen, setIsPlaybackSettingsOpen] = useState(false);
@@ -314,7 +324,11 @@ export default function TimelineControls({
           <img src="/settings.svg" alt="Settings" className="h-full w-full" />
         </button>
         {isPlaybackSettingsOpen && (
-          <SettingsDropdown dropdownRef={playbackSettingsRef} />
+          <SettingsDropdown
+            dropdownRef={playbackSettingsRef}
+            loop={loop}
+            setLoop={setStateLoop}
+          />
         )}
       </div>
       <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[9] flex flex-row justify-evenly p-[2dvh]">
