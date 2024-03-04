@@ -89,6 +89,8 @@ interface StoreState {
   // Playback
   bpm: number;
   setBpm: (bpm: number) => void;
+  loop: boolean;
+  setLoop: (loop: boolean) => void;
 
   // Suggestions
   enabledShortcuts: boolean; // When typing in the search bar, disable shortcuts
@@ -318,6 +320,8 @@ export const useStore = createWithEqualityFn<StoreState>()(
       // Playback
       bpm: 120,
       setBpm: (bpm: number) => set({ bpm }),
+      loop: false,
+      setLoop: (loop: boolean) => set({ loop }),
 
       // Suggestions
       enabledShortcuts: true,
@@ -382,6 +386,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         selectedGenres: state.selectedGenres,
         selectedDecades: state.selectedDecades,
         bpm: state.bpm,
+        loop: state.loop,
         defaultVariants: state.defaultVariants,
         welcomeFirstTime: state.welcomeFirstTime,
       }),

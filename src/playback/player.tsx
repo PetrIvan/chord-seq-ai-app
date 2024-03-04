@@ -7,6 +7,7 @@ let metronomeSynth: Tone.Sampler;
 let metronomePart: Tone.Part;
 
 let playing = false;
+let loop = false;
 let bpm = 120; // Custom implementation of bpm is used to allow number input
 let timeNoteDuration: { time: number; note: number; duration: number }[] = [];
 let lastStartPlaying: number;
@@ -135,7 +136,7 @@ export function playSequence(
 
     // Start the metronome
     let metronomeBeats = Array.from(
-      { length: totalTime * (bpm / 60) + 1 },
+      { length: totalTime * (bpm / 60) },
       (value, key) => key
     ).map((i) => i / (bpm / 60));
     metronomePart = new Tone.Part((time) => {
@@ -175,16 +176,27 @@ async function updatePlayheadPosition(
   partDuration: number,
   setPlaying: (playing: boolean) => void
 ) {
-  // Stop the playback if it is not playing or the end of the sequence is reached
+  // Stop the playback if it is not playing
   const timePosition = Tone.Transport.seconds;
-  if (!playing || timePosition > partDuration) {
+  if (!playing) {
     setPlaying(false);
     stopPlayback();
 
-    // Reset the playhead position if the end of the sequence is reached
-    if (timePosition > partDuration) setPlayheadPosition(0);
-
     return;
+  }
+
+  // Reset the playhead position if the end of the sequence is reached
+  if (timePosition >= partDuration && playing) {
+    if (loop) {
+      Tone.Transport.seconds = -0.01; // To avoid the first note being skipped
+      setPlayheadPosition(0);
+    } else {
+      setPlayheadPosition(0);
+      setPlaying(false);
+      stopPlayback();
+
+      return;
+    }
   }
 
   // Move the playhead, repeat the function
@@ -234,4 +246,8 @@ export function setBpm(newBpm: number) {
 
   // To not fall out of sync, we stop the playback
   if (playing) stopPlayback();
+}
+
+export function setLoop(newLoop: boolean) {
+  loop = newLoop;
 }
