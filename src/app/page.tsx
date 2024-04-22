@@ -96,6 +96,31 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="w-full h-[2dvh]" />
+
+          <div className="flex flex-col lg:flex-row items-center justify-center rounded-lg bg-zinc-950 drop-shadow-[0_0px_15px_rgba(24,24,27,1)] w-full min-h-fit">
+            <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-5">
+              <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+                Start your learning journey
+              </h3>
+              <p className="text-lg md:text-xl text-zinc-300 pb-5 px-5 text-justify">
+                Check out our YouTube playlist covering the essentials of
+                ChordSeqAI. Starting from the basics and eventually covering
+                advanced topics, it will help you get the most out of the app.
+              </p>
+            </div>
+            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
+              <iframe
+                className="h-full w-full aspect-video object-cover object-center rounded-b-lg lg:rounded-bl-none lg:rounded-r-lg"
+                src="https://www.youtube.com/embed/videoseries?si=t-XM9ujWyvSJyIbj&amp;list=PLT4SeTqv-OaknHUttzBYHr2gmKemcEXkp"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            </div>
+          </div>
+
+          <div className="w-full h-[1dvh]" />
+
           <div className="w-full h-[3dvh] bg-gradient-to-b from-transparent to-zinc-900" />
 
           <div className="flex flex-col items-center justify-center shadow-lg max-w-3xl p-5 space-y-2">
