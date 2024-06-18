@@ -101,6 +101,10 @@ interface StoreState {
   setSearchQuery: (searchQuery: string) => void;
   searchNotes: number[];
   setSearchNotes: (searchNotes: number[]) => void;
+  matchType: number;
+  setMatchType: (matchType: number) => void;
+  matchAnyVariant: boolean;
+  setMatchAnyVariant: (matchAnyOctave: boolean) => void;
   includeVariants: boolean;
   setIncludeVariants: (includeVariants: boolean) => void;
 
@@ -333,6 +337,11 @@ export const useStore = createWithEqualityFn<StoreState>()(
       setSearchQuery: (searchQuery: string) => set({ searchQuery }),
       searchNotes: [],
       setSearchNotes: (searchNotes: number[]) => set({ searchNotes }),
+      matchType: 0,
+      setMatchType: (matchType: number) => set({ matchType }),
+      matchAnyVariant: true,
+      setMatchAnyVariant: (matchAnyOctave: boolean) =>
+        set({ matchAnyVariant: matchAnyOctave }),
       includeVariants: false,
       setIncludeVariants: (includeVariants: boolean) =>
         set({ includeVariants }),

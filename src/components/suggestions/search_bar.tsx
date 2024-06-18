@@ -14,6 +14,10 @@ export default function SearchBar() {
     setIncludeVariants,
     searchNotes,
     setSearchNotes,
+    matchType,
+    setMatchType,
+    matchAnyVariant,
+    setMatchAnyVariant,
   ] = useStore(
     (state) => [
       state.setEnabledShortcuts,
@@ -23,6 +27,10 @@ export default function SearchBar() {
       state.setIncludeVariants,
       state.searchNotes,
       state.setSearchNotes,
+      state.matchType,
+      state.setMatchType,
+      state.matchAnyVariant,
+      state.setMatchAnyVariant,
     ],
     shallow
   );
@@ -56,6 +64,30 @@ export default function SearchBar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  // Match dropdown
+  const matchTypes = ["At least", "At most", "Exact"];
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  let matchDropdown = (
+    <div className="absolute z-[15] top-full mt-[0.5dvw] bg-zinc-800 rounded-[0.5dvw] w-full text-[2.5dvh]">
+      <ul>
+        {matchTypes.map((match) => (
+          <li key={match}>
+            <button
+              className="w-full bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
+              onClick={() => {
+                setMatchType(matchTypes.indexOf(match) as 0 | 1 | 2);
+                setIsDropdownOpen(false);
+              }}
+            >
+              {match}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 
   return (
     <div className="h-[4dvw] flex flex-row items-center justify-start space-x-[1dvw]">
@@ -141,9 +173,46 @@ export default function SearchBar() {
         </button>
         {isPianoOpen && (
           <div
-            className="absolute top-[100%] bg-zinc-950 p-[1dvw] pb-[2dvw] rounded-[0.5dvw] flex flex-row items-center justify-center"
+            className="absolute top-[100%] bg-zinc-950 p-[1dvw] pb-[2dvw] rounded-[0.5dvw] flex flex-col items-center justify-center z-10"
             ref={pianoRef}
           >
+            <div className="flex flex-row items-center justify-center pb-[1dvw] text-[2.5dvh]">
+              <span className="select-none mr-[1dvw]">Match:</span>
+              <div
+                className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] mr-[1dvw] hover:bg-zinc-900 w-[7dvw] cursor-pointer whitespace-nowrap"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                <div className="flex flex-row items-center justify-between">
+                  {matchTypes[matchType]}
+                  <svg
+                    className="w-[0.8dvw] h-[0.8dvw] mr-[0.5dvw] inline-block"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </div>
+
+                <div className="relative w-full h-full">
+                  {isDropdownOpen && matchDropdown}
+                </div>
+              </div>
+              <span className="select-none mr-[1dvw]">Any variant:</span>
+              <input
+                type="checkbox"
+                className="h-[1.2dvw] w-[1.2dvw] bg-zinc-800 rounded-[0.25dvw] focus:outline-none"
+                checked={matchAnyVariant}
+                onChange={() => setMatchAnyVariant(!matchAnyVariant)}
+              />
+            </div>
             <Piano
               notes={searchNotes}
               octaveOffset={3}
@@ -161,6 +230,8 @@ export default function SearchBar() {
           onClick={() => {
             setSearchQuery("");
             setSearchNotes([]);
+            setMatchType(0);
+            setMatchAnyVariant(true);
           }}
         >
           <img

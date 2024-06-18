@@ -7,7 +7,7 @@ import { tokenToChord } from "@/data/token_to_chord";
 import { chordToNotes } from "@/data/chord_to_notes";
 
 import { shallow } from "zustand/shallow";
-import { isEqual } from "lodash";
+import { clone, isEqual } from "lodash";
 import { playChord } from "@/playback/player";
 
 import SearchBar from "./search_bar";
@@ -29,6 +29,8 @@ interface Props {
   decayFactor: number;
   searchQuery: string;
   searchNotes: number[];
+  matchType: number;
+  matchAnyVariant: boolean;
   enabledShortcuts: boolean;
   suggestionsIncludeVariants: boolean;
   setVariantsOpen: (open: boolean) => void;
@@ -63,6 +65,8 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
     prevProps.modelPath !== newProps.modelPath ||
     prevProps.decayFactor !== newProps.decayFactor ||
     prevProps.searchQuery !== newProps.searchQuery ||
+    prevProps.matchType !== newProps.matchType ||
+    prevProps.matchAnyVariant !== newProps.matchAnyVariant ||
     prevProps.enabledShortcuts !== newProps.enabledShortcuts ||
     prevProps.suggestionsIncludeVariants !==
       newProps.suggestionsIncludeVariants ||
@@ -126,6 +130,8 @@ export default function Suggestions() {
     decayFactor,
     searchQuery,
     searchNotes,
+    matchType,
+    matchAnyVariant,
     enabledShortcuts,
     suggestionsIncludeVariants,
     setVariantsOpen,
@@ -147,6 +153,8 @@ export default function Suggestions() {
       state.decayFactor,
       state.searchQuery,
       state.searchNotes,
+      state.matchType,
+      state.matchAnyVariant,
       state.enabledShortcuts,
       state.includeVariants,
       state.setVariantsOpen,
@@ -172,6 +180,8 @@ export default function Suggestions() {
       decayFactor={decayFactor}
       searchQuery={searchQuery}
       searchNotes={searchNotes}
+      matchType={matchType}
+      matchAnyVariant={matchAnyVariant}
       enabledShortcuts={enabledShortcuts}
       suggestionsIncludeVariants={suggestionsIncludeVariants}
       setVariantsOpen={setVariantsOpen}
@@ -196,6 +206,8 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   decayFactor,
   searchQuery,
   searchNotes,
+  matchType,
+  matchAnyVariant,
   enabledShortcuts,
   suggestionsIncludeVariants,
   setVariantsOpen,
@@ -333,6 +345,30 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     return keywords.every((keyword) => name.includes(keyword));
   }
 
+  function notesMatch(
+    notes: number[],
+    searchNotes: number[],
+    matchType: number
+  ) {
+    // Remove duplicate notes
+    notes = notes.filter((note, index) => notes.indexOf(note) === index);
+    searchNotes = searchNotes.filter(
+      (note, index) => searchNotes.indexOf(note) === index
+    );
+
+    if (matchType === 0) {
+      // At least match (i.e. searchNotes is a subset of notes)
+      return searchNotes.every((note) => notes.includes(note));
+    } else if (matchType === 1) {
+      // At most match (i.e. notes is a subset of searchNotes)
+      return notes.every((note) => searchNotes.includes(note));
+    } else {
+      // Exact match
+      if (searchNotes.length !== notes.length) return false;
+      return searchNotes.every((note) => notes.includes(note));
+    }
+  }
+
   function getChordsList() {
     let chordsList = [];
     for (let i = 0; i < chordProbs.length; i++) {
@@ -361,10 +397,49 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
 
       // Filter out chords that don't contain the search notes
       if (searchNotes.length > 0) {
-        const notes = chordToNotes[tokenToChord[token][variant]].map(
-          (note) => note % 12
-        );
-        if (!searchNotes.every((note) => notes.includes(note % 12))) continue;
+        let normSearchNotes = clone(searchNotes);
+        if (matchAnyVariant) {
+          let notes = chordToNotes[tokenToChord[token][variant]];
+
+          // Normalize both notes and searchNotes to be in the same octave
+          notes = notes.map((note) => note % 12);
+          normSearchNotes = normSearchNotes.map((note) => note % 12);
+
+          // Check if the notes match (variants are irrelevant due to the normalization)
+          if (!notesMatch(notes, normSearchNotes, matchType)) continue;
+        } else {
+          // Check all variants
+          let allVariantNotes: number[][] = [];
+          for (let j = 0; j < tokenToChord[token].length; j++) {
+            let variantNotes = chordToNotes[tokenToChord[token][j]];
+
+            // Normalize notes to start from the lowest octave
+            const lowestOctave = Math.round(Math.min(...variantNotes) / 12);
+            variantNotes = variantNotes.map((note) => note - lowestOctave * 12);
+
+            allVariantNotes.push(variantNotes);
+          }
+
+          // Normalize searchNotes to start from the lowest octave
+          const lowestOctave = Math.round(Math.min(...normSearchNotes) / 12);
+          normSearchNotes = normSearchNotes.map(
+            (note) => note - lowestOctave * 12
+          );
+
+          // Check if any variant matches
+          let anyMatch = false;
+          for (let j = 0; j < allVariantNotes.length; j++) {
+            let notes = allVariantNotes[j];
+
+            if (notesMatch(notes, normSearchNotes, matchType)) {
+              variant = j;
+              anyMatch = true;
+              break;
+            }
+          }
+
+          if (!anyMatch) continue;
+        }
       }
 
       chordsList.push(
