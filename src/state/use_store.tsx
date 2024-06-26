@@ -302,7 +302,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       },
 
       // Model settings
-      modelPath: "/models/transformer_small.onnx", // Default model
+      modelPath: "/models/conditional_medium.onnx", // Default model
       setModelPath: (modelPath: string) => set({ modelPath }),
       selectedGenres: Array(genres.length).fill(0),
       setSelectedGenres: (selectedGenres: number[]) => set({ selectedGenres }),
