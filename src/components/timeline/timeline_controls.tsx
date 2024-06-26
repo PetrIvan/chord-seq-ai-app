@@ -293,7 +293,7 @@ export default function TimelineControls({
   }, []);
 
   return (
-    <div className="flex flex-row justify-stretch max-h-min max-w-[40%] space-x-[2dvh]">
+    <div className="flex flex-row justify-stretch max-h-min max-w-[50%] space-x-[2dvh]">
       <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[7] flex flex-row justify-evenly p-[2dvh]">
         <button
           className={`grow select-none ${
@@ -331,7 +331,7 @@ export default function TimelineControls({
           />
         )}
       </div>
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[9] flex flex-row justify-evenly p-[2dvh]">
+      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[11] flex flex-row justify-evenly p-[2dvh]">
         <button
           className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex <= 0}
@@ -351,15 +351,18 @@ export default function TimelineControls({
         <button
           className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={selectedChord === -1}
-          title="Delete chord (Del)/right click to delete all"
+          title="Delete chord (Del)"
           onClick={() => deleteChord()}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            setIsDeleteAllOpen(!isDeleteAllOpen);
-          }}
-          ref={openDeleteAllButtonRef}
         >
           <img src="/trash.svg" alt="Delete" className="h-full w-full" />
+        </button>
+        <button
+          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          title="Delete all chords (Ctrl+Del)"
+          onClick={() => setIsDeleteAllOpen(!isDeleteAllOpen)}
+          ref={openDeleteAllButtonRef}
+        >
+          <img src="/trash-all.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
           className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
