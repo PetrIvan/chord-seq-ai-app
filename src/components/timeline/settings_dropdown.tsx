@@ -15,11 +15,10 @@ export default function SettingsDropdown({
   const [bpm, setBpm] = useStore((state) => [state.bpm, state.setBpm]);
   const [localBpm, setLocalBpm] = useState(bpm);
 
-  const handleNumeratorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleBMPChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(event.target.value, 10);
 
+    console.log(event.target.value);
     if ((newValue > 0 && newValue < 999) || event.target.value === "") {
       setLocalBpm(newValue);
 
@@ -48,8 +47,9 @@ export default function SettingsDropdown({
         <input
           type="number"
           className="w-[5dvw] h-[3dvw] bg-zinc-800 rounded-[0.5dvw] text-[2.5dvh]"
+          title="Change BPM (Up/Down Arrow keys)"
           value={localBpm}
-          onChange={handleNumeratorChange}
+          onInput={handleBMPChange}
         />
       </div>
     </div>

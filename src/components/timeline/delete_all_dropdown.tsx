@@ -19,6 +19,7 @@ export default function DeleteAllDropdown({ dropdownRef, setIsOpen }: Props) {
       </p>
       <button
         className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
+        title="Confirm deletion (Enter)"
         onClick={() => {
           clearChords();
           setIsOpen(false);

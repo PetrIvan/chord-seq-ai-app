@@ -4,15 +4,17 @@ interface Props {
   dropdownRef: React.RefObject<HTMLDivElement>;
   setIsExportDropdownOpen: (state: boolean) => void;
   handleExport: (format: string) => void;
+  format: string;
+  setFormat: (format: string) => void;
 }
 
 export default function ExportDropdown({
   dropdownRef,
   handleExport,
   setIsExportDropdownOpen,
+  format,
+  setFormat,
 }: Props) {
-  const [format, setFormat] = useState(".chseq");
-
   // Format selection dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -44,6 +46,7 @@ export default function ExportDropdown({
       <span className="select-none mr-[1dvw]">Format:</span>
       <div
         className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] mr-[1dvw] hover:bg-zinc-900 w-[6dvw] cursor-pointer whitespace-nowrap"
+        title="Select format (Up/Down Arrow keys)"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         {format}
@@ -68,6 +71,7 @@ export default function ExportDropdown({
       </div>
       <button
         className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
+        title="Export (Enter)"
         onClick={() => {
           handleExport(format);
           setIsExportDropdownOpen(false);

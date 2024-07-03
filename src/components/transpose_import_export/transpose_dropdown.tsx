@@ -32,12 +32,14 @@ export default function TransposeDropdown({ dropdownRef, transpose }: Props) {
       <input
         id="transpose-amount"
         type="number"
+        title="Semitones (Up/Down Arrow keys)"
         className="w-[5dvw] h-[6dvh] bg-zinc-800 rounded-[0.5dvw] mr-[1dvw]"
         value={transposeBy}
         onChange={handleNumeratorChange}
       />
       <button
         className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
+        title="Confirm transposition (Enter)"
         onClick={() => transpose(parseInt(transposeBy, 10))}
       >
         Confirm

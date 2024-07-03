@@ -36,6 +36,7 @@ export default function TimelineControls({
     setSelectedChord,
     addChord,
     deleteChord,
+    clearChords,
     signature,
     zoom,
     timelinePosition,
@@ -56,6 +57,7 @@ export default function TimelineControls({
       state.setSelectedChord,
       state.addChord,
       state.deleteChord,
+      state.clearChords,
       state.signature,
       state.zoom,
       state.timelinePosition,
@@ -84,15 +86,76 @@ export default function TimelineControls({
 
   // Mapping keys to their handler functions
   const keyEventHandlers: Record<string, () => void> = {
-    Space: changePlaying,
     KeyM: changeMetronome,
-    Delete: deleteChord,
-    KeyA: addChordAndScroll,
+    Space: changePlaying,
+    KeyS: () => {
+      setIsPlaybackSettingsOpen(!isPlaybackSettingsOpenRef.current);
+    },
+    KeyL: () => {
+      const newState = !loopRef.current;
+      setLoop(newState);
+      setStateLoop(newState);
+    },
     KeyZ_Ctrl: undo,
     KeyY_Ctrl: redo,
+    Delete: deleteChord,
+    Delete_Ctrl: () => {
+      if (isDeleteAllOpenRef.current) clearChords();
+      setIsDeleteAllOpen(!isDeleteAllOpenRef.current);
+    },
+    KeyA: addChordAndScroll,
     ArrowLeft: () => moveSelection("left"),
     ArrowRight: () => moveSelection("right"),
-    Escape: () => setSelectedChord(-1),
+    ArrowUp: () => {
+      // Increase the BPM by 1
+      if (isPlaybackSettingsOpenRef.current) {
+        const input = playbackSettingsRef.current?.querySelector(
+          "input[type=number]"
+        ) as HTMLInputElement;
+        if (!input) return;
+        input.value = Math.min(400, parseInt(input.value) + 1).toString();
+
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value"
+        )?.set;
+        nativeInputValueSetter?.call(input, input.value);
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    },
+    ArrowDown: () => {
+      // Decrease the BPM by 1
+      if (isPlaybackSettingsOpenRef.current) {
+        const input = playbackSettingsRef.current?.querySelector(
+          "input[type=number]"
+        ) as HTMLInputElement;
+        if (!input) return;
+        input.value = Math.max(10, parseInt(input.value) - 1).toString();
+
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value"
+        )?.set;
+        nativeInputValueSetter?.call(input, input.value);
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    },
+    Enter: () => handleEnterKey(),
+    NumpadEnter: () => handleEnterKey(),
+    Escape: () => {
+      if (isPlaybackSettingsOpenRef.current) setIsPlaybackSettingsOpen(false);
+      if (isDeleteAllOpenRef.current) setIsDeleteAllOpen(false);
+      if (selectedChord !== -1) setSelectedChord(-1);
+    },
+  };
+
+  const handleEnterKey = () => {
+    if (isDeleteAllOpenRef.current) {
+      clearChords();
+      setIsDeleteAllOpen(false);
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -240,8 +303,20 @@ export default function TimelineControls({
     setBpm(bpm);
   }, [bpm]);
 
+  const bpmRef = useRef(bpm);
+
+  useEffect(() => {
+    bpmRef.current = bpm;
+  }, [bpm]);
+
   useEffect(() => {
     setLoop(loop);
+  }, [loop]);
+
+  const loopRef = useRef(loop);
+
+  useEffect(() => {
+    loopRef.current = loop;
   }, [loop]);
 
   /* Dropdowns */
@@ -317,7 +392,7 @@ export default function TimelineControls({
         </button>
         <button
           className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-          title="Playback settings"
+          title="Playback settings (S)"
           onClick={() => setIsPlaybackSettingsOpen(!isPlaybackSettingsOpen)}
           ref={openPlaybackSettingsButtonRef}
         >

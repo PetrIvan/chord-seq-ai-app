@@ -15,17 +15,117 @@ import TransposeDropdown from "./transpose_dropdown";
 import ExportDropdown from "./export_dropdown";
 
 export default function TransposeImportExport() {
-  const [chords, setChords, signature, setSignature, setSelectedChord] =
-    useStore(
-      (state) => [
-        state.chords,
-        state.setChords,
-        state.signature,
-        state.setSignature,
-        state.setSelectedChord,
-      ],
-      shallow
-    );
+  const [
+    chords,
+    setChords,
+    signature,
+    setSignature,
+    setSelectedChord,
+    enabledShortcuts,
+    selectedChord,
+    timelinePosition,
+    zoom,
+  ] = useStore(
+    (state) => [
+      state.chords,
+      state.setChords,
+      state.signature,
+      state.setSignature,
+      state.setSelectedChord,
+      state.enabledShortcuts,
+      state.selectedChord,
+      state.timelinePosition,
+      state.zoom,
+    ],
+    shallow
+  );
+
+  /* Shortcuts */
+  const enabledShortcutsRef = useRef(enabledShortcuts);
+
+  useEffect(() => {
+    enabledShortcutsRef.current = enabledShortcuts;
+  }, [enabledShortcuts]);
+
+  // Keyboard shortcuts
+  const keyEventHandlers: Record<string, () => void> = {
+    KeyT: () => {
+      setShowTransposeDropdown(!showTransposeDropdownRef.current);
+      setShowExportDropdown(false);
+    },
+    KeyI: () => importRef.current?.click(),
+    KeyE: () => {
+      setShowExportDropdown(!showExportDropdownRef.current);
+      setShowTransposeDropdown(false);
+    },
+    ArrowUp: () => {
+      // Increment the value in the transpose dropdown
+      if (showTransposeDropdownRef.current) {
+        const input = transposeDropdownRef.current?.querySelector("input");
+        if (!input) return;
+        input.value = Math.min(parseInt(input.value, 10) + 1, 11).toString();
+      }
+      // Change the export format
+      if (showExportDropdownRef.current) {
+        setFormat(formatRef.current === ".chseq" ? ".mid" : ".chseq");
+      }
+    },
+    ArrowDown: () => {
+      // Decrement the value in the transpose dropdown
+      if (showTransposeDropdownRef.current) {
+        const input = transposeDropdownRef.current?.querySelector("input");
+        if (!input) return;
+        input.value = Math.max(parseInt(input.value, 10) - 1, -11).toString();
+      }
+      // Change the export format
+      if (showExportDropdownRef.current) {
+        setFormat(formatRef.current === ".chseq" ? ".mid" : ".chseq");
+      }
+    },
+    Enter: () => handleEnterKey(),
+    NumpadEnter: () => handleEnterKey(),
+    Escape: () => {
+      if (showTransposeDropdownRef.current) setShowTransposeDropdown(false);
+      if (showExportDropdownRef.current) setShowExportDropdown(false);
+    },
+  };
+
+  const handleEnterKey = () => {
+    // Confirm the transposition
+    if (showTransposeDropdownRef.current) {
+      const input = transposeDropdownRef.current?.querySelector("input");
+      if (!input) return;
+      transposeChords(parseInt(input.value, 10));
+      setShowTransposeDropdown(false);
+    }
+    // Confirm the export
+    if (showExportDropdownRef.current) {
+      handleExport(formatRef.current);
+      setShowExportDropdown(false);
+    }
+  };
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    // Based on the key, call the corresponding handler function
+    const key = event.code;
+    const action =
+      key + (event.altKey ? "_Alt" : "") + (event.ctrlKey ? "_Ctrl" : "");
+
+    if (!enabledShortcutsRef.current) return;
+
+    if (keyEventHandlers[action]) {
+      event.preventDefault();
+      keyEventHandlers[action]();
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [chords, selectedChord, signature, timelinePosition, zoom]);
 
   /* Transposition */
   function transposeChords(delta: number) {
@@ -158,9 +258,20 @@ export default function TransposeImportExport() {
           );
         });
     }
+
+    // Clear the input
+    event.target.value = "";
   };
 
   /* Export */
+  const [format, setFormat] = useState(".chseq");
+
+  const formatRef = useRef(format);
+
+  useEffect(() => {
+    formatRef.current = format;
+  }, [format]);
+
   function downloadFile(blob: Blob, filename: string) {
     const url = URL.createObjectURL(blob);
 
@@ -222,7 +333,7 @@ export default function TransposeImportExport() {
     <section className="relative flex-1 bg-zinc-900 p-[2dvh] rounded-[0.5dvw] w-full flex flex-row justify-evenly text-[2.5dvh]">
       <button
         className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-        title="Transpose"
+        title="Transpose (T)"
         onClick={() => setShowTransposeDropdown(!showTransposeDropdown)}
         ref={openTransposeDropdownButtonRef}
       >
@@ -230,7 +341,7 @@ export default function TransposeImportExport() {
       </button>
       <button
         className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-        title="Import (.chseq, .mid)"
+        title="Import .chseq/.mid (I)"
         onClick={() => importRef.current?.click()}
       >
         <img src="/import.svg" alt="Import" className="h-full w-full" />
@@ -244,7 +355,7 @@ export default function TransposeImportExport() {
       </button>
       <button
         className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-        title="Export"
+        title="Export (E)"
         onClick={() => setShowExportDropdown(!showExportDropdown)}
         ref={openExportDropdownButtonRef}
       >
@@ -262,6 +373,8 @@ export default function TransposeImportExport() {
           dropdownRef={exportDropdownRef}
           setIsExportDropdownOpen={setShowExportDropdown}
           handleExport={handleExport}
+          format={format}
+          setFormat={setFormat}
         />
       )}
     </section>
