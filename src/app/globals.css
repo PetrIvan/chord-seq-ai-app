@@ -50,3 +50,10 @@ body {
   overflow: hidden;
   white-space: nowrap;
 }
+
+/* For chord variant overflow in suggestions */
+.overflow-left {
+  white-space: nowrap;
+  direction: rtl;
+  unicode-bidi: bidi-override;
+}

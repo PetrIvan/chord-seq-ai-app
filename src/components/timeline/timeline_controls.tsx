@@ -50,6 +50,11 @@ export default function TimelineControls({
     loop,
     setStateLoop,
     enabledShortcuts,
+    setSelectedToken,
+    setSelectedVariant,
+    setVariantsOpen,
+    setSelectedChordVariants,
+    setIsVariantsOpenFromSuggestions,
   ] = useStore(
     (state) => [
       state.chords,
@@ -71,6 +76,11 @@ export default function TimelineControls({
       state.loop,
       state.setLoop,
       state.enabledShortcuts,
+      state.setSelectedToken,
+      state.setSelectedVariant,
+      state.setVariantsOpen,
+      state.setSelectedChordVariants,
+      state.setIsVariantsOpenFromSuggestions,
     ],
     shallow
   );
@@ -98,6 +108,15 @@ export default function TimelineControls({
     },
     KeyZ_Ctrl: undo,
     KeyY_Ctrl: redo,
+    KeyV: () => {
+      if (selectedChord !== -1) {
+        setSelectedToken(chords[selectedChord].token);
+        setSelectedVariant(chords[selectedChord].variant);
+        setSelectedChordVariants(selectedChord);
+        setIsVariantsOpenFromSuggestions(false);
+        setVariantsOpen(true);
+      }
+    },
     Delete: deleteChord,
     Delete_Ctrl: () => {
       if (isDeleteAllOpenRef.current) clearChords();
@@ -371,7 +390,7 @@ export default function TimelineControls({
     <div className="flex flex-row justify-stretch max-h-min max-w-[50%] space-x-[2dvh]">
       <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[7] flex flex-row justify-evenly p-[2dvh]">
         <button
-          className={`grow select-none ${
+          className={`w-full h-full select-none ${
             !metronome && "filter brightness-75"
           } flex flex-col justify-center items-center`}
           title="Metronome (M)"
@@ -380,7 +399,7 @@ export default function TimelineControls({
           <img src="/metronome.svg" alt="Settings" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title={`${playing ? "Pause" : "Play"} (Space)`}
           onClick={() => changePlaying()}
         >
@@ -391,7 +410,7 @@ export default function TimelineControls({
           />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title="Playback settings (S)"
           onClick={() => setIsPlaybackSettingsOpen(!isPlaybackSettingsOpen)}
           ref={openPlaybackSettingsButtonRef}
@@ -406,9 +425,9 @@ export default function TimelineControls({
           />
         )}
       </div>
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[11] flex flex-row justify-evenly p-[2dvh]">
+      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[13] flex flex-row justify-around p-[2dvh]">
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex <= 0}
           title="Undo (Ctrl+Z)"
           onClick={() => undo()}
@@ -416,7 +435,7 @@ export default function TimelineControls({
           <img src="/undo.svg" alt="Undo" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex === stateWindowLength - 1}
           title="Redo (Ctrl+Y)"
           onClick={() => redo()}
@@ -424,7 +443,21 @@ export default function TimelineControls({
           <img src="/redo.svg" alt="Redo" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          disabled={selectedChord === -1}
+          title="Open chord variants (V)"
+          onClick={() => {
+            setSelectedToken(chords[selectedChord].token);
+            setSelectedVariant(chords[selectedChord].variant);
+            setSelectedChordVariants(selectedChord);
+            setIsVariantsOpenFromSuggestions(false);
+            setVariantsOpen(true);
+          }}
+        >
+          <img src="/variants.svg" alt="Variants" className="h-full w-full" />
+        </button>
+        <button
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={selectedChord === -1}
           title="Delete chord (Del)"
           onClick={() => deleteChord()}
@@ -432,7 +465,7 @@ export default function TimelineControls({
           <img src="/trash.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full  select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           title="Delete all chords (Ctrl+Del)"
           onClick={() => setIsDeleteAllOpen(!isDeleteAllOpen)}
           ref={openDeleteAllButtonRef}
@@ -440,7 +473,7 @@ export default function TimelineControls({
           <img src="/trash-all.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title="Add chord (A)"
           onClick={() => addChordAndScroll()}
         >

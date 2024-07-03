@@ -23,11 +23,6 @@ export default function Chord({ index, token, duration, variant }: Props) {
     zoom,
     resizingAnyChord,
     setResizingChord,
-    setVariantsOpen,
-    setSelectedToken,
-    setSelectedVariant,
-    setSelectedChordVariants,
-    setIsVariantsOpenFromSuggestions,
   ] = useStore(
     (state) => [
       state.chords,
@@ -38,11 +33,6 @@ export default function Chord({ index, token, duration, variant }: Props) {
       state.zoom,
       state.resizingChord,
       state.setResizingChord,
-      state.setVariantsOpen,
-      state.setSelectedToken,
-      state.setSelectedVariant,
-      state.setSelectedChordVariants,
-      state.setIsVariantsOpenFromSuggestions,
     ],
     shallow
   );
@@ -188,43 +178,6 @@ export default function Chord({ index, token, duration, variant }: Props) {
     else setSelectedChord(index);
   }
 
-  /* Variants */
-  // Open variants on right click
-  const tokenRef = useRef(token);
-  const variantRef = useRef(variant);
-
-  useEffect(() => {
-    tokenRef.current = token;
-  }, [token]);
-
-  useEffect(() => {
-    variantRef.current = variant;
-  }, [variant]);
-
-  useEffect(() => {
-    const element = chordElementRef.current;
-    if (!element) return;
-
-    const handleContextMenu = (e: MouseEvent) => {
-      if (tokenRef.current === -1) return;
-
-      e.preventDefault();
-      if (e.button === 2) {
-        setSelectedToken(tokenRef.current);
-        setSelectedVariant(variantRef.current);
-        setSelectedChordVariants(index);
-        setIsVariantsOpenFromSuggestions(false);
-        setVariantsOpen(true);
-      }
-    };
-
-    element.addEventListener("contextmenu", handleContextMenu);
-
-    return () => {
-      element.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, []);
-
   return (
     <div className="h-full" style={{ paddingInline: `${chordPadding}px` }}>
       <button
@@ -248,9 +201,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
               }
         }
         ref={chordElementRef}
-        title={`${selectedChord === index ? "Des" : "S"}elect this chord${
-          token === -1 ? "" : "/right click to open variants"
-        }`}
+        title={`${selectedChord === index ? "Des" : "S"}elect this chord`}
       >
         <p className="select-none overflow-hidden">
           {token === -1 ? "?" : tokenToChord[token][variant]}

@@ -40,8 +40,7 @@ export default function Chord({
   setIsVariantsOpenFromSuggestions,
 }: Props) {
   /* Variants */
-  // Open variants on right click
-  const chordElementRef = useRef<HTMLButtonElement>(null);
+  // Open variants on button click
   const tokenRef = useRef(token);
   const variantRef = useRef(variant);
 
@@ -53,32 +52,9 @@ export default function Chord({
     variantRef.current = variant;
   }, [variant]);
 
-  useEffect(() => {
-    const element = chordElementRef.current;
-    if (!element) return;
-
-    const handleContextMenu = (e: MouseEvent) => {
-      if (tokenRef.current === -1) return;
-
-      e.preventDefault();
-      if (e.button === 2) {
-        setSelectedToken(tokenRef.current);
-        setSelectedVariant(variantRef.current);
-        setIsVariantsOpenFromSuggestions(true);
-        setVariantsOpen(true);
-      }
-    };
-
-    element.addEventListener("contextmenu", handleContextMenu);
-
-    return () => {
-      element.removeEventListener("contextmenu", handleContextMenu);
-    };
-  }, []);
-
   return (
     <button
-      className="flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw]"
+      className="relative group flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw]"
       style={{
         // Interpolate between violet and black logarithmically
         backgroundColor: color(
@@ -92,14 +68,35 @@ export default function Chord({
         variant !== 0 ? `; variant of ${tokenToChord[token][0]}` : ""
       }${
         prob === 0 ? "; same as previous" : "" // The probability can be 0 only in that case (because of model's softmax function)
-      }), right click to open variants`}
+      })`}
       onClick={() => {
         playChord(tokenToChord[token][variant]);
         replaceChord(token, variant);
       }}
-      ref={chordElementRef}
     >
-      {tokenToChord[token][variant]}
+      {/* Chord name - styling to handle overflow with the icon */}
+      <div className="w-full">
+        <div className="text-center group-hover:mx-[2.1dvw]">
+          <div className="overflow-left">
+            <span className="inline-block whitespace-nowrap">
+              {tokenToChord[token][variant]}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <button
+        className="absolute right-[1dvw] invisible group-hover:visible w-[2dvw] h-[2dvw] select-none filter brightness-90 flex flex-col justify-center items-center"
+        title="Open chord variants"
+        onClick={() => {
+          setSelectedToken(tokenRef.current);
+          setSelectedVariant(variantRef.current);
+          setIsVariantsOpenFromSuggestions(true);
+          setVariantsOpen(true);
+        }}
+      >
+        <img src="/variants.svg" alt="Variants" className="h-full w-full" />
+      </button>
     </button>
   );
 }
