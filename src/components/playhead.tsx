@@ -20,15 +20,15 @@ export default function Playhead({ timelineStart }: Props) {
 
   let [numerator, denominator] = signature;
   const actualPosition =
-    (playheadPosition * 100 * zoom * denominator) / 4 / numerator +
+    (playheadPosition * 10 * zoom * denominator) / 4 / numerator +
     timelineStart;
 
   return (
     <div
       className={`absolute top-0 bottom-0 z-10 flex flex-col h-full items-center justify-between cursor-ew-resize`}
       style={{
-        left: actualPosition,
-        transform: `translateX(-50%) translateX(${timelinePosition}px)`,
+        left: `${actualPosition}dvw`,
+        transform: `translateX(-50%) translateX(${timelinePosition}dvw)`,
       }}
     >
       <svg viewBox="0 0 27 24" className="fill-blue-400 h-[1dvw] w-[1dvw]">

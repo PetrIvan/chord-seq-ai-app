@@ -62,14 +62,14 @@ function ShowableWelcomeOverlay({ setIsWelcomeOverlayOpen }: Props) {
   return (
     <div className="absolute z-30 bg-zinc-950 bg-opacity-50 h-[100dvh] w-[100dvw] flex flex-col items-center justify-center">
       <div className="relative bg-zinc-900 h-[80dvh] w-[70dvw] rounded-[0.5dvw] flex flex-col items-center justify-evenly p-[1dvw]">
-        <div className="grow-[1] flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
+        <div className="grow-[1] w-full flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
           <img
             className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer"
             src="/close.svg"
             title="Close (Esc)"
             onClick={() => setIsWelcomeOverlayOpen(false)}
           />
-          <p className="text-[5dvh] font-semibold whitespace-nowrap">
+          <p className="w-full text-center px-[1dvh] text-[5dvh] font-semibold overflow-clip">
             Welcome to ChordSeqAI!
           </p>
           <p className="text-[2.5dvh] max-w-[75%] text-justify">
@@ -87,7 +87,7 @@ function ShowableWelcomeOverlay({ setIsWelcomeOverlayOpen }: Props) {
             .
           </p>
           <iframe
-            className="h-full aspect-video"
+            className="max-w-full h-full aspect-video"
             src="https://www.youtube.com/embed/YbTd2QBZqOk?si=DoGTRXT7tJnu_ReV"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             allowFullScreen

@@ -139,7 +139,7 @@ function ShowableVariantOverlay({
 
   return (
     <div className="absolute z-30 bg-zinc-950 bg-opacity-50 h-[100dvh] w-[100dvw] flex flex-col items-center justify-center">
-      <div className="relative bg-zinc-900 h-[70dvh] w-[60dvw] rounded-[0.5dvw] flex flex-col items-center justify-evenly p-[1dvw]">
+      <div className="relative bg-zinc-900 h-[70dvh] w-[60dvw] rounded-[1dvh] flex flex-col items-center justify-evenly p-[2dvh]">
         <div className="grow-[1] flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
           <img
             className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer"
@@ -158,17 +158,17 @@ function ShowableVariantOverlay({
         </div>
         <div className="grow-[1] flex flex-col items-center justify-center h-full w-full space-y-[2dvh] min-h-0">
           <p className="text-[2.5dvh]">All variants:</p>
-          <div className="flex-1 bg-zinc-900 w-full max-h-screen p-[1dvw] overflow-y-auto min-h-0">
+          <div className="flex-1 bg-zinc-900 w-full max-h-screen p-[2dvh] overflow-y-auto min-h-0">
             <div
-              className="grid gap-[1dvw] overflow-y-auto w-full h-full"
+              className="grid gap-[2dvh] overflow-y-auto w-full h-full"
               style={{
-                gridTemplateColumns: "repeat(auto-fit, minmax(10dvw, 1fr))",
+                gridTemplateColumns: "repeat(auto-fit, minmax(20dvh, 1fr))",
                 minHeight: "0",
               }}
             >
               {tokenToChord[token].map((_, i) => (
                 <button
-                  className="flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw] min-h-[4dvw] bg-violet-700"
+                  className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] min-h-[8dvh] bg-violet-700"
                   onClick={() => {
                     playChord(tokenToChord[token][i]);
                     setVariant(i);
@@ -183,7 +183,7 @@ function ShowableVariantOverlay({
           </div>
           <div className="flex flex-row w-full justify-evenly">
             <button
-              className="flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw] bg-zinc-800"
+              className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
               onClick={() => {
                 variantsFromSuggestions ? setAsDefault() : applyToAll();
               }}
@@ -191,7 +191,7 @@ function ShowableVariantOverlay({
               {variantsFromSuggestions ? "Set as default" : "Apply to all"}
             </button>
             <button
-              className="flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw] bg-zinc-800"
+              className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
               onClick={() => {
                 variantsFromSuggestions ? variantUseOnce() : applyOnce();
               }}

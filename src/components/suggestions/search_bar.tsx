@@ -90,8 +90,8 @@ export default function SearchBar() {
   );
 
   return (
-    <div className="h-[4dvw] flex flex-row items-center justify-start space-x-[1dvw]">
-      <div className="h-[4dvw] bg-zinc-800 flex flex-row items-center justify-start rounded-[1dvw] p-[0.5dvw]">
+    <div className="h-[8dvh] flex flex-row items-center justify-start space-x-[1dvw]">
+      <div className="h-[8dvh] bg-zinc-800 flex flex-row items-center justify-start rounded-[2dvh] p-[0.5dvw]">
         {/* Search by name */}
         <div className="h-full flex flex-row items-center justify-end">
           <img className="w-[70%] h-[70%]" src="/search.svg" alt="Search" />
@@ -102,7 +102,7 @@ export default function SearchBar() {
         </label>
         <input
           id="search"
-          className="flex-1 h-full bg-zinc-800 text-white text-[2.5dvh] rounded-[1dvw] placeholder-zinc-500 placeholder-opacity-50 border-transparent focus:border-transparent focus:ring-0"
+          className="flex-1 h-full border-[0.2dvh] p-[2dvh] bg-zinc-800 text-white text-[2.5dvh] rounded-[2dvh] placeholder-zinc-500 placeholder-opacity-50 border-transparent focus:border-transparent focus:ring-0"
           type="text"
           placeholder="Search a chord..."
           autoComplete="off"
@@ -173,19 +173,19 @@ export default function SearchBar() {
         </button>
         {isPianoOpen && (
           <div
-            className="absolute top-[100%] bg-zinc-950 p-[1dvw] pb-[2dvw] rounded-[0.5dvw] flex flex-col items-center justify-center z-10"
+            className="absolute top-[100%] bg-zinc-950 p-[2dvh] pb-[4dvh] rounded-[1dvh] flex flex-col items-center justify-center z-10"
             ref={pianoRef}
           >
-            <div className="flex flex-row items-center justify-center pb-[1dvw] text-[2.5dvh]">
-              <span className="select-none mr-[1dvw]">Match:</span>
+            <div className="flex flex-row items-center justify-center pb-[2dvh] text-[2.5dvh]">
+              <span className="select-none mr-[2dvh]">Match:</span>
               <div
-                className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] mr-[1dvw] hover:bg-zinc-900 w-[7dvw] cursor-pointer whitespace-nowrap"
+                className="bg-zinc-800 rounded-[1dvh] p-[0.5dvw] mr-[2dvh] hover:bg-zinc-900 w-[15dvh] cursor-pointer whitespace-nowrap"
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
                 <div className="flex flex-row items-center justify-between">
                   {matchTypes[matchType]}
                   <svg
-                    className="w-[0.8dvw] h-[0.8dvw] mr-[0.5dvw] inline-block"
+                    className="w-[1.6dvh] h-[1.6dvh] mr-[1dvh] inline-block"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -205,10 +205,10 @@ export default function SearchBar() {
                   {isDropdownOpen && matchDropdown}
                 </div>
               </div>
-              <span className="select-none mr-[1dvw]">Any variant:</span>
+              <span className="select-none mr-[2dvh]">Any variant:</span>
               <input
                 type="checkbox"
-                className="h-[1.2dvw] w-[1.2dvw] bg-zinc-800 rounded-[0.25dvw] focus:outline-none"
+                className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
                 checked={matchAnyVariant}
                 onChange={() => setMatchAnyVariant(!matchAnyVariant)}
               />
@@ -250,7 +250,7 @@ export default function SearchBar() {
           <input
             type="checkbox"
             id="include-variants"
-            className="h-[1.2dvw] w-[1.2dvw] bg-zinc-800 rounded-[0.25dvw] focus:outline-none"
+            className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
             checked={includeVariants}
             onChange={() => setIncludeVariants(!includeVariants)}
           />

@@ -13,14 +13,14 @@ export default function modelDropdown({
 }: Props) {
   return (
     <div
-      className="absolute z-20 bg-zinc-900 left-0 w-full rounded-[0.5dvw] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh]"
+      className="absolute z-20 bg-zinc-900 left-0 w-full rounded-[1dvh] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh]"
       ref={modelDropdownRef}
     >
       {models.map((model, i) => (
         <ul key={i} className="">
           <li>
             <button
-              className="flex-1 grow-[2] w-full flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-700 hover:bg-zinc-800 rounded-[0.5dvw]"
+              className="flex-1 grow-[2] w-full flex justify-center items-center p-[2dvh] min-w-0 whitespace-nowrap active:bg-zinc-700 hover:bg-zinc-800 rounded-[1dvh]"
               title="Change model"
               onClick={() => {
                 setSelectedModel(i);

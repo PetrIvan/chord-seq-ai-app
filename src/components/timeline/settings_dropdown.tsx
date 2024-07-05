@@ -37,7 +37,7 @@ export default function SettingsDropdown({
         <label className="select-none text-[2.5dvh] mr-[1dvw]">Loop:</label>
         <input
           type="checkbox"
-          className="h-[1.2dvw] w-[1.2dvw] bg-zinc-800 rounded-[0.25dvw] focus:outline-none"
+          className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
           checked={loop}
           onChange={() => setLoop(!loop)}
         />
@@ -46,7 +46,7 @@ export default function SettingsDropdown({
         <label className="select-none text-[2.5dvh] mr-[1dvw]">BPM:</label>
         <input
           type="number"
-          className="w-[5dvw] h-[3dvw] bg-zinc-800 rounded-[0.5dvw] text-[2.5dvh]"
+          className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[12dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh]"
           title="Change BPM (Up/Down Arrow keys)"
           value={localBpm}
           onInput={handleBMPChange}

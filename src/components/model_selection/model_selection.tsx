@@ -120,7 +120,7 @@ export default function ModelSelection() {
   }
 
   return (
-    <section className="relative flex-1 grow-[3] bg-zinc-900 rounded-[0.5dvw] w-full flex flex-row items-stretch justify-center text-center">
+    <section className="relative min-w-0 bg-zinc-900 rounded-[0.5dvw] flex flex-row items-stretch justify-center text-center">
       <button
         className={`flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 rounded${
           models[selectedModel][0].includes("Conditional") ? "-l" : ""

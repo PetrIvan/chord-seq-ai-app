@@ -267,16 +267,20 @@ export default function TimelineControls({
 
     // Calculate the size of the chord in pixels
     const totalChordsSize =
-      (totalChordsDuration / 4 / signature[0]) * zoom * 100 * signature[1];
-    const currentChordsSize =
-      (currChords[id].duration / 4 / signature[0]) * zoom * 100 * signature[1];
+      (totalChordsDuration / 4 / signature[0]) * zoom * 10 * signature[1];
+    const currentChordSize =
+      (currChords[id].duration / 4 / signature[0]) * zoom * 10 * signature[1];
 
     // If the chord is out of view, scroll to it
-    if (totalChordsSize > -timelinePosition + timelineWidthRef.current) {
-      setTimelinePosition(-totalChordsSize + timelineWidthRef.current);
+    const offset = 2;
+    if (
+      totalChordsSize >
+      -timelinePosition + timelineWidthRef.current - offset
+    ) {
+      setTimelinePosition(-totalChordsSize + timelineWidthRef.current - offset);
     }
-    if (totalChordsSize < -timelinePosition + currentChordsSize) {
-      setTimelinePosition(-totalChordsSize + currentChordsSize);
+    if (totalChordsSize < -timelinePosition + currentChordSize) {
+      setTimelinePosition(-totalChordsSize + currentChordSize);
     }
   }
 
@@ -387,7 +391,7 @@ export default function TimelineControls({
   }, []);
 
   return (
-    <div className="flex flex-row justify-stretch max-h-min max-w-[50%] space-x-[2dvh]">
+    <div className="flex flex-row justify-stretch max-h-min min-w-[50%] max-w-[70dvh] space-x-[2dvh]">
       <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[7] flex flex-row justify-evenly p-[2dvh]">
         <button
           className={`w-full h-full select-none ${
@@ -425,7 +429,7 @@ export default function TimelineControls({
           />
         )}
       </div>
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[13] flex flex-row justify-around p-[2dvh]">
+      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[13] flex flex-row justify-evenly p-[2dvh]">
         <button
           className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex <= 0}

@@ -35,6 +35,30 @@ export default function TimelineEditor() {
     shallow
   );
 
+  /* Units */
+  let oneDvwInPx = window.innerWidth / 100;
+
+  // Update on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      oneDvwInPx = window.innerWidth / 100;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  function dvwToPx(dvw: number) {
+    return dvw * oneDvwInPx;
+  }
+
+  function pxToDvw(px: number) {
+    return px / oneDvwInPx;
+  }
+
   /* State window logic */
   useEffect(() => {
     // Once the app starts, initialize the state window
@@ -74,15 +98,15 @@ export default function TimelineEditor() {
 
   const handleTimelineDrag = (event: MouseEvent) => {
     if (timelineRef.current && middleMouseDraggingRef.current) {
-      const dx = event.clientX - lastPositionRef.current;
+      const dx = pxToDvw(event.clientX) - lastPositionRef.current;
 
-      setLastPosition(event.clientX);
+      setLastPosition(pxToDvw(event.clientX));
       setTimelinePosition(Math.min(0, timelinePositionRef.current + dx));
     }
   };
 
   const handleDragStart = (event: MouseEvent) => {
-    setLastPosition(event.clientX);
+    setLastPosition(pxToDvw(event.clientX));
     if (
       timelineRef.current &&
       event.button === 1 &&
@@ -120,11 +144,8 @@ export default function TimelineEditor() {
   useEffect(() => {
     // Get padding from the left of the timeline
     if (timelineRef.current) {
-      const style = window.getComputedStyle(timelineRef.current);
-      const leftPadding = parseInt(style.paddingLeft, 10);
-
-      // Set the timeline start to the left padding + 1 to account for the border
-      setTimelineStart(leftPadding + 1);
+      // Set the timeline start to the left padding in dvw + offset to account for the border
+      setTimelineStart(1 + 0.05);
     }
   }, [timelineRef?.current?.getBoundingClientRect()]);
 
@@ -148,7 +169,7 @@ export default function TimelineEditor() {
       const rect = timelineRef.current.getBoundingClientRect();
 
       // Mouse position from the left start of the timeline
-      const x = event.clientX - rect.left - timelineStartRef.current;
+      const x = pxToDvw(event.clientX - rect.left) - timelineStartRef.current;
 
       // Calculate the position change required to correctly zoom on the cursor
       const zoomChange = clampedZoom - zoomRef.current;
@@ -174,7 +195,7 @@ export default function TimelineEditor() {
 
   /* Window resize logic */
   // The width referenced is that of the timeline
-  const [width, setWidth] = useState(0);
+  const [widthInPx, setWidthInPx] = useState(0);
   const [widthWithoutPadding, setWidthWithoutPadding] = useState(0);
 
   useEffect(() => {
@@ -184,9 +205,9 @@ export default function TimelineEditor() {
         const leftPadding = parseInt(style.paddingLeft, 10);
         const rightPadding = parseInt(style.paddingRight, 10);
 
-        setWidth(timelineRef.current.offsetWidth);
+        setWidthInPx(timelineRef.current.offsetWidth);
         setWidthWithoutPadding(
-          timelineRef.current.offsetWidth - leftPadding - rightPadding
+          timelineRef.current.offsetWidth - leftPadding + rightPadding
         );
       }
     }
@@ -217,8 +238,8 @@ export default function TimelineEditor() {
   // Convert from screen position to timeline position
   const xToPosition = (x: number) => {
     return (
-      ((x - timelineStartRef.current) /
-        100 /
+      ((x - dvwToPx(timelineStartRef.current)) /
+        10 /
         zoomRef.current /
         signatureRef.current[1]) *
       signatureRef.current[0] *
@@ -245,10 +266,11 @@ export default function TimelineEditor() {
 
     const rect = timelineRef.current.getBoundingClientRect();
     const x = event.clientX - rect.left;
-    const newPlayheadPosition = Math.max(
+    let newPlayheadPosition = Math.max(
       0,
-      xToPosition(x - timelinePositionRef.current)
+      xToPosition(x - dvwToPx(timelinePositionRef.current))
     );
+    newPlayheadPosition = pxToDvw(newPlayheadPosition);
 
     onPlayheadPositionChange(newPlayheadPosition); // Reference to playback
 
@@ -263,10 +285,13 @@ export default function TimelineEditor() {
     // Playhead should update both on mouse move and click
     setHoldingMouse(true);
     if (timelineRef.current) {
-      const newPlayheadPosition = Math.max(
+      let newPlayheadPosition = Math.max(
         0,
-        xToPosition(event.clientX - rect.left - timelinePositionRef.current)
+        xToPosition(
+          event.clientX - rect.left - dvwToPx(timelinePositionRef.current)
+        )
       );
+      newPlayheadPosition = pxToDvw(newPlayheadPosition);
 
       onPlayheadPositionChange(newPlayheadPosition); // Reference to playback
 
@@ -319,15 +344,15 @@ export default function TimelineEditor() {
       <div /> {/* The upper left corner is empty */}
       <TimelineControls
         stateWindowLength={stateWindow.length}
-        timelineWidth={widthWithoutPadding}
+        timelineWidth={pxToDvw(widthWithoutPadding)}
         playing={playing}
         setPlaying={setPlaying}
       />
       <Signature />
       <div
         ref={timelineRef}
-        className={`relative flex-1 bg-zinc-900 px-[1dvw] rounded-br-[0.5dvw] h-full ${
-          width > 500 && "rounded-tr-[0.5dvw]"
+        className={`relative flex-1 bg-zinc-900 px-[1dvw] rounded-br-[1dvh] h-full ${
+          widthInPx > 500 && "rounded-tr-[1dvh]"
         } flex flex-col overflow-hidden ${
           middleMouseDragging && "cursor-grabbing"
         }`}
@@ -336,13 +361,13 @@ export default function TimelineEditor() {
         <Ticks
           timelineStart={timelineStart}
           top={true}
-          availableSpace={widthWithoutPadding}
+          availableSpace={pxToDvw(widthWithoutPadding)}
         />
         <Chords />
         <Ticks
           timelineStart={timelineStart}
           top={false}
-          availableSpace={widthWithoutPadding}
+          availableSpace={pxToDvw(widthWithoutPadding)}
         />
       </div>
     </section>

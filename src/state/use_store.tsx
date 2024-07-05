@@ -53,9 +53,9 @@ interface StoreState {
   setSignature: (state: [number, number], ignoreStateWindow?: boolean) => void;
   zoom: number; // Default is 1, less means zoomed out
   setZoom: (state: number) => void;
-  timelinePosition: number; // Where the timeline is scrolled to (on screen)
+  timelinePosition: number; // Where the timeline is scrolled to (on screen), in dvw
   setTimelinePosition: (state: number) => void;
-  playheadPosition: number; // Where the playhead is (on screen)
+  playheadPosition: number; // Where the playhead is (on screen), in dvw
   setPlayheadPosition: (state: number) => void;
 
   // State window (undo/redo)

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { tokenToChord } from "@/data/token_to_chord";
 
 // Interpolate between violet and black
@@ -52,41 +52,60 @@ export default function Chord({
     variantRef.current = variant;
   }, [variant]);
 
+  /* Overflow left */
+  const textRef = useRef<HTMLSpanElement>(null);
+
+  const [alignDirection, setAlignDirection] = useState<"center" | "end">(
+    "center"
+  );
+
   return (
-    <button
-      className="relative group flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[5dvw]"
-      style={{
-        // Interpolate between violet and black logarithmically
-        backgroundColor: color(
-          1 - (Math.log(prob + Number.EPSILON) + decayFactor) / decayFactor
-        ),
-        minHeight: "5dvw",
+    <div
+      className="relative group flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none max-h-[20dvh] min-h-[10dvh]"
+      onMouseEnter={() => {
+        if (!textRef.current) return;
+
+        if (textRef.current.scrollWidth > textRef.current.clientWidth) {
+          setAlignDirection("end");
+        } else {
+          setAlignDirection("center");
+        }
       }}
-      title={`Replace selected with ${tokenToChord[token][variant]} (${(
-        prob * 100
-      ).toFixed(2)}%${
-        variant !== 0 ? `; variant of ${tokenToChord[token][0]}` : ""
-      }${
-        prob === 0 ? "; same as previous" : "" // The probability can be 0 only in that case (because of model's softmax function)
-      })`}
-      onClick={() => {
-        playChord(tokenToChord[token][variant]);
-        replaceChord(token, variant);
-      }}
+      onMouseLeave={() => setAlignDirection("center")}
     >
-      {/* Chord name - styling to handle overflow with the icon */}
-      <div className="w-full">
-        <div className="text-center group-hover:mx-[2.1dvw]">
-          <div className="overflow-left">
-            <span className="inline-block whitespace-nowrap">
-              {tokenToChord[token][variant]}
-            </span>
-          </div>
+      <button
+        className="absolute right-0 top-0 w-full h-full filter active:brightness-90 hover:filter hover:brightness-110 rounded-[0.5dvh] select-none outline-none"
+        style={{
+          // Interpolate between violet and black logarithmically
+          backgroundColor: color(
+            1 - (Math.log(prob + Number.EPSILON) + decayFactor) / decayFactor
+          ),
+        }}
+        title={`Replace selected with ${tokenToChord[token][variant]} (${(
+          prob * 100
+        ).toFixed(2)}%${
+          variant !== 0 ? `; variant of ${tokenToChord[token][0]}` : ""
+        }${
+          prob === 0 ? "; same as previous" : "" // The probability can be 0 only in that case (because of model's softmax function)
+        })`}
+        onClick={() => {
+          playChord(tokenToChord[token][variant]);
+          replaceChord(token, variant);
+        }}
+      >
+        {/* Chord name - styling to handle overflow with the icon */}
+        <div className="w-full h-full px-[6.5dvh]">
+          <span
+            className={`w-full h-full whitespace-nowrap flex flex-row items-center justify-${alignDirection}`}
+            ref={textRef}
+          >
+            {tokenToChord[token][variant]}
+          </span>
         </div>
-      </div>
+      </button>
 
       <button
-        className="absolute right-[1dvw] invisible group-hover:visible w-[2dvw] h-[2dvw] select-none filter brightness-90 flex flex-col justify-center items-center"
+        className="z-10 absolute right-[2dvh] invisible group-hover:visible w-[4dvh] h-[4dvh] select-none filter active:brightness-90 flex flex-col justify-center items-center"
         title="Open chord variants"
         onClick={() => {
           setSelectedToken(tokenRef.current);
@@ -97,6 +116,6 @@ export default function Chord({
       >
         <img src="/variants.svg" alt="Variants" className="h-full w-full" />
       </button>
-    </button>
+    </div>
   );
 }

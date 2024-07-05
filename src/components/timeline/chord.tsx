@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, use } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -39,6 +39,27 @@ export default function Chord({ index, token, duration, variant }: Props) {
 
   const chordElementRef = useRef<HTMLButtonElement>(null);
 
+  /* Units */
+  let oneDvwInPx = window.innerWidth / 100;
+
+  // Update on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      oneDvwInPx = window.innerWidth / 100;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  function pxToDvw(px: number) {
+    return px / oneDvwInPx;
+  }
+
+  /* Resizing state */
   // Keep track of which chord is being resized
   const [resizingThisChord, setResizingThisChord] = useState(false);
   const resizingThisChordRef = useRef(resizingThisChord);
@@ -88,7 +109,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
 
     const handleMouseMove = (e: MouseEvent) => {
       // Indicate that the chord can be resized
-      if (isAtResizePosition(e, element)) {
+      if (isAtResizePosition(e, element) || resizingAnyChordRef.current) {
         element.style.cursor = "ew-resize";
       } else {
         element.style.cursor = "pointer";
@@ -98,11 +119,13 @@ export default function Chord({ index, token, duration, variant }: Props) {
 
       // Change the duration of the chord based on the mouse position
       let [numerator, denominator] = signatureRef.current;
-      // 1 duration means one quarter note and a whole note spans 100px (on zoom 1 and 4/4),
+      // 1 duration means one quarter note and a whole note spans 10 dvw (on zoom 1 and 4/4),
       // so we need to convert the mouse position to a duration
       let newDuration =
-        ((e.clientX - element.getBoundingClientRect().left) * 4 * numerator) /
-        (100 * zoomRef.current * denominator);
+        (pxToDvw(e.clientX - element.getBoundingClientRect().left) *
+          4 *
+          numerator) /
+        (10 * zoomRef.current * denominator);
 
       const stepSize = 4 / denominator;
       newDuration = Math.max(
@@ -166,11 +189,11 @@ export default function Chord({ index, token, duration, variant }: Props) {
     };
   }, []);
 
-  // Render the chord properly (a whole note (duration 4) on zoom set to 1 and signature 4/4 spans 100px)
+  // Render the chord properly (a whole note (duration 4) on zoom set to 1 and signature 4/4 spans 10dvw)
   let [numerator, denominator] = signature;
-  const chordPadding = 2; // Space between chords
+  const chordPadding = 0.15; // Space between chords
   const width =
-    (duration * 100 * zoom * denominator) / 4 / numerator - chordPadding * 2;
+    (duration * 10 * zoom * denominator) / 4 / numerator - chordPadding * 2;
 
   function changeSelected() {
     if (token !== -1) playChord(tokenToChord[token][variant]);
@@ -179,7 +202,10 @@ export default function Chord({ index, token, duration, variant }: Props) {
   }
 
   return (
-    <div className="h-full" style={{ paddingInline: `${chordPadding}px` }}>
+    <div
+      className={`h-full ${resizingAnyChordRef.current && "cursor-ew-resize"}`}
+      style={{ paddingInline: `${chordPadding}dvw` }}
+    >
       <button
         className={`${
           token === -1
@@ -191,8 +217,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
             : "bg-violet-700 text-zinc-100"
         } ${
           resizingAnyChord ? "" : "hover:filter hover:brightness-110"
-        } flex justify-center items-center py-[2dvh] rounded-[0.5dvw] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
-        style={{ width: `${width}px` }}
+        } flex justify-center items-center py-[2dvh] rounded-[1dvh] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
+        style={{ width: `${width}dvw` }}
         onClick={
           resizingThisChordRef.current
             ? () => {}

@@ -330,9 +330,9 @@ export default function TransposeImportExport() {
   }, []);
 
   return (
-    <section className="relative flex-1 bg-zinc-900 p-[2dvh] rounded-[0.5dvw] w-full flex flex-row justify-evenly text-[2.5dvh]">
+    <section className="relative bg-zinc-900 p-[2dvh] rounded-[0.5dvw] h-[9dvh] flex flex-row items-stretch justify-evenly text-[2.5dvh] max-h-min">
       <button
-        className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+        className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
         title="Transpose (T)"
         onClick={() => setShowTransposeDropdown(!showTransposeDropdown)}
         ref={openTransposeDropdownButtonRef}
@@ -340,7 +340,7 @@ export default function TransposeImportExport() {
         <img src="/transpose.svg" alt="Transpose" className="h-full w-full" />
       </button>
       <button
-        className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+        className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
         title="Import .chseq/.mid (I)"
         onClick={() => importRef.current?.click()}
       >
@@ -354,7 +354,7 @@ export default function TransposeImportExport() {
         />
       </button>
       <button
-        className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+        className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
         title="Export (E)"
         onClick={() => setShowExportDropdown(!showExportDropdown)}
         ref={openExportDropdownButtonRef}

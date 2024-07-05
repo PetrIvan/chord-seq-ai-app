@@ -503,9 +503,9 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     } else {
       content = (
         <div
-          className="grid gap-[1dvw] overflow-y-auto"
+          className="grid gap-[2dvh] overflow-y-auto"
           style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(10dvw, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(22.5dvh, 1fr))",
             minHeight: "0",
           }}
         >

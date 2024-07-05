@@ -74,7 +74,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
                   <input
                     id={`style-param-${item}`}
                     type="checkbox"
-                    className="h-[1.2dvw] w-[1.2dvw] bg-zinc-800 rounded-[0.25dvw] focus:outline-none"
+                    className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
                     checked={selectedList[i] !== 0}
                     onChange={() =>
                       switchSelected(i, selectedList, setSelected)
@@ -86,7 +86,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
                   <input
                     id={`weight-${item}`}
                     type="number"
-                    className="w-[6dvw] h-[3dvw] bg-zinc-800 text-white text-[2.5dvh] rounded-[0.25dvw]"
+                    className="w-[12dvh] h-[6dvh] border-[0.2dvh] p-[1dvh] bg-zinc-800 text-white text-[2.5dvh] rounded-[0.5dvh]"
                     value={selectedList[i] || ""}
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => {

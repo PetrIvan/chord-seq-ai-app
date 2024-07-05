@@ -7,7 +7,6 @@ import Suggestions from "@/components/suggestions/suggestions";
 import VariantOverlay from "./variant_overlay";
 import WelcomeOverlay from "./welcome_overlay";
 
-import MobileScreen from "@/components/mobile_screen";
 import { getSelectorsByUserAgent } from "react-device-detect";
 
 import { useEffect, useState } from "react";
@@ -24,10 +23,44 @@ export default function App() {
     setIsMobile(selectors.isMobile);
   }, []);
 
+  const [aspectRatio, setAspectRatio] = useState(16 / 9);
+
+  // On window resize, update the aspect ratio
+  useEffect(() => {
+    function handleResize() {
+      setAspectRatio(window.innerWidth / window.innerHeight);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Show a message if the aspect ratio or the device is not supported
+  let info = "";
+
   if (isMobile) {
-    return <MobileScreen />;
+    info =
+      "This app is currently not available on mobile devices, please use a desktop.";
+  }
+  if (aspectRatio <= 0.96) {
+    info =
+      "This app is not supported on this screen size, please use a landscape orientation.";
+  }
+  if (aspectRatio >= 4) {
+    info =
+      "This app is not supported on this screen size, please use a more narrow screen.";
   }
 
+  if (info) {
+    return (
+      <div className="w-full min-h-screen flex flex-col justify-center items-center bg-zinc-950 p-[4dvh]">
+        <p className="text-[4dvh] font-bold text-zinc-500 text-center">
+          {info}
+        </p>
+      </div>
+    );
+  }
+
+  // Main app
   return (
     <div
       className="relative max-h-screen flex flex-col bg-scroll bg-center bg-cover text-[2.5dvh]"
@@ -35,8 +68,8 @@ export default function App() {
     >
       <VariantOverlay />
       <WelcomeOverlay />
-      <div className="min-h-screen min-w-full grid grid-rows-[1fr_3fr_6fr] backdrop-blur-[2dvw] gap-[1dvw] p-[1dvw]">
-        <div className="flex flex-row space-x-[1dvw] w-full min-h-0">
+      <div className="min-h-screen min-w-full grid grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] backdrop-blur-[max(2dvw,4dvh)] gap-[1dvw] p-[1dvw]">
+        <div className="grid grid-cols-[15fr_5fr_2fr] gap-[1dvw] w-full min-w-0">
           <ModelSelection />
           <TransposeImportExport />
           <GetHelp />
