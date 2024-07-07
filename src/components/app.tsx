@@ -6,6 +6,7 @@ import TimelineEditor from "@/components/timeline/timeline_editor";
 import Suggestions from "@/components/suggestions/suggestions";
 import VariantOverlay from "./variant_overlay";
 import WelcomeOverlay from "./welcome_overlay";
+import NewFeaturesOverlay from "./new_features_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
@@ -68,6 +69,7 @@ export default function App() {
     >
       <VariantOverlay />
       <WelcomeOverlay />
+      <NewFeaturesOverlay />
       <div className="min-h-screen min-w-full grid grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] backdrop-blur-[max(2dvw,4dvh)] gap-[1dvw] p-[1dvw]">
         <div className="grid grid-cols-[15fr_5fr_2fr] gap-[1dvw] w-full min-w-0">
           <ModelSelection />
