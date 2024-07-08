@@ -46,7 +46,7 @@ export default function ExportDropdown({
       <span className="select-none mr-[1dvw]">Format:</span>
       <div
         className="bg-zinc-800 rounded-[1dvh] p-[0.5dvw] mr-[2dvh] hover:bg-zinc-900 w-[14dvh] cursor-pointer whitespace-nowrap"
-        title="Select format (Up/Down Arrow keys)"
+        title="Select format (Up/Down arrow keys)"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
       >
         <div className="flex flex-row items-center justify-between">

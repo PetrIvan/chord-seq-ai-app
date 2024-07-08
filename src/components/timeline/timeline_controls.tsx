@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useStore } from "@/state/use_store";
+import { useIsMount } from "@/state/use_is_mount";
 import { shallow } from "zustand/shallow";
 import * as Tone from "tone";
 
@@ -109,7 +110,7 @@ export default function TimelineControls({
     KeyZ_Ctrl: undo,
     KeyY_Ctrl: redo,
     KeyV: () => {
-      if (selectedChord !== -1) {
+      if (selectedChord !== -1 && chords[selectedChord].token !== -1) {
         setSelectedToken(chords[selectedChord].token);
         setSelectedVariant(chords[selectedChord].variant);
         setSelectedChordVariants(selectedChord);
@@ -236,9 +237,10 @@ export default function TimelineControls({
       playChord(tokenToChord[chords[newValue].token][chords[newValue].variant]);
   }
 
-  // Scroll to the selected chord when the selection changes
+  // Scroll to the selected chord when the selection changes, but not on mount
+  const isMount = useIsMount();
   useEffect(() => {
-    if (selectedChord === -1 || chords.length === 0) return;
+    if (selectedChord === -1 || chords.length === 0 || isMount) return;
     scrollToChord(chords, selectedChord);
   }, [selectedChord]);
 
@@ -391,8 +393,8 @@ export default function TimelineControls({
   }, []);
 
   return (
-    <div className="flex flex-row justify-stretch max-h-min min-w-[50%] max-w-[70dvh] space-x-[2dvh]">
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[7] flex flex-row justify-evenly p-[2dvh]">
+    <div className="grid grid-cols-[7fr_13fr] justify-stretch h-[8dvh] min-w-[50%] max-w-[70dvh] space-x-[2dvh]">
+      <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
         <button
           className={`w-full h-full select-none ${
             !metronome && "filter brightness-75"
@@ -429,7 +431,7 @@ export default function TimelineControls({
           />
         )}
       </div>
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[13] flex flex-row justify-evenly p-[2dvh]">
+      <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
         <button
           className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex <= 0}
@@ -448,7 +450,7 @@ export default function TimelineControls({
         </button>
         <button
           className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
-          disabled={selectedChord === -1}
+          disabled={selectedChord === -1 || chords[selectedChord].token === -1}
           title="Open chord variants (V)"
           onClick={() => {
             setSelectedToken(chords[selectedChord].token);

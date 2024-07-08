@@ -35,7 +35,7 @@ export default function TransposeDropdown({ dropdownRef, transpose }: Props) {
       <input
         id="transpose-amount"
         type="number"
-        title="Semitones (Up/Down Arrow keys)"
+        title="Semitones (Up/Down arrow keys)"
         className="text-[2.5dvh] border-[0.2dvh] p-[1dvh] w-[10dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh] mr-[1dvw]"
         value={transposeBy}
         onChange={handleNumeratorChange}

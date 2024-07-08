@@ -47,7 +47,7 @@ export default function SettingsDropdown({
         <input
           type="number"
           className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[12dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh]"
-          title="Change BPM (Up/Down Arrow keys)"
+          title="Change BPM (Up/Down arrow keys)"
           value={localBpm}
           onInput={handleBMPChange}
         />

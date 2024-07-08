@@ -142,7 +142,7 @@ function ShowableVariantOverlay({
       <div className="relative bg-zinc-900 h-[70dvh] w-[60dvw] rounded-[1dvh] flex flex-col items-center justify-evenly p-[2dvh]">
         <div className="grow-[1] flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
           <img
-            className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer"
+            className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer filter active:brightness-90"
             src="/close.svg"
             title="Close (Esc)"
             onClick={() => setVariantsOpen(false)}

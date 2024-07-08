@@ -78,6 +78,7 @@ function ShowableNewFeaturesOverlay({
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") {
         setIsNewFeaturesOverlayOpen(false);
+        setEnabledShortcuts(true);
         setShowPrev(true);
       }
       if (e.key === "ArrowLeft" && showPrev) {
@@ -104,7 +105,7 @@ function ShowableNewFeaturesOverlay({
             }}
           />
           <p className="w-full text-center px-[1dvh] text-[5dvh] font-semibold overflow-clip">
-            What's new
+            What&apos;s new
           </p>
           <ul className="text-[3dvh] max-w-[75%] text-justify space-y-[1dvh] list-disc list-outside">
             <li>

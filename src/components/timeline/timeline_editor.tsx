@@ -134,20 +134,8 @@ export default function TimelineEditor() {
   }, []);
 
   /* Timeline start position */
-  const [timelineStart, setTimelineStart] = useState(0);
-  const timelineStartRef = useRef(timelineStart);
-
-  useEffect(() => {
-    timelineStartRef.current = timelineStart;
-  }, [timelineStart]);
-
-  useEffect(() => {
-    // Get padding from the left of the timeline
-    if (timelineRef.current) {
-      // Set the timeline start to the left padding in dvw + offset to account for the border
-      setTimelineStart(1 + 0.05);
-    }
-  }, [timelineRef?.current?.getBoundingClientRect()]);
+  // Set the timeline start to the left padding in dvw + offset to account for the border
+  const timelineStart = 1 + 0.05;
 
   /* Zoom logic */
   const zoomRef = useRef(zoom);
@@ -169,7 +157,7 @@ export default function TimelineEditor() {
       const rect = timelineRef.current.getBoundingClientRect();
 
       // Mouse position from the left start of the timeline
-      const x = pxToDvw(event.clientX - rect.left) - timelineStartRef.current;
+      const x = pxToDvw(event.clientX - rect.left) - timelineStart;
 
       // Calculate the position change required to correctly zoom on the cursor
       const zoomChange = clampedZoom - zoomRef.current;
@@ -238,7 +226,7 @@ export default function TimelineEditor() {
   // Convert from screen position to timeline position
   const xToPosition = (x: number) => {
     return (
-      ((x - dvwToPx(timelineStartRef.current)) /
+      ((x - dvwToPx(timelineStart)) /
         10 /
         zoomRef.current /
         signatureRef.current[1]) *
@@ -338,7 +326,7 @@ export default function TimelineEditor() {
   return (
     <section
       ref={gridRef}
-      className="grid grid-cols-[max(8dvh)_1fr] grid-rows-[auto_1fr] w-full h-full min-h-0"
+      className="grid grid-cols-[8dvh_1fr] grid-rows-[auto_1fr] w-full h-full min-h-0"
       style={{ gridTemplateRows: `${firstRowHeight} 1fr` }}
     >
       <div /> {/* The upper left corner is empty */}
