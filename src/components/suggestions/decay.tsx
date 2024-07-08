@@ -29,7 +29,7 @@ export default function Decay() {
       </label>
       <input
         id="decay"
-        className="w-[8dvw] h-[1dvw] bg-zinc-800 rounded-full appearance-none cursor-pointer accent-violet-800 range-slider"
+        className="w-[16dvh] h-[2dvh] bg-zinc-800 rounded-full appearance-none cursor-pointer accent-violet-800 range-slider"
         type="range"
         style={{
           background: `linear-gradient(to right, #5b21b6 50%, #27272a 50%)`,

@@ -303,6 +303,12 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     enabledShortcutsRef.current = enabledShortcuts;
   }, [enabledShortcuts]);
 
+  const defaultVariantsRef = useRef(defaultVariants);
+
+  useEffect(() => {
+    defaultVariantsRef.current = defaultVariants;
+  }, [defaultVariants]);
+
   function handleKeyDown(event: KeyboardEvent) {
     if ("Digit" === event.code.substring(0, 5) && enabledShortcutsRef.current) {
       event.preventDefault();
@@ -313,7 +319,10 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         number - 1 < chordProbsRef.current.length &&
         !chordProbsLoadingRef.current
       ) {
-        replaceChord(chordProbsRef.current[number - 1].token, 0);
+        let token = chordProbsRef.current[number - 1].token;
+        let variant = defaultVariantsRef.current[token];
+        replaceChord(token, variant);
+        playChord(tokenToChord[token][variant]);
       }
     }
   }
@@ -503,9 +512,9 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     } else {
       content = (
         <div
-          className="grid gap-[1dvw] overflow-y-auto"
+          className="grid gap-[2dvh] overflow-y-auto"
           style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(10dvw, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(22.5dvh, 1fr))",
             minHeight: "0",
           }}
         >

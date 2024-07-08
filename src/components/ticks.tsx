@@ -20,7 +20,7 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
   // Only add ticks that are necessary (could be optimized further)
   useEffect(() => {
     let [signatureNumerator] = signature;
-    let tickSpace = (zoom * 100) / signatureNumerator;
+    let tickSpace = (zoom * 10) / signatureNumerator;
     let numTicks =
       Math.ceil(
         (availableSpace - timelinePosition + timelineStart) / tickSpace
@@ -36,17 +36,19 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
   // Render a tick
   const tick = (id: number) => {
     let [signatureNumerator] = signature;
-    let tickSpace = (zoom * 100) / signatureNumerator;
-    const tickStyle = { marginRight: id < tickIds.length - 1 ? tickSpace : 0 };
+    let tickSpace = (zoom * 10) / signatureNumerator;
+    const tickStyle = {
+      marginRight: id < tickIds.length - 1 ? `${tickSpace}dvw` : 0,
+    };
     const isMajorTick = id % signatureNumerator === 0;
     return (
       <div
         key={id}
-        className={`relative ${isMajorTick ? "h-[1dvw]" : "h-[0.5dvw]"}`}
+        className={`relative ${isMajorTick ? "h-[2dvh]" : "h-[1dvh]"}`}
         style={tickStyle}
       >
         {/* To make the tick width not influence the distribution while being visible */}
-        <div className="absolute h-full w-full border-r-[0.15dvw] border-white" />
+        <div className="absolute h-full w-full border-r-[0.3dvh] border-white" />
       </div>
     );
   };
@@ -54,9 +56,9 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
   return (
     <div
       className={`flex flex-row max-w-full justify-start ${
-        top ? "items-start" : "items-end mt-[1dvw]"
+        top ? "items-start" : "items-end mt-[2dvh]"
       }`}
-      style={{ transform: `translateX(${timelinePosition}px)` }}
+      style={{ transform: `translateX(${timelinePosition}dvw)` }}
     >
       {tickIds.map((id) => tick(id))}
     </div>

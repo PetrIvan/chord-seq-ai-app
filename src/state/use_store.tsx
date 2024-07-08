@@ -53,9 +53,9 @@ interface StoreState {
   setSignature: (state: [number, number], ignoreStateWindow?: boolean) => void;
   zoom: number; // Default is 1, less means zoomed out
   setZoom: (state: number) => void;
-  timelinePosition: number; // Where the timeline is scrolled to (on screen)
+  timelinePosition: number; // Where the timeline is scrolled to (on screen), in dvw
   setTimelinePosition: (state: number) => void;
-  playheadPosition: number; // Where the playhead is (on screen)
+  playheadPosition: number; // Where the playhead is (on screen), in dvw
   setPlayheadPosition: (state: number) => void;
 
   // State window (undo/redo)
@@ -130,6 +130,12 @@ interface StoreState {
   setWelcomeFirstTime: (welcomeFirstTime: boolean) => void;
   isWelcomeOverlayOpen: boolean;
   setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) => void;
+
+  // New features overlay
+  version: number;
+  setVersion: (version: number) => void;
+  isNewFeaturesOverlayOpen: boolean;
+  setIsNewFeaturesOverlayOpen: (isNewFeaturesOverlayOpen: boolean) => void;
 
   // Support us overlay
   isSupportUsOverlayOpen: boolean;
@@ -302,7 +308,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       },
 
       // Model settings
-      modelPath: "/models/transformer_small.onnx", // Default model
+      modelPath: "/models/conditional_medium.onnx", // Default model
       setModelPath: (modelPath: string) => set({ modelPath }),
       selectedGenres: Array(genres.length).fill(0),
       setSelectedGenres: (selectedGenres: number[]) => set({ selectedGenres }),
@@ -380,6 +386,13 @@ export const useStore = createWithEqualityFn<StoreState>()(
       setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) =>
         set({ isWelcomeOverlayOpen }),
 
+      // New features overlay
+      version: 0,
+      setVersion: (version: number) => set({ version }),
+      isNewFeaturesOverlayOpen: false,
+      setIsNewFeaturesOverlayOpen: (isNewFeaturesOverlayOpen: boolean) =>
+        set({ isNewFeaturesOverlayOpen }),
+
       // Support us overlay
       isSupportUsOverlayOpen: false,
       setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) =>
@@ -398,6 +411,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         loop: state.loop,
         defaultVariants: state.defaultVariants,
         welcomeFirstTime: state.welcomeFirstTime,
+        version: state.version,
       }),
     }
   )

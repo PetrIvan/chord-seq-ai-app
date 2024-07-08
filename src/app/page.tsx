@@ -153,14 +153,15 @@ export default function Home() {
             </h3>
             <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-zinc-300 pb-5">
               <li>
-                <b>Documentation.</b> You can view all of the available features{" "}
+                <b>Documentation.</b> You can view all of the available features
+                on the{" "}
                 <a
                   className="text-blue-400 hover:underline"
                   href="https://github.com/PetrIvan/chord-seq-ai-app/wiki"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  here
+                  wiki
                 </a>
                 .
               </li>
@@ -193,7 +194,7 @@ export default function Home() {
               Contact us
             </h3>
             <p className="text-lg md:text-xl text-zinc-300 pb-5">
-              To report bugs or request features, use either{" "}
+              To report bugs, use either{" "}
               <a
                 className="text-blue-400 hover:underline"
                 href="https://github.com/PetrIvan/chord-seq-ai-app/issues"
@@ -202,14 +203,23 @@ export default function Home() {
               >
                 GitHub Issues
               </a>{" "}
-              or contact me by mail at{" "}
+              or contact me by{" "}
               <a
                 className="text-blue-400 hover:underline"
                 href="mailto:petr.ivan.junior@gmail.com"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                petr.ivan.junior@gmail.com
+                mail
+              </a>
+              . You can request features or vote for the next ones on{" "}
+              <a
+                className="text-blue-400 hover:underline"
+                href="https://github.com/PetrIvan/chord-seq-ai-app/discussions/categories/feature-requests?discussions_q=category%3A%22Feature+requests%22+sort%3Atop"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub Discussions
               </a>
               .
             </p>

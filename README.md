@@ -114,13 +114,13 @@ You can import and export the sequence you are composing in the `.chseq` format 
 
 ### Chord Variants
 
-Recommended for more advanced users. By right-clicking on any chord (either in the timeline or in suggestions), you can specify which variant to use (usually, alternative notations or inversions). Clicking on any alternative will change the visualization on the piano. When this menu is open from the timeline, the newly selected variant can be either applied once (only to that chord) or to all (replacing all of the same chords with this variant). When it is open from the suggestions, it can be used once (replacing the selected chord with this variant) or set as default (which makes it the preferred variant in the suggestions). You can close this menu from the close icon (alternatively `Esc`).
+Recommended for more advanced users. By opening the variant menu in the timeline for the currently selected chord (`V`) or suggestions via its button, you can specify which variant to use (usually, alternative notations or inversions). Clicking on any alternative will change the visualization on the piano. When this menu is open from the timeline, the newly selected variant can be either applied once (only to that chord) or to all (replacing all of the same chords with this variant). When it is open from the suggestions, it can be used once (replacing the selected chord with this variant) or set as default (which makes it the preferred variant in the suggestions). You can close this menu from the close icon (alternatively `Esc`).
 
 While you might try to use variants to compose chord voicings, this is not recommended. Only use chord variants when you specifically want to use another symbol for that chord.
 
 Scientific pitch notation, also known as American standard pitch notation, is used. Sharps are used instead of flats for note names to make the notation easier to read and understand.
 
-For a list of all available features, check out section 4.3 in the [technical report](https://github.com/StudentTraineeCenter/chord-seq-ai/blob/master/Report/report.pdf).
+For a list of all available features, check out the page [Features in the wiki](https://github.com/PetrIvan/chord-seq-ai-app/wiki/Features).
 
 ## FAQ
 

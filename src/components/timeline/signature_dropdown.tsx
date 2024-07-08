@@ -20,10 +20,10 @@ export default function SignatureDropdown({
   const handleNumeratorChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    // Limit the numerator to 2-16
+    // Limit the numerator to 1-16
     const newValue = parseInt(event.target.value, 10);
 
-    if ((newValue > 1 && newValue <= 16) || event.target.value === "") {
+    if ((newValue > 0 && newValue <= 16) || event.target.value === "") {
       setNumerator(newValue);
 
       if (event.target.value !== "") {
@@ -62,14 +62,14 @@ export default function SignatureDropdown({
     >
       <input
         type="number"
-        className="w-[4dvw] h-[3dvw] bg-zinc-800 text-white rounded-[0.5dvw] text-[2.5dvh]"
+        className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[10dvh] h-[6dvh] bg-zinc-800 text-white rounded-[1dvh]"
         value={numerator}
         onChange={handleNumeratorChange}
       />
       <span className="text-white mx-[0.5dvw]">/</span>
       <input
         type="number"
-        className="w-[4dvw] h-[3dvw] bg-zinc-800 text-white rounded-[0.5dvw] text-[2.5dvh]"
+        className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[10dvh] h-[6dvh] bg-zinc-800 text-white rounded-[1dvh]"
         value={denominator}
         onChange={handleDenominatorChange}
       />

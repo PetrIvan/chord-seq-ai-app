@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { useStore } from "@/state/use_store";
+import { useIsMount } from "@/state/use_is_mount";
 import { shallow } from "zustand/shallow";
 import * as Tone from "tone";
 
@@ -36,6 +37,7 @@ export default function TimelineControls({
     setSelectedChord,
     addChord,
     deleteChord,
+    clearChords,
     signature,
     zoom,
     timelinePosition,
@@ -49,6 +51,11 @@ export default function TimelineControls({
     loop,
     setStateLoop,
     enabledShortcuts,
+    setSelectedToken,
+    setSelectedVariant,
+    setVariantsOpen,
+    setSelectedChordVariants,
+    setIsVariantsOpenFromSuggestions,
   ] = useStore(
     (state) => [
       state.chords,
@@ -56,6 +63,7 @@ export default function TimelineControls({
       state.setSelectedChord,
       state.addChord,
       state.deleteChord,
+      state.clearChords,
       state.signature,
       state.zoom,
       state.timelinePosition,
@@ -69,6 +77,11 @@ export default function TimelineControls({
       state.loop,
       state.setLoop,
       state.enabledShortcuts,
+      state.setSelectedToken,
+      state.setSelectedVariant,
+      state.setVariantsOpen,
+      state.setSelectedChordVariants,
+      state.setIsVariantsOpenFromSuggestions,
     ],
     shallow
   );
@@ -84,15 +97,85 @@ export default function TimelineControls({
 
   // Mapping keys to their handler functions
   const keyEventHandlers: Record<string, () => void> = {
-    Space: changePlaying,
     KeyM: changeMetronome,
-    Delete: deleteChord,
-    KeyA: addChordAndScroll,
+    Space: changePlaying,
+    KeyS: () => {
+      setIsPlaybackSettingsOpen(!isPlaybackSettingsOpenRef.current);
+    },
+    KeyL: () => {
+      const newState = !loopRef.current;
+      setLoop(newState);
+      setStateLoop(newState);
+    },
     KeyZ_Ctrl: undo,
     KeyY_Ctrl: redo,
+    KeyV: () => {
+      if (selectedChord !== -1 && chords[selectedChord].token !== -1) {
+        setSelectedToken(chords[selectedChord].token);
+        setSelectedVariant(chords[selectedChord].variant);
+        setSelectedChordVariants(selectedChord);
+        setIsVariantsOpenFromSuggestions(false);
+        setVariantsOpen(true);
+      }
+    },
+    Delete: deleteChord,
+    Delete_Ctrl: () => {
+      if (isDeleteAllOpenRef.current) clearChords();
+      setIsDeleteAllOpen(!isDeleteAllOpenRef.current);
+    },
+    KeyA: addChordAndScroll,
     ArrowLeft: () => moveSelection("left"),
     ArrowRight: () => moveSelection("right"),
-    Escape: () => setSelectedChord(-1),
+    ArrowUp: () => {
+      // Increase the BPM by 1
+      if (isPlaybackSettingsOpenRef.current) {
+        const input = playbackSettingsRef.current?.querySelector(
+          "input[type=number]"
+        ) as HTMLInputElement;
+        if (!input) return;
+        input.value = Math.min(400, parseInt(input.value) + 1).toString();
+
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value"
+        )?.set;
+        nativeInputValueSetter?.call(input, input.value);
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    },
+    ArrowDown: () => {
+      // Decrease the BPM by 1
+      if (isPlaybackSettingsOpenRef.current) {
+        const input = playbackSettingsRef.current?.querySelector(
+          "input[type=number]"
+        ) as HTMLInputElement;
+        if (!input) return;
+        input.value = Math.max(10, parseInt(input.value) - 1).toString();
+
+        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+          window.HTMLInputElement.prototype,
+          "value"
+        )?.set;
+        nativeInputValueSetter?.call(input, input.value);
+
+        input.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    },
+    Enter: () => handleEnterKey(),
+    NumpadEnter: () => handleEnterKey(),
+    Escape: () => {
+      if (isPlaybackSettingsOpenRef.current) setIsPlaybackSettingsOpen(false);
+      if (isDeleteAllOpenRef.current) setIsDeleteAllOpen(false);
+      if (selectedChord !== -1) setSelectedChord(-1);
+    },
+  };
+
+  const handleEnterKey = () => {
+    if (isDeleteAllOpenRef.current) {
+      clearChords();
+      setIsDeleteAllOpen(false);
+    }
   };
 
   const handleKeyDown = (event: KeyboardEvent) => {
@@ -154,9 +237,10 @@ export default function TimelineControls({
       playChord(tokenToChord[chords[newValue].token][chords[newValue].variant]);
   }
 
-  // Scroll to the selected chord when the selection changes
+  // Scroll to the selected chord when the selection changes, but not on mount
+  const isMount = useIsMount();
   useEffect(() => {
-    if (selectedChord === -1 || chords.length === 0) return;
+    if (selectedChord === -1 || chords.length === 0 || isMount) return;
     scrollToChord(chords, selectedChord);
   }, [selectedChord]);
 
@@ -185,16 +269,20 @@ export default function TimelineControls({
 
     // Calculate the size of the chord in pixels
     const totalChordsSize =
-      (totalChordsDuration / 4 / signature[0]) * zoom * 100 * signature[1];
-    const currentChordsSize =
-      (currChords[id].duration / 4 / signature[0]) * zoom * 100 * signature[1];
+      (totalChordsDuration / 4 / signature[0]) * zoom * 10 * signature[1];
+    const currentChordSize =
+      (currChords[id].duration / 4 / signature[0]) * zoom * 10 * signature[1];
 
     // If the chord is out of view, scroll to it
-    if (totalChordsSize > -timelinePosition + timelineWidthRef.current) {
-      setTimelinePosition(-totalChordsSize + timelineWidthRef.current);
+    const offset = 2;
+    if (
+      totalChordsSize >
+      -timelinePosition + timelineWidthRef.current - offset
+    ) {
+      setTimelinePosition(-totalChordsSize + timelineWidthRef.current - offset);
     }
-    if (totalChordsSize < -timelinePosition + currentChordsSize) {
-      setTimelinePosition(-totalChordsSize + currentChordsSize);
+    if (totalChordsSize < -timelinePosition + currentChordSize) {
+      setTimelinePosition(-totalChordsSize + currentChordSize);
     }
   }
 
@@ -240,8 +328,20 @@ export default function TimelineControls({
     setBpm(bpm);
   }, [bpm]);
 
+  const bpmRef = useRef(bpm);
+
+  useEffect(() => {
+    bpmRef.current = bpm;
+  }, [bpm]);
+
   useEffect(() => {
     setLoop(loop);
+  }, [loop]);
+
+  const loopRef = useRef(loop);
+
+  useEffect(() => {
+    loopRef.current = loop;
   }, [loop]);
 
   /* Dropdowns */
@@ -293,10 +393,10 @@ export default function TimelineControls({
   }, []);
 
   return (
-    <div className="flex flex-row justify-stretch max-h-min max-w-[40%] space-x-[2dvh]">
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[7] flex flex-row justify-evenly p-[2dvh]">
+    <div className="grid grid-cols-[7fr_13fr] justify-stretch h-[8dvh] min-w-[50%] max-w-[70dvh] space-x-[2dvh]">
+      <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
         <button
-          className={`grow select-none ${
+          className={`w-full h-full select-none ${
             !metronome && "filter brightness-75"
           } flex flex-col justify-center items-center`}
           title="Metronome (M)"
@@ -305,7 +405,7 @@ export default function TimelineControls({
           <img src="/metronome.svg" alt="Settings" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title={`${playing ? "Pause" : "Play"} (Space)`}
           onClick={() => changePlaying()}
         >
@@ -316,8 +416,8 @@ export default function TimelineControls({
           />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
-          title="Playback settings"
+          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          title="Playback settings (S)"
           onClick={() => setIsPlaybackSettingsOpen(!isPlaybackSettingsOpen)}
           ref={openPlaybackSettingsButtonRef}
         >
@@ -331,9 +431,9 @@ export default function TimelineControls({
           />
         )}
       </div>
-      <div className="relative bg-zinc-950 rounded-t-[0.5dvw] grow-[9] flex flex-row justify-evenly p-[2dvh]">
+      <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex <= 0}
           title="Undo (Ctrl+Z)"
           onClick={() => undo()}
@@ -341,7 +441,7 @@ export default function TimelineControls({
           <img src="/undo.svg" alt="Undo" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           disabled={stateWindowIndex === stateWindowLength - 1}
           title="Redo (Ctrl+Y)"
           onClick={() => redo()}
@@ -349,20 +449,37 @@ export default function TimelineControls({
           <img src="/redo.svg" alt="Redo" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
-          disabled={selectedChord === -1}
-          title="Delete chord (Del)/right click to delete all"
-          onClick={() => deleteChord()}
-          onContextMenu={(e) => {
-            e.preventDefault();
-            setIsDeleteAllOpen(!isDeleteAllOpen);
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          disabled={selectedChord === -1 || chords[selectedChord].token === -1}
+          title="Open chord variants (V)"
+          onClick={() => {
+            setSelectedToken(chords[selectedChord].token);
+            setSelectedVariant(chords[selectedChord].variant);
+            setSelectedChordVariants(selectedChord);
+            setIsVariantsOpenFromSuggestions(false);
+            setVariantsOpen(true);
           }}
-          ref={openDeleteAllButtonRef}
+        >
+          <img src="/variants.svg" alt="Variants" className="h-full w-full" />
+        </button>
+        <button
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          disabled={selectedChord === -1}
+          title="Delete chord (Del)"
+          onClick={() => deleteChord()}
         >
           <img src="/trash.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
-          className="grow select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="w-full h-full  select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          title="Delete all chords (Ctrl+Del)"
+          onClick={() => setIsDeleteAllOpen(!isDeleteAllOpen)}
+          ref={openDeleteAllButtonRef}
+        >
+          <img src="/trash-all.svg" alt="Delete" className="h-full w-full" />
+        </button>
+        <button
+          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title="Add chord (A)"
           onClick={() => addChordAndScroll()}
         >

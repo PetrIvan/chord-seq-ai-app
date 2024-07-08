@@ -27,18 +27,33 @@ body {
 }
 
 /* For decay factor slider */
+/* Webkit browsers (Chrome, Safari, newer versions of Edge) */
 .range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; /* Override default appearance */
+  appearance: none;
   background: #5b21b6;
   border: none;
-  height: 1dvw;
-  width: 1dvw;
+  height: 2dvh;
+  width: 2dvh;
+  border-radius: 50%; /* Make it circular */
 }
 
+/* Firefox */
 .range-slider::-moz-range-thumb {
   background: #5b21b6;
   border: none;
-  height: 1dvw;
-  width: 1dvw;
+  height: 2dvh;
+  width: 2dvh;
+  border-radius: 50%;
+}
+
+/* IE and Edge (older versions) */
+.range-slider::-ms-thumb {
+  background: #5b21b6;
+  border: none;
+  height: 2dvh;
+  width: 2dvh;
+  border-radius: 50%;
 }
 
 /* For search bar label */

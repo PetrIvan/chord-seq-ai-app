@@ -26,7 +26,7 @@ export default function Chords() {
   return (
     <div
       className="h-full flex flex-row max-w-full mt-[1dvw] items-center"
-      style={{ transform: `translateX(${timelinePosition}px)` }}
+      style={{ transform: `translateX(${timelinePosition}dvw)` }}
     >
       {chordList}
     </div>
