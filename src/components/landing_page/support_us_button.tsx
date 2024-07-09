@@ -12,7 +12,10 @@ export default function SupportUsButton() {
     <>
       <button
         className="max-md:hidden whitespace-nowrap flex items-center justify-center text-white py-7 px-6 text-2xl transition duration-300 ease-in-out hover:brightness-90 w-36 h-12"
-        onClick={() => setIsSupportUsOverlayOpen(true)}
+        onClick={() => {
+          setIsSupportUsOverlayOpen(true);
+          (globalThis as any).umami.track("support-us-button");
+        }}
       >
         Support us
       </button>

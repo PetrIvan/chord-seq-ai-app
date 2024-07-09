@@ -30,6 +30,9 @@ export default function SupportUsOverlay() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center bg-zinc-800 p-8 rounded-lg transition hover:bg-zinc-700"
+                    onClick={() =>
+                      (globalThis as any).umami.track("paypal-button")
+                    }
                   >
                     <p className="text-xl mb-3 whitespace-nowrap">
                       One-time donation
@@ -41,6 +44,9 @@ export default function SupportUsOverlay() {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex flex-col items-center bg-zinc-800 p-8 rounded-lg transition hover:bg-zinc-700"
+                    onClick={() =>
+                      (globalThis as any).umami.track("patreon-button")
+                    }
                   >
                     <p className="text-xl mb-3 whitespace-nowrap">
                       Monthly subscription
