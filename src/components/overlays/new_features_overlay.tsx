@@ -3,6 +3,8 @@ import React, { useEffect, useState, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
+import Overlay from "../ui/overlay";
+
 export default function NewFeaturesOverlay() {
   const [
     welcomeFirstTime,
@@ -11,7 +13,6 @@ export default function NewFeaturesOverlay() {
     isNewFeaturesOverlayOpen,
     setIsNewFeaturesOverlayOpen,
     setIsWelcomeOverlayOpen,
-    setEnabledShortcuts,
   ] = useStore(
     (state) => [
       state.welcomeFirstTime,
@@ -20,7 +21,6 @@ export default function NewFeaturesOverlay() {
       state.isNewFeaturesOverlayOpen,
       state.setIsNewFeaturesOverlayOpen,
       state.setIsWelcomeOverlayOpen,
-      state.setEnabledShortcuts,
     ],
     shallow
   );
@@ -31,20 +31,8 @@ export default function NewFeaturesOverlay() {
     showPrevRef.current = showPrev;
   }, [showPrev]);
 
-  const isNewFeaturesOverlayOpenRef = useRef(isNewFeaturesOverlayOpen);
-  useEffect(() => {
-    isNewFeaturesOverlayOpenRef.current = isNewFeaturesOverlayOpen;
-  }, [isNewFeaturesOverlayOpen]);
-
   const [showFeatures, setShowFeatures] = useState<number[]>([]);
   const latestVersion = 2;
-
-  // Disable shortcuts when the overlay is open
-  useEffect(() => {
-    if (isNewFeaturesOverlayOpen) {
-      setEnabledShortcuts(false);
-    }
-  }, [isNewFeaturesOverlayOpen]);
 
   // If it's the first time after the update, show the overlay
   useEffect(() => {
@@ -76,23 +64,16 @@ export default function NewFeaturesOverlay() {
   }, [showPrev]);
 
   // Keyboard shortcuts
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (!isNewFeaturesOverlayOpenRef.current) return;
-
-      if (e.key === "Escape") {
-        setIsNewFeaturesOverlayOpen(false);
-        setEnabledShortcuts(true);
-        setShowPrev(true);
-      }
-      if (e.key === "ArrowLeft" && showPrevRef.current) {
-        setIsWelcomeOverlayOpen(true);
-        setIsNewFeaturesOverlayOpen(false);
-      }
+  const otherShortcuts = (e: KeyboardEvent) => {
+    if (e.key === "ArrowLeft" && showPrevRef.current) {
+      setIsWelcomeOverlayOpen(true);
+      setIsNewFeaturesOverlayOpen(false);
     }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  };
+
+  const callOnClose = () => {
+    setShowPrev(true);
+  };
 
   let features: { [key: number]: JSX.Element[] } = {
     1: [
@@ -120,87 +101,76 @@ export default function NewFeaturesOverlay() {
   };
 
   return (
-    isNewFeaturesOverlayOpen && (
-      <div className="absolute z-30 bg-zinc-950 bg-opacity-50 h-[100dvh] w-[100dvw] flex flex-col items-center justify-center">
-        <div className="relative bg-zinc-900 h-[80dvh] w-[70dvw] rounded-[0.5dvw] p-[2dvh] overflow-y-auto">
-          <img
-            className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer filter active:brightness-90"
-            src="/close.svg"
-            title="Close (Esc)"
-            onClick={() => {
-              setIsNewFeaturesOverlayOpen(false);
-              setEnabledShortcuts(true);
-              setShowPrev(true);
-            }}
-          />
-          <div className="h-fit min-h-full w-full flex flex-col items-center justify-center space-y-[2dvh] px-[6dvh]">
-            <p className="w-full text-center text-[5dvh] font-semibold">
-              What&apos;s new
-            </p>
-            <ul className="text-[3dvh] max-w-[75%] text-justify space-y-[1dvh] list-disc list-outside">
-              {showFeatures.map((feature) => features[feature])}
-            </ul>
-            <p className="text-[3dvh] max-w-[75%] text-justify">
-              For more information, check the{" "}
-              <a
-                className="text-blue-400 hover:underline"
-                href="https://github.com/PetrIvan/chord-seq-ai-app/wiki/Features"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                documentation
-              </a>
-              .
-            </p>
+    <Overlay
+      isOverlayOpen={isNewFeaturesOverlayOpen}
+      setIsOverlayOpen={setIsNewFeaturesOverlayOpen}
+      otherShortcuts={otherShortcuts}
+      callOnClose={callOnClose}
+    >
+      <p className="w-full text-center text-[5dvh] font-semibold">
+        What&apos;s new
+      </p>
+      <ul className="text-[3dvh] max-w-[75%] text-justify space-y-[1dvh] list-disc list-outside">
+        {showFeatures.map((feature) => features[feature])}
+      </ul>
+      <p className="text-[3dvh] max-w-[75%] text-justify">
+        For more information, check the{" "}
+        <a
+          className="text-blue-400 hover:underline"
+          href="https://github.com/PetrIvan/chord-seq-ai-app/wiki/Features"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          documentation
+        </a>
+        .
+      </p>
 
-            <div className="w-[75%] h-[2px] flex flex-row items-center justify-center">
-              <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-r from-transparent to-zinc-800 border-0" />
-              <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-l from-transparent to-zinc-800 border-0" />
-            </div>
-
-            <p className="text-[2.5dvh] max-w-[60%] text-center">
-              Would you like to see more features or vote for the next ones? You
-              can do so on{" "}
-              <a
-                className="text-blue-400 hover:underline"
-                href="https://github.com/PetrIvan/chord-seq-ai-app/discussions/categories/feature-requests?discussions_q=category%3A%22Feature+requests%22+sort%3Atop"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                GitHub Discussions
-              </a>
-              .
-            </p>
-          </div>
-          {showPrev && (
-            <button
-              className="absolute bottom-[50%] left-[1dvh] w-[5dvh] h-[5dvh] filter active:brightness-90"
-              title="Show welcome overlay (Left arrow key)"
-              onClick={() => {
-                setIsWelcomeOverlayOpen(true);
-                setIsNewFeaturesOverlayOpen(false);
-              }}
-            >
-              <svg
-                className="w-full h-full inline-block"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 10 10"
-              >
-                <path
-                  transform="rotate(90 5 5)"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="1"
-                  d="m1 1 4 4 4-4"
-                />
-              </svg>
-            </button>
-          )}
-        </div>
+      <div className="w-[75%] h-[2px] flex flex-row items-center justify-center">
+        <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-r from-transparent to-zinc-800 border-0" />
+        <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-l from-transparent to-zinc-800 border-0" />
       </div>
-    )
+
+      <p className="text-[2.5dvh] max-w-[60%] text-center">
+        Would you like to see more features or vote for the next ones? You can
+        do so on{" "}
+        <a
+          className="text-blue-400 hover:underline"
+          href="https://github.com/PetrIvan/chord-seq-ai-app/discussions/categories/feature-requests?discussions_q=category%3A%22Feature+requests%22+sort%3Atop"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          GitHub Discussions
+        </a>
+        .
+      </p>
+      {showPrev && (
+        <button
+          className="absolute bottom-[50%] left-[1dvh] w-[5dvh] h-[5dvh] filter active:brightness-90"
+          title="Show welcome overlay (Left arrow key)"
+          onClick={() => {
+            setIsWelcomeOverlayOpen(true);
+            setIsNewFeaturesOverlayOpen(false);
+          }}
+        >
+          <svg
+            className="w-full h-full inline-block"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 10 10"
+          >
+            <path
+              transform="rotate(90 5 5)"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="1"
+              d="m1 1 4 4 4-4"
+            />
+          </svg>
+        </button>
+      )}
+    </Overlay>
   );
 }

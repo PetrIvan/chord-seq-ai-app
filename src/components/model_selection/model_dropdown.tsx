@@ -3,6 +3,7 @@ interface Props {
   setShowModelDropdown: (show: boolean) => void;
   models: [string, string][];
   modelDropdownRef: React.RefObject<HTMLDivElement>;
+  customScrollbarEnabled: boolean;
 }
 
 export default function modelDropdown({
@@ -10,10 +11,18 @@ export default function modelDropdown({
   setShowModelDropdown,
   models,
   modelDropdownRef,
+  customScrollbarEnabled,
 }: Props) {
   return (
     <div
-      className="absolute z-20 bg-zinc-900 left-0 w-full rounded-[1dvh] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh]"
+      className={
+        `absolute z-20 bg-zinc-900 left-0 w-full rounded-[1dvh] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh] ` +
+        `${
+          customScrollbarEnabled
+            ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+            : ""
+        }`
+      }
       ref={modelDropdownRef}
     >
       {models.map((model, i) => (

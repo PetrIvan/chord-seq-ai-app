@@ -147,6 +147,10 @@ interface StoreState {
   setIsMidiImportOverlayOpen: (isMidiImportOverlayOpen: boolean) => void;
   midiFile: Midi;
   setMidiFile: (midiFile: Midi) => void;
+
+  // UI
+  customScrollbarEnabled: boolean;
+  setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) => void;
 }
 
 export const useStore = createWithEqualityFn<StoreState>()(
@@ -411,6 +415,11 @@ export const useStore = createWithEqualityFn<StoreState>()(
         set({ isMidiImportOverlayOpen }),
       midiFile: new Midi(),
       setMidiFile: (midiFile: Midi) => set({ midiFile }),
+
+      // UI
+      customScrollbarEnabled: true,
+      setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) =>
+        set({ customScrollbarEnabled }),
     }),
     {
       // Saving

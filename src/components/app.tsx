@@ -12,8 +12,15 @@ import MidiImportOverlay from "./overlays/midi_import_overlay";
 import { getSelectorsByUserAgent } from "react-device-detect";
 
 import { useEffect, useState } from "react";
+import { useStore } from "@/state/use_store";
+import { shallow } from "zustand/shallow";
 
 export default function App() {
+  const [setCustomScrollbar] = useStore(
+    (state) => [state.setCustomScrollbarEnabled],
+    shallow
+  );
+
   // Next.js 13+ implementation, the default isMobile from react-device-detect
   // is not working anymore (see https://stackoverflow.com/a/77174374/3058839)
   const [isMobile, setIsMobile] = useState(false);
@@ -23,6 +30,9 @@ export default function App() {
     const userAgent = navigator.userAgent;
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
+
+    // Disable custom scrollbar for Firefox
+    if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
   }, []);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);

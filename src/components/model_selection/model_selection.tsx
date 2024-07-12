@@ -8,12 +8,19 @@ import ModelDropdown from "./model_dropdown";
 import StyleDropdown from "./style_dropdown";
 
 export default function ModelSelection() {
-  const [modelPath, setModelPath, selectedGenres, selectedDecades] = useStore(
+  const [
+    modelPath,
+    setModelPath,
+    selectedGenres,
+    selectedDecades,
+    customScrollbarEnabled,
+  ] = useStore(
     (state) => [
       state.modelPath,
       state.setModelPath,
       state.selectedGenres,
       state.selectedDecades,
+      state.customScrollbarEnabled,
     ],
     shallow
   );
@@ -144,6 +151,7 @@ export default function ModelSelection() {
           setShowModelDropdown={setShowModelDropdown}
           models={models}
           modelDropdownRef={modelDropdownRef}
+          customScrollbarEnabled={customScrollbarEnabled}
         />
       )}
       {showStyleDropdown && (

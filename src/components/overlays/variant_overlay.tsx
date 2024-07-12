@@ -2,7 +2,6 @@
 import React, { useEffect } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
-
 import { cloneDeep } from "lodash";
 
 import { chordToNotes } from "@/data/chord_to_notes";
@@ -11,6 +10,7 @@ import { tokenToChord } from "@/data/token_to_chord";
 import { playChord } from "@/playback/player";
 
 import Piano from "../piano";
+import Overlay from "../ui/overlay";
 
 export default function VariantOverlay() {
   const [
@@ -26,6 +26,7 @@ export default function VariantOverlay() {
     variantsFromSuggestions,
     replaceDefaultVariant,
     replaceChord,
+    customScrollbarEnabled,
   ] = useStore(
     (state) => [
       state.selectedToken,
@@ -40,75 +41,10 @@ export default function VariantOverlay() {
       state.isVariantsOpenFromSuggestions,
       state.replaceDefaultVariant,
       state.replaceChord,
+      state.customScrollbarEnabled,
     ],
     shallow
   );
-
-  // Disable shortcuts when the overlay is open
-  useEffect(() => {
-    setEnabledShortcuts(!variantsOpen);
-  }, [variantsOpen]);
-
-  return (
-    variantsOpen && (
-      <ShowableVariantOverlay
-        token={token}
-        selectedVariant={variant}
-        setSelectedVariant={setVariant}
-        setVariantsOpen={setVariantsOpen}
-        selectedChordVariants={selectedChordVariants}
-        chords={chords}
-        setChords={setChords}
-        variantsFromSuggestions={variantsFromSuggestions}
-        replaceDefaultVariant={replaceDefaultVariant}
-        replaceChord={replaceChord}
-      />
-    )
-  );
-}
-
-interface Props {
-  token: number;
-  selectedVariant: number;
-  setSelectedVariant: (variant: number) => void;
-  setVariantsOpen: (variantsOpen: boolean) => void;
-  selectedChordVariants: number;
-  chords: { index: number; token: number; duration: number; variant: number }[];
-  setChords: (
-    chords: {
-      index: number;
-      token: number;
-      duration: number;
-      variant: number;
-    }[]
-  ) => void;
-  variantsFromSuggestions: boolean;
-  replaceDefaultVariant: (token: number, defaultVariant: number) => void;
-  replaceChord: (token: number, variant: number) => void;
-}
-
-function ShowableVariantOverlay({
-  token,
-  selectedVariant: variant,
-  setSelectedVariant: setVariant,
-  setVariantsOpen,
-  selectedChordVariants,
-  chords,
-  setChords,
-  variantsFromSuggestions,
-  replaceDefaultVariant,
-  replaceChord,
-}: Props) {
-  // Close on escape
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") {
-        setVariantsOpen(false);
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
 
   /* Apply functions */
   function applyToAll() {
@@ -138,69 +74,76 @@ function ShowableVariantOverlay({
   }
 
   return (
-    <div className="absolute z-30 bg-zinc-950 bg-opacity-50 h-[100dvh] w-[100dvw] flex flex-col items-center justify-center">
-      <div className="relative bg-zinc-900 h-[70dvh] w-[60dvw] rounded-[1dvh] flex flex-col items-center justify-evenly p-[2dvh]">
-        <div className="grow-[1] flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
-          <img
-            className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer filter active:brightness-90"
-            src="/close.svg"
-            title="Close (Esc)"
-            onClick={() => setVariantsOpen(false)}
-          ></img>
-          <p className="text-[5dvh] font-semibold">
-            {tokenToChord[token][variant]}
-          </p>
-          <Piano
-            notes={chordToNotes[tokenToChord[token][variant]]}
-            octaveOffset={3}
-            numKeys={29}
-          />
+    <Overlay
+      isOverlayOpen={variantsOpen}
+      setIsOverlayOpen={setVariantsOpen}
+      enabledOverflow={false}
+    >
+      <div className="flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
+        <p className="text-[5dvh] font-semibold">
+          {tokenToChord[Math.max(token, 0)][variant]}
+        </p>
+        <Piano
+          notes={chordToNotes[tokenToChord[Math.max(token, 0)][variant]]}
+          octaveOffset={3}
+          numKeys={29}
+        />
+      </div>
+      <div className="flex flex-col items-center justify-center h-fit w-full space-y-[2dvh] min-h-0">
+        <p className="text-[2.5dvh]">All variants:</p>
+        <div className="bg-zinc-900 w-full max-h-screen min-h-0">
+          <div
+            className={
+              `grid gap-[2dvh] p-[1dvh] w-full h-full overflow-y-auto ` +
+              `${
+                customScrollbarEnabled
+                  ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+                  : ""
+              }`
+            }
+            style={{
+              gridTemplateColumns: "repeat(auto-fit, minmax(20dvh, 1fr))",
+              minHeight: "0",
+            }}
+          >
+            {tokenToChord[Math.max(token, 0)].map((_, i) => (
+              <button
+                className="h-[10dvh] min-h-[8dvh] flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 bg-violet-700"
+                onClick={() => {
+                  playChord(tokenToChord[Math.max(token, 0)][i]);
+                  setVariant(i);
+                }}
+                key={i}
+                title={`Change the preview variant to ${
+                  tokenToChord[Math.max(token, 0)][i]
+                }`}
+              >
+                {tokenToChord[Math.max(token, 0)][i]}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="grow-[1] flex flex-col items-center justify-center h-full w-full space-y-[2dvh] min-h-0">
-          <p className="text-[2.5dvh]">All variants:</p>
-          <div className="flex-1 bg-zinc-900 w-full max-h-screen p-[2dvh] overflow-y-auto min-h-0">
-            <div
-              className="grid gap-[2dvh] overflow-y-auto w-full h-full"
-              style={{
-                gridTemplateColumns: "repeat(auto-fit, minmax(20dvh, 1fr))",
-                minHeight: "0",
-              }}
-            >
-              {tokenToChord[token].map((_, i) => (
-                <button
-                  className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] min-h-[8dvh] bg-violet-700"
-                  onClick={() => {
-                    playChord(tokenToChord[token][i]);
-                    setVariant(i);
-                  }}
-                  key={i}
-                  title={`Change the preview variant to ${tokenToChord[token][i]}`}
-                >
-                  {tokenToChord[token][i]}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-row w-full justify-evenly">
-            <button
-              className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
-              onClick={() => {
-                variantsFromSuggestions ? setAsDefault() : applyToAll();
-              }}
-            >
-              {variantsFromSuggestions ? "Set as default" : "Apply to all"}
-            </button>
-            <button
-              className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
-              onClick={() => {
-                variantsFromSuggestions ? variantUseOnce() : applyOnce();
-              }}
-            >
-              {variantsFromSuggestions ? "Use once" : "Apply once"}
-            </button>
-          </div>
+        <div className="flex flex-row w-full justify-evenly">
+          <button
+            className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+            onClick={() => {
+              setEnabledShortcuts(true);
+              variantsFromSuggestions ? setAsDefault() : applyToAll();
+            }}
+          >
+            {variantsFromSuggestions ? "Set as default" : "Apply to all"}
+          </button>
+          <button
+            className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+            onClick={() => {
+              setEnabledShortcuts(true);
+              variantsFromSuggestions ? variantUseOnce() : applyOnce();
+            }}
+          >
+            {variantsFromSuggestions ? "Use once" : "Apply once"}
+          </button>
         </div>
       </div>
-    </div>
+    </Overlay>
   );
 }

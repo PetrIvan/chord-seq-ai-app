@@ -2,7 +2,9 @@
 import { useEffect, useState, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
+
 import Select from "../ui/select";
+import Overlay from "../ui/overlay";
 
 import { getChordsFromNotes } from "@/playback/midi_io";
 
@@ -14,6 +16,8 @@ export default function MidiImportOverlay() {
     setChords,
     setSignature,
     setBpm,
+    customScrollbarEnabled,
+    setEnabledShortcuts,
   ] = useStore(
     (state) => [
       state.isMidiImportOverlayOpen,
@@ -22,6 +26,8 @@ export default function MidiImportOverlay() {
       state.setChords,
       state.setSignature,
       state.setBpm,
+      state.customScrollbarEnabled,
+      state.setEnabledShortcuts,
     ],
     shallow
   );
@@ -104,128 +110,141 @@ export default function MidiImportOverlay() {
       if (importBpm) setBpm(Math.round(bpm));
 
       setIsMidiImportOverlayOpen(false);
+      setEnabledShortcuts(true);
+    }
+  };
+
+  const otherShortcuts = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+
+      try {
+        importMidi(includedTracks, quantization, importBpm, quantizationMode);
+      } catch (e: any) {
+        alert(e.message);
+      }
     }
   };
 
   return (
-    isMidiImportOverlayOpen && (
-      <div className="absolute z-30 bg-zinc-950 bg-opacity-50 h-[100dvh] w-[100dvw] flex flex-col items-center justify-center">
-        <div className="relative bg-zinc-900 h-[80dvh] w-[70dvw] rounded-[0.5dvw] flex flex-col items-center justify-evenly p-[2dvh] overflow-y-auto">
-          <div className="w-full h-[70dvh] flex flex-col items-start justify-center space-y-[2dvh] mb-[5dvh] px-[6dvh]">
-            <img
-              className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer filter active:brightness-90"
-              src="/close.svg"
-              title="Close (Esc)"
-              onClick={() => {
-                setIsMidiImportOverlayOpen(false);
-              }}
-            />
-            <p className="w-full text-center px-[1dvh] text-[5dvh] font-semibold">
-              Import MIDI
-            </p>
-            <div className="w-full flex flex-wrap flex-row items-center justify-between">
-              <div className="flex flex-row items-center justify-start space-x-[2dvh] p-[1dvw]">
-                <label className="whitespace-nowrap" htmlFor="quantization">
-                  Quantization (beats):
-                </label>
-                <input
-                  id="quantization"
-                  type="number"
-                  title="Beats"
-                  className="text-[2.5dvh] border-[0.2dvh] p-[1dvh] w-[10dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh] mr-[1dvw]"
-                  min={1}
-                  max={8}
-                  step={1}
-                  value={quantization}
-                  onChange={(e) => {
-                    setQuantization(parseInt(e.target.value));
-                  }}
-                />
-              </div>
-              <div className="flex flex-row items-center justify-center space-x-[2dvh] p-[1dvw]">
-                <label className="whitespace-nowrap">Quantization mode:</label>
-                <Select
-                  selectName="quantization mode"
-                  state={quantizationMode}
-                  setState={setQuantizationMode}
-                  allStates={["closest", "all notes"]}
-                  width="17dvh"
-                />
-              </div>
-              <div className="flex flex-row items-center justify-end space-x-[2dvh] p-[1dvw]">
-                <label className="whitespace-nowrap" htmlFor="tempo">
-                  Import BPM:
-                </label>
-                <input
-                  id="tempo"
-                  type="checkbox"
-                  className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
-                  checked={importBpm}
-                  onChange={() => {
-                    setImportBpm(!importBpm);
-                  }}
-                />
-              </div>
-            </div>
-
-            <p className="w-full text-center px-[1dvh] font-semibold">
-              Select harmony tracks:
-            </p>
-            <ul className="left-0 w-full rounded-[0.5dvw] overflow-y-auto max-h-[40%]">
-              {tracks.map((track, i) => (
-                <li
-                  className="flex-1 w-full flex justify-between items-center p-[2dvh] min-w-0 whitespace-nowrap hover:bg-zinc-800 rounded-[0.5dvw]"
-                  title={`Include ${track.name}`}
-                  onClick={() => {
-                    setIncludedTracks(
-                      includedTracks.map((t, j) => (i === j ? !t : t))
-                    );
-                  }}
-                  key={i}
-                >
-                  <label className="truncate" htmlFor={`track-${i}`}>
-                    {track.name || "Unnamed"} (sounds like{" "}
-                    {track.instrument.name})
-                  </label>
-                  <div className="flex flex-row items-center justify-between space-x-[1dvw]">
-                    <input
-                      id={`track-${i}`}
-                      type="checkbox"
-                      className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
-                      checked={includedTracks[i]}
-                      onChange={() => {
-                        setIncludedTracks(
-                          includedTracks.map((t, j) => (i === j ? !t : t))
-                        );
-                      }}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
-
-            <div className="flex flex-row w-full justify-evenly">
-              <button
-                className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
-                onClick={() => {
-                  try {
-                    importMidi(
-                      includedTracks,
-                      quantization,
-                      importBpm,
-                      quantizationMode
-                    );
-                  } catch (e: any) {
-                    alert(e.message);
-                  }
-                }}
-              >
-                Import
-              </button>
-            </div>
-          </div>
+    <Overlay
+      isOverlayOpen={isMidiImportOverlayOpen}
+      setIsOverlayOpen={setIsMidiImportOverlayOpen}
+      enabledOverflow={false}
+      otherShortcuts={otherShortcuts}
+    >
+      <p className="w-full text-center px-[1dvh] text-[5dvh] font-semibold">
+        Import MIDI
+      </p>
+      <div className="w-full flex flex-wrap flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-start space-x-[2dvh] p-[1dvw]">
+          <label className="whitespace-nowrap" htmlFor="quantization">
+            Quantization (beats):
+          </label>
+          <input
+            id="quantization"
+            type="number"
+            title="Beats"
+            className="text-[2.5dvh] border-[0.2dvh] p-[1dvh] w-[10dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh] mr-[1dvw]"
+            min={1}
+            max={8}
+            step={1}
+            value={quantization}
+            onChange={(e) => {
+              setQuantization(parseInt(e.target.value));
+            }}
+          />
+        </div>
+        <div className="flex flex-row items-center justify-center space-x-[2dvh] p-[1dvw]">
+          <label className="whitespace-nowrap">Quantization mode:</label>
+          <Select
+            selectName="quantization mode"
+            state={quantizationMode}
+            setState={setQuantizationMode}
+            allStates={["closest", "all notes"]}
+            width="17dvh"
+          />
+        </div>
+        <div className="flex flex-row items-center justify-end space-x-[2dvh] p-[1dvw]">
+          <label className="whitespace-nowrap" htmlFor="tempo">
+            Import BPM:
+          </label>
+          <input
+            id="tempo"
+            type="checkbox"
+            className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+            checked={importBpm}
+            onChange={() => {
+              setImportBpm(!importBpm);
+            }}
+          />
         </div>
       </div>
-    )
+
+      <p className="w-full text-center px-[1dvh] font-semibold">
+        Select harmony tracks:
+      </p>
+      <ul
+        className={
+          `left-0 w-full rounded-[0.5dvw] overflow-y-auto max-h-[40%] ` +
+          `${
+            customScrollbarEnabled
+              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+              : ""
+          }`
+        }
+      >
+        {tracks.map((track, i) => (
+          <li
+            className="flex-1 w-full flex justify-between items-center p-[2dvh] min-w-0 whitespace-nowrap hover:bg-zinc-800 rounded-[0.5dvw]"
+            title={`Include ${track.name}`}
+            onClick={() => {
+              setIncludedTracks(
+                includedTracks.map((t, j) => (i === j ? !t : t))
+              );
+            }}
+            key={i}
+          >
+            <label className="truncate" htmlFor={`track-${i}`}>
+              {track.name || "Unnamed"} (sounds like {track.instrument.name})
+            </label>
+            <div className="flex flex-row items-center justify-between space-x-[1dvw]">
+              <input
+                id={`track-${i}`}
+                type="checkbox"
+                className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+                checked={includedTracks[i]}
+                onChange={() => {
+                  setIncludedTracks(
+                    includedTracks.map((t, j) => (i === j ? !t : t))
+                  );
+                }}
+              />
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex flex-row w-full justify-evenly">
+        <button
+          className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+          title="Import (Enter)"
+          onClick={() => {
+            try {
+              importMidi(
+                includedTracks,
+                quantization,
+                importBpm,
+                quantizationMode
+              );
+            } catch (e: any) {
+              alert(e.message);
+            }
+          }}
+        >
+          Import
+        </button>
+      </div>
+    </Overlay>
   );
 }
