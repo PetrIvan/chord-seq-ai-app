@@ -15,6 +15,7 @@ export default function TransposeImportExport() {
     chords,
     setChords,
     signature,
+    bpm,
     setSignature,
     setSelectedChord,
     enabledShortcuts,
@@ -28,6 +29,7 @@ export default function TransposeImportExport() {
       state.chords,
       state.setChords,
       state.signature,
+      state.bpm,
       state.setSignature,
       state.setSelectedChord,
       state.enabledShortcuts,
@@ -294,7 +296,7 @@ export default function TransposeImportExport() {
       downloadFile(blob, "chords.chseq");
     }
     if (format === ".mid") {
-      const blob = getMidiBlob(chords);
+      const blob = getMidiBlob(chords, bpm, signature);
 
       downloadFile(blob, "chords.mid");
     }

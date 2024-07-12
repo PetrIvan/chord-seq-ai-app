@@ -11,9 +11,15 @@ export function getMidiBlob(
     token: number;
     duration: number;
     variant: number;
-  }[]
+  }[],
+  bpm: number,
+  signature: [number, number]
 ): Blob {
   const track = new MidiWriter.Track();
+
+  // Set the tempo and time signature
+  track.setTempo(bpm);
+  track.setTimeSignature(signature[0], signature[1], 24, 8);
 
   // Create a track
   let restDuration = 0;
