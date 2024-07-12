@@ -18,6 +18,7 @@ export default function MidiImportOverlay() {
     setBpm,
     customScrollbarEnabled,
     setEnabledShortcuts,
+    setSelectedChord,
   ] = useStore(
     (state) => [
       state.isMidiImportOverlayOpen,
@@ -28,6 +29,7 @@ export default function MidiImportOverlay() {
       state.setBpm,
       state.customScrollbarEnabled,
       state.setEnabledShortcuts,
+      state.setSelectedChord,
     ],
     shallow
   );
@@ -83,6 +85,8 @@ export default function MidiImportOverlay() {
     if (tracksRef.current.length > 0) {
       if (includedTracks.every((t) => !t))
         throw new Error("Please select at least one track to import.");
+
+      setSelectedChord(-1);
 
       // Extract the chords from the MIDI file
       const notes = tracksRef.current
