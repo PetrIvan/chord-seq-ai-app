@@ -5,11 +5,7 @@ import { shallow } from "zustand/shallow";
 import { cloneDeep } from "lodash";
 
 import { transpositionMap } from "@/data/transposition_map";
-import {
-  getMidiBlob,
-  extractMidiNotes,
-  getChordsFromNotes,
-} from "@/playback/midi_io";
+import { getMidiBlob, extractMidiFile } from "@/playback/midi_io";
 
 import TransposeDropdown from "./transpose_dropdown";
 import ExportDropdown from "./export_dropdown";
@@ -25,6 +21,8 @@ export default function TransposeImportExport() {
     selectedChord,
     timelinePosition,
     zoom,
+    setIsMidiImportOverlayOpen,
+    setMidiFile,
   ] = useStore(
     (state) => [
       state.chords,
@@ -36,6 +34,8 @@ export default function TransposeImportExport() {
       state.selectedChord,
       state.timelinePosition,
       state.zoom,
+      state.setIsMidiImportOverlayOpen,
+      state.setMidiFile,
     ],
     shallow
   );
@@ -247,14 +247,15 @@ export default function TransposeImportExport() {
     }
 
     if (fileObj.name.endsWith(".mid")) {
-      extractMidiNotes(fileObj)
-        .then((notes) => {
-          setChords(getChordsFromNotes(notes));
+      extractMidiFile(fileObj)
+        .then((midi) => {
+          setMidiFile(midi);
+          setIsMidiImportOverlayOpen(true);
         })
         .catch((error) => {
           setChords(prevChords);
           alert(
-            "An error occurred while importing the MIDI file. Ensure that it contains a single track with non-overlapping chords."
+            "An error occurred while importing the MIDI file. Please make sure it is valid."
           );
         });
     }

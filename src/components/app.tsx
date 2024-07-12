@@ -4,9 +4,10 @@ import TransposeImportExport from "@/components/transpose_import_export/transpos
 import GetHelp from "@/components/get_help";
 import TimelineEditor from "@/components/timeline/timeline_editor";
 import Suggestions from "@/components/suggestions/suggestions";
-import VariantOverlay from "./variant_overlay";
-import WelcomeOverlay from "./welcome_overlay";
-import NewFeaturesOverlay from "./new_features_overlay";
+import VariantOverlay from "./overlays/variant_overlay";
+import WelcomeOverlay from "./overlays/welcome_overlay";
+import NewFeaturesOverlay from "./overlays/new_features_overlay";
+import MidiImportOverlay from "./overlays/midi_import_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
@@ -67,6 +68,7 @@ export default function App() {
       className="relative max-h-screen flex flex-col bg-scroll bg-center bg-cover text-[2.5dvh]"
       style={{ backgroundImage: `url('/background.jpg')` }}
     >
+      <MidiImportOverlay />
       <VariantOverlay />
       <WelcomeOverlay />
       <NewFeaturesOverlay />

@@ -7,6 +7,7 @@ import isEqual from "lodash/isEqual";
 
 import { genres, decades } from "@/data/conditions";
 import { tokenToChord } from "@/data/token_to_chord";
+import { Midi } from "@tonejs/midi";
 
 const deepCompareUpdate = (partial: any, state: any) => {
   if (partial.chords && isEqual(partial.chords, state.chords)) {
@@ -140,6 +141,12 @@ interface StoreState {
   // Support us overlay
   isSupportUsOverlayOpen: boolean;
   setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) => void;
+
+  // MIDI import overlay
+  isMidiImportOverlayOpen: boolean;
+  setIsMidiImportOverlayOpen: (isMidiImportOverlayOpen: boolean) => void;
+  midiFile: Midi;
+  setMidiFile: (midiFile: Midi) => void;
 }
 
 export const useStore = createWithEqualityFn<StoreState>()(
@@ -397,6 +404,13 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isSupportUsOverlayOpen: false,
       setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) =>
         set({ isSupportUsOverlayOpen }),
+
+      // MIDI import overlay
+      isMidiImportOverlayOpen: false,
+      setIsMidiImportOverlayOpen: (isMidiImportOverlayOpen: boolean) =>
+        set({ isMidiImportOverlayOpen }),
+      midiFile: new Midi(),
+      setMidiFile: (midiFile: Midi) => set({ midiFile }),
     }),
     {
       // Saving

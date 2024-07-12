@@ -10,7 +10,7 @@ import { tokenToChord } from "@/data/token_to_chord";
 
 import { playChord } from "@/playback/player";
 
-import Piano from "./piano";
+import Piano from "../piano";
 
 export default function VariantOverlay() {
   const [
