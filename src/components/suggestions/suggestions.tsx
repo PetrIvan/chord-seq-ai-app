@@ -43,6 +43,7 @@ interface Props {
   isDownloadingModel: boolean;
   percentageDownloaded: number;
   isLoadingSession: boolean;
+  customScrollbarEnabled: boolean;
 }
 
 // This logic is quite complex, but given that the rerendering
@@ -72,7 +73,8 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
       newProps.suggestionsIncludeVariants ||
     prevProps.isDownloadingModel !== newProps.isDownloadingModel ||
     prevProps.percentageDownloaded !== newProps.percentageDownloaded ||
-    prevProps.isLoadingSession !== newProps.isLoadingSession
+    prevProps.isLoadingSession !== newProps.isLoadingSession ||
+    prevProps.customScrollbarEnabled !== newProps.customScrollbarEnabled
   ) {
     return false;
   }
@@ -142,6 +144,7 @@ export default function Suggestions() {
     isDownloadingModel,
     percentageDownloaded,
     isLoadingSession,
+    customScrollbarEnabled,
   ] = useStore(
     (state) => [
       state.chords,
@@ -165,6 +168,7 @@ export default function Suggestions() {
       state.isDownloadingModel,
       state.percentageDownloaded,
       state.isLoadingSession,
+      state.customScrollbarEnabled,
     ],
     shallow
   );
@@ -192,6 +196,7 @@ export default function Suggestions() {
       isDownloadingModel={isDownloadingModel}
       percentageDownloaded={percentageDownloaded}
       isLoadingSession={isLoadingSession}
+      customScrollbarEnabled={customScrollbarEnabled}
     />
   );
 }
@@ -218,6 +223,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   isDownloadingModel,
   percentageDownloaded,
   isLoadingSession,
+  customScrollbarEnabled,
 }: Props) {
   /* Prediction states */
   const [chordProbsLoading, setChordProbsLoading] = useState(false);
@@ -533,11 +539,18 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         </div>
       )}
       <div
-        className={`flex-1 bg-zinc-900 w-full max-h-screen p-[1dvw] ${
-          selectedChord === -1
-            ? "flex flex-col justify-center items-center rounded-[0.5dvw] min-h-0"
-            : "overflow-y-auto min-h-0"
-        }`}
+        className={
+          `flex-1 bg-zinc-900 w-full max-h-screen p-[1dvw] ${
+            selectedChord === -1
+              ? "flex flex-col justify-center items-center rounded-[0.5dvw] min-h-0 "
+              : "overflow-y-auto "
+          }` +
+          `${
+            customScrollbarEnabled
+              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+              : ""
+          }`
+        }
       >
         {content}
       </div>

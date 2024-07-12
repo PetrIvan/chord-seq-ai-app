@@ -5,11 +5,7 @@ import { shallow } from "zustand/shallow";
 import { cloneDeep } from "lodash";
 
 import { transpositionMap } from "@/data/transposition_map";
-import {
-  getMidiBlob,
-  extractMidiNotes,
-  getChordsFromNotes,
-} from "@/playback/midi_io";
+import { getMidiBlob, extractMidiFile } from "@/playback/midi_io";
 
 import TransposeDropdown from "./transpose_dropdown";
 import ExportDropdown from "./export_dropdown";
@@ -19,23 +15,29 @@ export default function TransposeImportExport() {
     chords,
     setChords,
     signature,
+    bpm,
     setSignature,
     setSelectedChord,
     enabledShortcuts,
     selectedChord,
     timelinePosition,
     zoom,
+    setIsMidiImportOverlayOpen,
+    setMidiFile,
   ] = useStore(
     (state) => [
       state.chords,
       state.setChords,
       state.signature,
+      state.bpm,
       state.setSignature,
       state.setSelectedChord,
       state.enabledShortcuts,
       state.selectedChord,
       state.timelinePosition,
       state.zoom,
+      state.setIsMidiImportOverlayOpen,
+      state.setMidiFile,
     ],
     shallow
   );
@@ -247,14 +249,15 @@ export default function TransposeImportExport() {
     }
 
     if (fileObj.name.endsWith(".mid")) {
-      extractMidiNotes(fileObj)
-        .then((notes) => {
-          setChords(getChordsFromNotes(notes));
+      extractMidiFile(fileObj)
+        .then((midi) => {
+          setMidiFile(midi);
+          setIsMidiImportOverlayOpen(true);
         })
         .catch((error) => {
           setChords(prevChords);
           alert(
-            "An error occurred while importing the MIDI file. Ensure that it contains a single track with non-overlapping chords."
+            "An error occurred while importing the MIDI file. Please make sure it is valid."
           );
         });
     }
@@ -293,7 +296,7 @@ export default function TransposeImportExport() {
       downloadFile(blob, "chords.chseq");
     }
     if (format === ".mid") {
-      const blob = getMidiBlob(chords);
+      const blob = getMidiBlob(chords, bpm, signature);
 
       downloadFile(blob, "chords.mid");
     }

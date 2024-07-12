@@ -11,9 +11,15 @@ export function getMidiBlob(
     token: number;
     duration: number;
     variant: number;
-  }[]
+  }[],
+  bpm: number,
+  signature: [number, number]
 ): Blob {
   const track = new MidiWriter.Track();
+
+  // Set the tempo and time signature
+  track.setTempo(bpm);
+  track.setTimeSignature(signature[0], signature[1], 24, 8);
 
   // Create a track
   let restDuration = 0;
@@ -52,21 +58,12 @@ export function getMidiBlob(
   return new Blob([byteArray], { type: "audio/midi" });
 }
 
-export async function extractMidiNotes(
-  midiFile: Blob
-): Promise<{ name: string; duration: number; time: number }[]> {
+export async function extractMidiFile(midiFile: Blob): Promise<Midi> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
       const midi = new Midi(e.target?.result as ArrayBuffer);
-      const notes = midi.tracks.flatMap((track) =>
-        track.notes.map((note) => ({
-          name: note.name,
-          duration: note.duration,
-          time: note.time,
-        }))
-      );
-      resolve(notes);
+      resolve(midi);
     };
     reader.onerror = (e) => reject(e);
     reader.readAsArrayBuffer(midiFile);
@@ -107,28 +104,59 @@ function getVariantRep(notes: number[]): string {
 
 // Convert a list of notes to a list of chords
 export function getChordsFromNotes(
-  notes: { name: string; duration: number; time: number }[]
+  notes: { name: string; duration: number; time: number }[],
+  quantization: number, // In beats
+  quantizationMode: string
 ): { index: number; token: number; duration: number; variant: number }[] {
-  // Group notes into chords
-  let [prevTime, prevDuration] = [-1, 1]; // To account for the first chord
-  let groupedNotes: { duration: number; notes: number[] }[] = [];
-  for (const note of notes) {
-    if (note.time > prevTime) {
-      // Check for rests
-      if (prevTime + prevDuration < note.time) {
-        console.log("Rest");
-        groupedNotes.push({
-          duration: note.time - (prevTime + prevDuration),
-          notes: [],
-        });
-      }
+  // Quantize the chords
+  let lastNote = notes.sort(
+    (a, b) => a.time + a.duration - b.time - b.duration
+  )[notes.length - 1];
+  let lastTime = Math.ceil(lastNote.time + lastNote.duration);
 
-      // Add the new chord
-      groupedNotes.push({ duration: note.duration, notes: [] });
-      prevTime = note.time;
-      prevDuration = note.duration;
+  let quantizedNotes: { notes: number[] }[] = new Array<{ notes: number[] }>(
+    Math.ceil(lastTime / quantization)
+  );
+  for (let i = 0; i < quantizedNotes.length; i++) {
+    quantizedNotes[i] = { notes: [] };
+  }
+  for (const note of notes) {
+    let start = note.time / quantization;
+    start =
+      quantizationMode === "closest" ? Math.round(start) : Math.floor(start);
+    const end = Math.ceil((note.time + note.duration) / quantization);
+    const pitch = noteNameToMidi(note.name);
+
+    for (let i = start; i < end; i++) {
+      if (!quantizedNotes[i].notes.includes(pitch)) {
+        quantizedNotes[i].notes.push(pitch);
+      }
     }
-    groupedNotes[groupedNotes.length - 1].notes.push(noteNameToMidi(note.name));
+  }
+
+  // Merge the quantized notes
+  let groupedNotes: { duration: number; notes: number[] }[] = [];
+  for (let i = 0; i < quantizedNotes.length; i++) {
+    const prevIndex = Math.max(groupedNotes.length - 1, 0);
+    const prevNotes =
+      groupedNotes[prevIndex] !== undefined
+        ? groupedNotes[prevIndex].notes
+        : [];
+
+    // Check if the notes are the same
+    if (
+      prevNotes.length === quantizedNotes[i].notes.length &&
+      prevNotes.every((note, index) => note === quantizedNotes[i].notes[index])
+    ) {
+      if (groupedNotes[prevIndex] !== undefined)
+        groupedNotes[prevIndex].duration += quantization;
+      continue;
+    }
+
+    groupedNotes.push({
+      duration: quantization,
+      notes: quantizedNotes[i].notes || [],
+    });
   }
 
   // Process chordToNotes into a pitch class representation
@@ -159,7 +187,7 @@ export function getChordsFromNotes(
       chords.push({
         index: chords.length,
         token: -1,
-        duration: group.duration * 2,
+        duration: group.duration,
         variant: 0,
       });
       continue;
@@ -186,7 +214,7 @@ export function getChordsFromNotes(
         chords.push({
           index: chords.length,
           token: i,
-          duration: group.duration * 2,
+          duration: group.duration,
           variant: variant,
         });
         foundToken = true;
@@ -199,11 +227,32 @@ export function getChordsFromNotes(
       chords.push({
         index: chords.length,
         token: -1,
-        duration: group.duration * 2,
+        duration: group.duration,
         variant: 0,
       });
     }
   }
 
-  return chords;
+  // Merge consecutive chords with the same token
+  let mergedChords: {
+    index: number;
+    token: number;
+    duration: number;
+    variant: number;
+  }[] = [];
+
+  let index = 0;
+  for (let i = 0; i < chords.length; i++) {
+    if (i === 0 || chords[i].token !== chords[i - 1].token) {
+      mergedChords.push({
+        ...chords[i],
+        index: index,
+      });
+      index++;
+    } else {
+      mergedChords[mergedChords.length - 1].duration += chords[i].duration;
+    }
+  }
+
+  return mergedChords;
 }

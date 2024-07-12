@@ -13,12 +13,14 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
     setSelectedGenres,
     selectedDecades,
     setSelectedDecades,
+    customScrollbarEnabled,
   ] = useStore(
     (state) => [
       state.selectedGenres,
       state.setSelectedGenres,
       state.selectedDecades,
       state.setSelectedDecades,
+      state.customScrollbarEnabled,
     ],
     shallow
   );
@@ -58,7 +60,16 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
       selectedTab === "genres" ? setSelectedGenres : setSelectedDecades;
 
     return (
-      <div className="absolute z-20 bg-zinc-900 left-0 w-full rounded-[0.5dvw] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh]">
+      <div
+        className={
+          `absolute z-20 bg-zinc-900 left-0 w-full rounded-[0.5dvw] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh] ` +
+          `${
+            customScrollbarEnabled
+              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+              : ""
+          }`
+        }
+      >
         {list.map((item, i) => (
           <ul key={i} className="">
             <li>

@@ -24,6 +24,12 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    require("tailwind-scrollbar")({
+      nocompatible: true,
+      preferredStrategy: "pseudoelements",
+    }),
+  ],
 };
 export default config;

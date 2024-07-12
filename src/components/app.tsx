@@ -4,15 +4,23 @@ import TransposeImportExport from "@/components/transpose_import_export/transpos
 import GetHelp from "@/components/get_help";
 import TimelineEditor from "@/components/timeline/timeline_editor";
 import Suggestions from "@/components/suggestions/suggestions";
-import VariantOverlay from "./variant_overlay";
-import WelcomeOverlay from "./welcome_overlay";
-import NewFeaturesOverlay from "./new_features_overlay";
+import VariantOverlay from "./overlays/variant_overlay";
+import WelcomeOverlay from "./overlays/welcome_overlay";
+import NewFeaturesOverlay from "./overlays/new_features_overlay";
+import MidiImportOverlay from "./overlays/midi_import_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
 import { useEffect, useState } from "react";
+import { useStore } from "@/state/use_store";
+import { shallow } from "zustand/shallow";
 
 export default function App() {
+  const [setCustomScrollbar] = useStore(
+    (state) => [state.setCustomScrollbarEnabled],
+    shallow
+  );
+
   // Next.js 13+ implementation, the default isMobile from react-device-detect
   // is not working anymore (see https://stackoverflow.com/a/77174374/3058839)
   const [isMobile, setIsMobile] = useState(false);
@@ -22,6 +30,9 @@ export default function App() {
     const userAgent = navigator.userAgent;
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
+
+    // Disable custom scrollbar for Firefox
+    if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
   }, []);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
@@ -67,6 +78,7 @@ export default function App() {
       className="relative max-h-screen flex flex-col bg-scroll bg-center bg-cover text-[2.5dvh]"
       style={{ backgroundImage: `url('/background.jpg')` }}
     >
+      <MidiImportOverlay />
       <VariantOverlay />
       <WelcomeOverlay />
       <NewFeaturesOverlay />
