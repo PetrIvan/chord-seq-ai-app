@@ -4,6 +4,7 @@ import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
 import Piano from "../piano";
+import Select from "../ui/select";
 
 export default function SearchBar() {
   const [
@@ -67,27 +68,6 @@ export default function SearchBar() {
 
   // Match dropdown
   const matchTypes = ["At least", "At most", "Exact"];
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  let matchDropdown = (
-    <div className="absolute z-[15] top-full mt-[0.5dvw] bg-zinc-800 rounded-[0.5dvw] w-full text-[2.5dvh]">
-      <ul>
-        {matchTypes.map((match) => (
-          <li key={match}>
-            <button
-              className="w-full bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
-              onClick={() => {
-                setMatchType(matchTypes.indexOf(match) as 0 | 1 | 2);
-                setIsDropdownOpen(false);
-              }}
-            >
-              {match}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
 
   return (
     <div className="h-[8dvh] flex flex-row items-center justify-start space-x-[1dvw]">
@@ -178,33 +158,16 @@ export default function SearchBar() {
           >
             <div className="flex flex-row items-center justify-center pb-[2dvh] text-[2.5dvh]">
               <span className="select-none mr-[2dvh]">Match:</span>
-              <div
-                className="bg-zinc-800 rounded-[1dvh] p-[0.5dvw] mr-[2dvh] hover:bg-zinc-900 w-[15dvh] cursor-pointer whitespace-nowrap"
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                <div className="flex flex-row items-center justify-between">
-                  {matchTypes[matchType]}
-                  <svg
-                    className="w-[1.6dvh] h-[1.6dvh] mr-[1dvh] inline-block"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 10 6"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="m1 1 4 4 4-4"
-                    />
-                  </svg>
-                </div>
-
-                <div className="relative w-full h-full">
-                  {isDropdownOpen && matchDropdown}
-                </div>
-              </div>
+              <Select
+                selectName="match"
+                state={matchTypes[matchType]}
+                setState={(state: string) =>
+                  setMatchType(matchTypes.indexOf(state))
+                }
+                allStates={matchTypes}
+                width="16dvh"
+                onDark={true}
+              />
               <span className="select-none mr-[2dvh]">Any variant:</span>
               <input
                 type="checkbox"
