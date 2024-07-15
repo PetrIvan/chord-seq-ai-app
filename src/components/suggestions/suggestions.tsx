@@ -286,7 +286,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
             alert("Maximum number of chords reached. Please start a new song.");
             break;
           default:
-            if ("no available backend found" in error.message) {
+            if ("no available backend found" in error) {
               alert(
                 "No backend found. Please reload the page, your progress is saved. If the problem persists, try using a different browser."
               );

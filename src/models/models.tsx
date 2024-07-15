@@ -1,4 +1,4 @@
-import * as ort from "onnxruntime-web";
+import * as ort from "onnxruntime-web/webgpu";
 import { tokenToChord } from "@/data/token_to_chord";
 import { transpositionMap } from "@/data/transposition_map";
 import { useStore } from "@/state/use_store";
@@ -246,6 +246,8 @@ async function loadModel(modelPath: string) {
   useStore.getState().setIsDownloadingModel(false);
 
   useStore.getState().setIsLoadingSession(true);
-  currentSession = await ort.InferenceSession.create(buffer);
+  currentSession = await ort.InferenceSession.create(buffer, {
+    executionProviders: ["webgpu", "wasm"],
+  });
   useStore.getState().setIsLoadingSession(false);
 }

@@ -34,6 +34,10 @@ module.exports = {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
             to: "static/chunks",
           },
+          {
+            from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.jsep.wasm",
+            to: "static/chunks",
+          },
           // Dev
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm.wasm",
@@ -41,6 +45,10 @@ module.exports = {
           },
           {
             from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.wasm",
+            to: "static/chunks/app/app",
+          },
+          {
+            from: "./node_modules/onnxruntime-web/dist/ort-wasm-simd.jsep.wasm",
             to: "static/chunks/app/app",
           },
           // Models
