@@ -14,6 +14,7 @@ export default function ModelSelection() {
     selectedGenres,
     selectedDecades,
     customScrollbarEnabled,
+    setModelSize,
   ] = useStore(
     (state) => [
       state.modelPath,
@@ -21,6 +22,7 @@ export default function ModelSelection() {
       state.selectedGenres,
       state.selectedDecades,
       state.customScrollbarEnabled,
+      state.setModelSize,
     ],
     shallow
   );
@@ -45,6 +47,8 @@ export default function ModelSelection() {
 
   useEffect(() => {
     setModelPath(models[selectedModel][1]);
+    // Reset model size
+    setModelSize(0);
   }, [selectedModel]);
 
   // Dropdowns

@@ -44,6 +44,7 @@ interface Props {
   defaultVariants: number[];
   isDownloadingModel: boolean;
   percentageDownloaded: number;
+  modelSize: number;
   isLoadingSession: boolean;
   customScrollbarEnabled: boolean;
   forceRerender: boolean;
@@ -81,6 +82,7 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
       newProps.suggestionsIncludeVariants ||
     prevProps.isDownloadingModel !== newProps.isDownloadingModel ||
     prevProps.percentageDownloaded !== newProps.percentageDownloaded ||
+    prevProps.modelSize !== newProps.modelSize ||
     prevProps.isLoadingSession !== newProps.isLoadingSession ||
     prevProps.customScrollbarEnabled !== newProps.customScrollbarEnabled
   ) {
@@ -151,6 +153,7 @@ export default function Suggestions() {
     defaultVariants,
     isDownloadingModel,
     percentageDownloaded,
+    modelSize,
     isLoadingSession,
     customScrollbarEnabled,
   ] = useStore(
@@ -175,6 +178,7 @@ export default function Suggestions() {
       state.defaultVariants,
       state.isDownloadingModel,
       state.percentageDownloaded,
+      state.modelSize,
       state.isLoadingSession,
       state.customScrollbarEnabled,
     ],
@@ -236,6 +240,7 @@ export default function Suggestions() {
       isLoadingSession={isLoadingSession}
       customScrollbarEnabled={customScrollbarEnabled}
       forceRerender={forceRerender}
+      modelSize={modelSize}
     />
   );
 }
@@ -264,6 +269,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   isLoadingSession,
   customScrollbarEnabled,
   forceRerender,
+  modelSize,
 }: Props) {
   /* Prediction states */
   const [chordProbsLoading, setChordProbsLoading] = useState(false);
@@ -552,9 +558,13 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   ) {
     let text = "Loading...";
     if (errorOccured) text = "An error has occurred";
-    else if (isLoadingSession) text = "Loading session...";
-    else if (isDownloadingModel)
-      text = "Loading model... " + Math.round(percentageDownloaded * 100) + "%";
+    else if (isDownloadingModel) {
+      text = `Loading model...`;
+      if (modelSize > 0) {
+        let mbDownloaded = (percentageDownloaded * modelSize).toFixed(1);
+        text += ` ${mbDownloaded}/${modelSize.toFixed(1)} MB`;
+      }
+    } else if (isLoadingSession) text = "Loading session...";
     else if (chordProbsLoading) text = "Predicting suggestions...";
 
     content = (

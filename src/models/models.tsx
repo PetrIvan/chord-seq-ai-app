@@ -226,6 +226,8 @@ async function loadModel(modelPath: string) {
 
   const total = parseInt(contentLength, 10);
   let loaded = 0;
+  // Set size in MB
+  useStore.getState().setModelSize(total / 1024 / 1024);
 
   const reader = response?.body?.getReader();
   let chunks = [];
