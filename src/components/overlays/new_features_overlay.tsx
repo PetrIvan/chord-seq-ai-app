@@ -32,7 +32,7 @@ export default function NewFeaturesOverlay() {
   }, [showPrev]);
 
   const [showFeatures, setShowFeatures] = useState<number[]>([]);
-  const latestVersion = 2;
+  const latestVersion = 3;
 
   // If it's the first time after the update, show the overlay
   useEffect(() => {
@@ -97,6 +97,14 @@ export default function NewFeaturesOverlay() {
         Since Jul 12, 2024:
       </li>,
       <li key={5}>Reworked MIDI import to be more reliable.</li>,
+    ],
+    3: [
+      <li className="list-none" key={6}>
+        Since Jul 22, 2024:
+      </li>,
+      <li key={7}>
+        Improved models to be more accurate and suggest chords faster.
+      </li>,
     ],
   };
 
