@@ -39,9 +39,12 @@ export default function App() {
 
   // On window resize, update the aspect ratio
   useEffect(() => {
+    setAspectRatio(window.innerWidth / window.innerHeight); // Initial aspect ratio
+
     function handleResize() {
       setAspectRatio(window.innerWidth / window.innerHeight);
     }
+
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

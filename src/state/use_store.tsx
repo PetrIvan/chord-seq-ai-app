@@ -86,6 +86,8 @@ interface StoreState {
   setIsLoadingSession: (isLoadingSession: boolean) => void;
   percentageDownloaded: number;
   setPercentageDownloaded: (percentageDownloaded: number) => void;
+  modelSize: number; // Size of the model in MB
+  setModelSize: (modelSize: number) => void;
 
   // Playback
   bpm: number;
@@ -337,6 +339,8 @@ export const useStore = createWithEqualityFn<StoreState>()(
       percentageDownloaded: 0,
       setPercentageDownloaded: (percentageDownloaded: number) =>
         set({ percentageDownloaded }),
+      modelSize: 0,
+      setModelSize: (modelSize: number) => set({ modelSize }),
 
       // Playback
       bpm: 120,

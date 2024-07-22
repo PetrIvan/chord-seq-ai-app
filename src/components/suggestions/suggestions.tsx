@@ -9,10 +9,12 @@ import { chordToNotes } from "@/data/chord_to_notes";
 import { shallow } from "zustand/shallow";
 import { clone, isEqual } from "lodash";
 import { playChord } from "@/playback/player";
+import { AutoSizer, Grid, GridCellProps } from "react-virtualized";
 
 import SearchBar from "./search_bar";
 import Decay from "./decay";
 import Chord from "./chord";
+import ChordGrid from "./chord_grid";
 
 interface Props {
   chords: {
@@ -42,13 +44,20 @@ interface Props {
   defaultVariants: number[];
   isDownloadingModel: boolean;
   percentageDownloaded: number;
+  modelSize: number;
   isLoadingSession: boolean;
   customScrollbarEnabled: boolean;
+  forceRerender: boolean;
 }
 
 // This logic is quite complex, but given that the rerendering
 // of suggestions is very expensive, it is not a problem
 function arePropsEqual(prevProps: Props, newProps: Props) {
+  // Short-circuit when the forceRerender flag is set
+  if (prevProps.forceRerender !== newProps.forceRerender) {
+    return false;
+  }
+
   // Short-circuit when no chord is selected or if we select a chord (when no chord was selected)
   if (prevProps.selectedChord === -1 || newProps.selectedChord === -1) {
     return prevProps.selectedChord === newProps.selectedChord;
@@ -73,6 +82,7 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
       newProps.suggestionsIncludeVariants ||
     prevProps.isDownloadingModel !== newProps.isDownloadingModel ||
     prevProps.percentageDownloaded !== newProps.percentageDownloaded ||
+    prevProps.modelSize !== newProps.modelSize ||
     prevProps.isLoadingSession !== newProps.isLoadingSession ||
     prevProps.customScrollbarEnabled !== newProps.customScrollbarEnabled
   ) {
@@ -143,6 +153,7 @@ export default function Suggestions() {
     defaultVariants,
     isDownloadingModel,
     percentageDownloaded,
+    modelSize,
     isLoadingSession,
     customScrollbarEnabled,
   ] = useStore(
@@ -167,11 +178,42 @@ export default function Suggestions() {
       state.defaultVariants,
       state.isDownloadingModel,
       state.percentageDownloaded,
+      state.modelSize,
       state.isLoadingSession,
       state.customScrollbarEnabled,
     ],
     shallow
   );
+
+  // Rerender on window resize (necessary to resize the suggestions grid)
+  const [forceRerender, setForceRerender] = useState(false);
+
+  useEffect(() => {
+    function handleResize() {
+      // Force a rerender
+      setForceRerender(true);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const timeoutIDRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (forceRerender) {
+      // Clear the previous timeout
+      if (timeoutIDRef.current) {
+        window.clearTimeout(timeoutIDRef.current);
+      }
+      // Reset the flag after a delay
+      timeoutIDRef.current = window.setTimeout(() => {
+        setForceRerender(false);
+      }, 100);
+    }
+  }, [forceRerender]);
 
   return (
     <MemoizedSuggestions
@@ -197,6 +239,8 @@ export default function Suggestions() {
       percentageDownloaded={percentageDownloaded}
       isLoadingSession={isLoadingSession}
       customScrollbarEnabled={customScrollbarEnabled}
+      forceRerender={forceRerender}
+      modelSize={modelSize}
     />
   );
 }
@@ -224,6 +268,8 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   percentageDownloaded,
   isLoadingSession,
   customScrollbarEnabled,
+  forceRerender,
+  modelSize,
 }: Props) {
   /* Prediction states */
   const [chordProbsLoading, setChordProbsLoading] = useState(false);
@@ -286,7 +332,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
             alert("Maximum number of chords reached. Please start a new song.");
             break;
           default:
-            if ("no available backend found" in error.message) {
+            if ("no available backend found" in error) {
               alert(
                 "No backend found. Please reload the page, your progress is saved. If the problem persists, try using a different browser."
               );
@@ -477,8 +523,27 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     return chordsList;
   }
 
+  // Units
+  let oneDvhInPx = window.innerHeight / 100;
+  useEffect(() => {
+    const handleResize = () => {
+      oneDvhInPx = window.innerHeight / 100;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  function pxToDvh(px: number) {
+    return px / oneDvhInPx;
+  }
+
   // Render the content
-  let content = null;
+  let content: JSX.Element;
+  const contentContainerRef = useRef<HTMLDivElement>(null);
   if (selectedChord === -1) {
     content = (
       <p className="text-zinc-500 truncate text-[2dvw]">
@@ -493,14 +558,20 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   ) {
     let text = "Loading...";
     if (errorOccured) text = "An error has occurred";
-    else if (isLoadingSession) text = "Loading session...";
-    else if (isDownloadingModel)
-      text = "Loading model... " + Math.round(percentageDownloaded * 100) + "%";
+    else if (isDownloadingModel) {
+      text = `Loading model...`;
+      if (modelSize > 0) {
+        let mbDownloaded = (percentageDownloaded * modelSize).toFixed(1);
+        text += ` ${mbDownloaded}/${modelSize.toFixed(1)} MB`;
+      }
+    } else if (isLoadingSession) text = "Loading session...";
     else if (chordProbsLoading) text = "Predicting suggestions...";
 
     content = (
       <div className="h-full flex flex-col items-center justify-center">
-        <p className="text-zinc-500 truncate text-[2dvw]">{text}</p>
+        <p className="text-zinc-500 truncate text-[2dvw] animate-pulse">
+          {text}
+        </p>
       </div>
     );
   } else {
@@ -516,19 +587,48 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         </div>
       );
     } else {
-      content = (
-        <div
-          className="grid gap-[2dvh] overflow-y-auto"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(22.5dvh, 1fr))",
-            minHeight: "0",
-          }}
-        >
-          {chordList}
-        </div>
-      );
+      if (forceRerender) {
+        // Show a loading animation while resizing
+        content = (
+          <div className="h-full flex flex-col items-center justify-center">
+            <p className="text-zinc-500 truncate text-[2dvw] animate-pulse">
+              Loading...
+            </p>
+          </div>
+        );
+      } else {
+        // Manual auto-sizing to obtain column count (otherwise inaccessable by cells)
+        let sliderWidth = 17; // px
+        let prefferedColumnWidth = 25; // dvh
+        const containerWidth = pxToDvh(
+          (contentContainerRef.current?.clientWidth || 0) - sliderWidth
+        );
+        const columnWidth = Math.max(
+          prefferedColumnWidth,
+          containerWidth / Math.floor(containerWidth / prefferedColumnWidth)
+        );
+        const columnCount = Math.floor(containerWidth / columnWidth);
+
+        content = ChordGrid(chordList, columnCount);
+      }
     }
   }
+
+  // Add custom scrollbar to the suggestions virtualized grid manually, as the library does not support it
+  useEffect(() => {
+    let suggestions = document.getElementsByClassName(
+      "ReactVirtualized__Grid"
+    )[0];
+    let scrollbarText =
+      " scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full";
+    if (
+      suggestions &&
+      customScrollbarEnabled &&
+      !suggestions.className.includes("scrollbar-thin")
+    ) {
+      suggestions.className += scrollbarText;
+    }
+  }, [customScrollbarEnabled, content]);
 
   return (
     <div className="flex flex-col rounded-[0.5dvw] w-full h-full min-h-0">
@@ -538,21 +638,17 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           <Decay />
         </div>
       )}
-      <div
-        className={
-          `flex-1 bg-zinc-900 w-full max-h-screen p-[1dvw] ${
+      <div className="flex-1 bg-zinc-900 w-full max-h-screen pl-[0.5dvw] flex flex-col justify-center items-center rounded-[0.5dvw] min-h-0">
+        <div
+          className={`w-full h-full ${
             selectedChord === -1
-              ? "flex flex-col justify-center items-center rounded-[0.5dvw] min-h-0 "
-              : "overflow-y-auto "
-          }` +
-          `${
-            customScrollbarEnabled
-              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+              ? "flex flex-col justify-center items-center min-h-0"
               : ""
-          }`
-        }
-      >
-        {content}
+          }`}
+          ref={contentContainerRef}
+        >
+          {content}
+        </div>
       </div>
     </div>
   );

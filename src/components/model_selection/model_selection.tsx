@@ -14,6 +14,7 @@ export default function ModelSelection() {
     selectedGenres,
     selectedDecades,
     customScrollbarEnabled,
+    setModelSize,
   ] = useStore(
     (state) => [
       state.modelPath,
@@ -21,19 +22,20 @@ export default function ModelSelection() {
       state.selectedGenres,
       state.selectedDecades,
       state.customScrollbarEnabled,
+      state.setModelSize,
     ],
     shallow
   );
 
   // Model selection handling
-  const models: [string, string][] = [
-    ["Recurrent Network", "/models/recurrent_net.onnx"],
-    ["Transformer S", "/models/transformer_small.onnx"],
-    ["Transformer M", "/models/transformer_medium.onnx"],
-    ["Transformer L", "/models/transformer_large.onnx"],
-    ["Conditional Transformer S", "/models/conditional_small.onnx"],
-    ["Conditional Transformer M", "/models/conditional_medium.onnx"],
-    ["Conditional Transformer L", "/models/conditional_large.onnx"],
+  const models: [string, string, number][] = [
+    ["Recurrent Network", "/models/recurrent_net.onnx", 1.44],
+    ["Transformer S", "/models/transformer_small.onnx", 4.47],
+    ["Transformer M", "/models/transformer_medium.onnx", 9.42],
+    ["Transformer L", "/models/transformer_large.onnx", 17.7],
+    ["Conditional Transformer S", "/models/conditional_small.onnx", 4.58],
+    ["Conditional Transformer M", "/models/conditional_medium.onnx", 9.6],
+    ["Conditional Transformer L", "/models/conditional_large.onnx", 18.0],
   ];
 
   const [selectedModel, setSelectedModel] = useState(
@@ -45,6 +47,7 @@ export default function ModelSelection() {
 
   useEffect(() => {
     setModelPath(models[selectedModel][1]);
+    setModelSize(models[selectedModel][2]);
   }, [selectedModel]);
 
   // Dropdowns
@@ -116,7 +119,7 @@ export default function ModelSelection() {
 
     return (
       <button
-        className="flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 rounded-r-lg"
+        className="flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 hover:bg-zinc-800 rounded-r-lg"
         title="Change style"
         ref={openStyleDropdownButtonRef}
         onClick={() => setShowStyleDropdown(!showStyleDropdown)}
@@ -129,7 +132,7 @@ export default function ModelSelection() {
   return (
     <section className="relative min-w-0 bg-zinc-900 rounded-[0.5dvw] flex flex-row items-stretch justify-center text-center">
       <button
-        className={`flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 rounded${
+        className={`flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 hover:bg-zinc-800 rounded${
           models[selectedModel][0].includes("Conditional") ? "-l" : ""
         }-[0.5dvw]`}
         title="Change model"

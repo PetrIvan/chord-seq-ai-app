@@ -1,7 +1,7 @@
 interface Props {
   setSelectedModel: (model: number) => void;
   setShowModelDropdown: (show: boolean) => void;
-  models: [string, string][];
+  models: [string, string, number][];
   modelDropdownRef: React.RefObject<HTMLDivElement>;
   customScrollbarEnabled: boolean;
 }
@@ -25,22 +25,33 @@ export default function modelDropdown({
       }
       ref={modelDropdownRef}
     >
-      {models.map((model, i) => (
-        <ul key={i} className="">
-          <li>
+      <ul>
+        {models.map((model, i) => (
+          <li key={i}>
             <button
-              className="flex-1 grow-[2] w-full flex justify-center items-center p-[2dvh] min-w-0 whitespace-nowrap active:bg-zinc-700 hover:bg-zinc-800 rounded-[1dvh]"
+              className="flex-1 grow-[2] w-full flex justify-center items-center p-[2dvh] min-w-0 whitespace-nowrap active:bg-zinc-700 hover:bg-zinc-800 rounded-[1dvh] truncate"
               title="Change model"
               onClick={() => {
                 setSelectedModel(i);
                 setShowModelDropdown(false);
               }}
             >
-              <p className="truncate">{model[0]}</p>
+              <div className="relative flex flex-row items-center justify-center w-full">
+                <div>
+                  {model[0]}{" "}
+                  <span className="text-zinc-400">
+                    ({model[2].toFixed(2)} MB
+                    {model[0].includes("Conditional") ? "; style" : ""})
+                  </span>
+                </div>
+                {model[0].includes("Conditional") && (
+                  <span className="absolute right-0 mr-[1dvh]">✨</span>
+                )}
+              </div>
             </button>
           </li>
-        </ul>
-      ))}
+        ))}
+      </ul>
     </div>
   );
 }

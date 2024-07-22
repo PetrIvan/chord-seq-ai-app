@@ -61,7 +61,7 @@ export default function Chord({
 
   return (
     <div
-      className="relative group flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full overflow-hidden outline-none max-h-[20dvh] min-h-[10dvh]"
+      className="relative group flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full h-full overflow-hidden outline-none"
       onMouseEnter={() => {
         if (!textRef.current) return;
 
