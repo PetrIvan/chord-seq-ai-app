@@ -10,8 +10,9 @@ const numTokens = Object.keys(tokenToChord).length + 2;
 let predictionCache = new Map<string, { token: number; prob: number }[]>();
 const maxCacheSize = 32;
 
-// A global variable to store the model (avoids loading it every time we want to make a prediction)
-let currentSession: ort.InferenceSession | null = null;
+// Initialize the worker (predictions are made there to avoid blocking the main thread while using WebGPU)
+// Check https://onnxruntime.ai/docs/tutorials/web/env-flags-and-session-options.html#envwasmproxy for more info
+const worker = new Worker(new URL("../models/onnx_worker.ts", import.meta.url));
 let prevModelPath = "";
 
 // Process the chords into a tensor that can be fed into the model
@@ -23,7 +24,7 @@ function process_chords(
     variant: number;
   }[]
 ) {
-  const data = new BigInt64Array(256).fill(BigInt(0));
+  const data: BigInt64Array = new BigInt64Array(256).fill(BigInt(0));
 
   data[0] = BigInt(numTokens - 2); // Start token
   let i = 1;
@@ -38,7 +39,7 @@ function process_chords(
   }
   // End token is not included
 
-  return [i, new ort.Tensor("int64", data, [1, 256])];
+  return [i, data];
 }
 
 // After inference, the output is a 3D tensor, but we only need the column corresponding to the last chord
@@ -53,7 +54,7 @@ function getColumnSlice(tensor: any, columnIndex: number): Float32Array {
 
   for (let k = 0; k < D3; k++) {
     const index = columnIndex * D3 + k;
-    slice[k] = tensor.data[index];
+    slice[k] = tensor.cpuData[index];
   }
 
   return slice;
@@ -84,7 +85,7 @@ export async function predict(
   // Check cache
   let strData = "";
   for (let i = 0; i < (numChords as number); i++) {
-    strData += (data as ort.Tensor).data[i].toString() + " ";
+    strData += (data as BigInt64Array)[i].toString() + " ";
   }
   strData += modelPath; // The predictions depend on the model used
   if (style) {
@@ -94,67 +95,80 @@ export async function predict(
     return predictionCache.get(strData);
   }
 
-  // Load the model (if necessary)
-  if (modelPath !== prevModelPath) {
-    await loadModel(modelPath);
+  const resultPromise = new Promise<{ token: number; prob: number }[]>(
+    (resolve, reject) => {
+      worker.onmessage = (event) => {
+        // Handle set calls from the worker (cannot transfer the store directly)
+        if (event.data.status === "setDownloadingModel") {
+          useStore.getState().setIsDownloadingModel(event.data.value);
+        } else if (event.data.status === "setPercentageDownloaded") {
+          useStore.getState().setPercentageDownloaded(event.data.value);
+        } else if (event.data.status === "setModelSize") {
+          useStore.getState().setModelSize(event.data.value);
+        } else if (event.data.status === "setIsLoadingSession") {
+          useStore.getState().setIsLoadingSession(event.data.value);
+        }
+
+        // Handle the output
+        if (event.data.status === "modelLoaded") {
+          // Predict after the model is loaded
+          worker.postMessage({ action: "predict", data: data, style });
+        } else if (event.data.output) {
+          const { output } = event.data;
+          /* Process the output */
+          const column = getColumnSlice(
+            output as ort.Tensor,
+            (numChords as number) - 1
+          ); // Only a single column is needed
+
+          // Zero out the start and end tokens, as well as the previous chord
+          column[numTokens - 1] = -Infinity;
+          column[numTokens - 2] = -Infinity;
+          column[chords[chords.length - 1].token] = -Infinity;
+
+          // Get the softmax probabilities
+          const probs = softmax(column);
+
+          // Convert it to the wanted format, skip the start and end tokens
+          let chordProbs = [];
+          for (let i = 0; i < probs.length - 2; i++) {
+            chordProbs.push({ token: i, prob: probs[i] });
+          }
+
+          // Process or sort the predictions
+          if (numChords === 1) {
+            chordProbs = processFirstPreds(chordProbs);
+          } else {
+            chordProbs.sort((a, b) => b.prob - a.prob);
+          }
+
+          // Cache the result
+          predictionCache.set(strData, chordProbs);
+
+          // Clear the first element of the cache if it's too big
+          if (predictionCache.size > maxCacheSize) {
+            predictionCache.delete(predictionCache.keys().next().value);
+          }
+
+          resolve(chordProbs);
+        }
+      };
+
+      worker.onerror = (error) => {
+        reject(error);
+      };
+    }
+  );
+
+  // Load the model or predict
+  if (!prevModelPath || prevModelPath !== modelPath) {
     prevModelPath = modelPath;
-  }
-
-  if (!currentSession) {
-    throw new Error("model not loaded");
-  }
-
-  // Inference based on the model
-  let outputs = null;
-  if (style) {
-    outputs = await currentSession.run({
-      "input.1": data as ort.Tensor,
-      "onnx::Gemm_1": new ort.Tensor(
-        "float32",
-        new Float32Array(style),
-        [1, 28]
-      ),
-    });
+    worker.postMessage({ action: "loadModel", modelPath });
   } else {
-    outputs = await currentSession.run({
-      "input.1": data as ort.Tensor,
-    });
-  }
-  const outputTensor = Object.values(outputs)[0];
-
-  /* Process the output */
-  const column = getColumnSlice(outputTensor, (numChords as number) - 1); // Only a single column is needed
-
-  // Zero out the start and end tokens, as well as the previous chord
-  column[numTokens - 1] = -Infinity;
-  column[numTokens - 2] = -Infinity;
-  column[chords[chords.length - 1].token] = -Infinity;
-
-  // Get the softmax probabilities
-  const probs = softmax(column);
-
-  // Convert it to the wanted format, skip the start and end tokens
-  let chordProbs = [];
-  for (let i = 0; i < probs.length - 2; i++) {
-    chordProbs.push({ token: i, prob: probs[i] });
+    worker.postMessage({ action: "predict", data: data, style });
   }
 
-  // Process or sort the predictions
-  if (numChords === 1) {
-    chordProbs = processFirstPreds(chordProbs);
-  } else {
-    chordProbs.sort((a, b) => b.prob - a.prob);
-  }
-
-  // Cache the result
-  predictionCache.set(strData, chordProbs);
-
-  // Clear the first element of the cache if it's too big
-  if (predictionCache.size > maxCacheSize) {
-    predictionCache.delete(predictionCache.keys().next().value);
-  }
-
-  return chordProbs;
+  return resultPromise;
 }
 
 // Tokens that are transpositions of one another should have the same probability, so we average them and sort
@@ -207,49 +221,4 @@ function getRootNoteValue(token: number) {
     noteOrder.indexOf(rootNote) * 2 +
     (tokenToChord[token][0][1] === "#" ? 1 : 0)
   );
-}
-
-async function loadModel(modelPath: string) {
-  useStore.getState().setPercentageDownloaded(0);
-  useStore.getState().setIsDownloadingModel(true);
-
-  const response = await fetch(modelPath);
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch model: ${response.statusText}.`);
-  }
-
-  const contentLength = response.headers.get("content-length");
-  if (!contentLength) {
-    throw new Error("Failed to get content length from response headers.");
-  }
-
-  const total = parseInt(contentLength, 10);
-  let loaded = 0;
-  // Set size in MB
-  useStore.getState().setModelSize(total / 1024 / 1024);
-
-  const reader = response?.body?.getReader();
-  let chunks = [];
-
-  if (!reader) {
-    throw new Error("Failed to get response body reader.");
-  }
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    loaded += value.byteLength;
-    useStore.getState().setPercentageDownloaded(loaded / total);
-    chunks.push(value);
-  }
-
-  const blob = new Blob(chunks);
-  const buffer = await blob.arrayBuffer();
-  useStore.getState().setIsDownloadingModel(false);
-
-  useStore.getState().setIsLoadingSession(true);
-  currentSession = await ort.InferenceSession.create(buffer, {
-    executionProviders: ["webgpu", "wasm"],
-  });
-  useStore.getState().setIsLoadingSession(false);
 }
