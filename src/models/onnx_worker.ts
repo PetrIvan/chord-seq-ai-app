@@ -10,14 +10,26 @@ self.onmessage = async (event) => {
     self.postMessage({ status: "setDownloadingModel", value: true });
     self.postMessage({ status: "setPercentageDownloaded", value: 0 });
 
-    const response = await fetch(modelPath);
+    // Check if the model path is a valid URL
+    let modelName = "";
+    try {
+      let url = new URL(modelPath, location.origin);
+      modelName = /^\/models\/([^/]+)\.onnx$/.exec(url.pathname)?.[1] || "";
+    } catch {
+      self.reportError("Invalid model path.");
+      return;
+    }
+    const response = await fetch(`/models/${modelName}.onnx`);
+
     if (!response.ok) {
-      throw new Error(`Failed to fetch model: ${response.statusText}.`);
+      self.reportError(`Failed to fetch model: ${response.statusText}.`);
+      return;
     }
 
     const contentLength = response.headers.get("content-length");
     if (!contentLength) {
-      throw new Error("Failed to get content length from response headers.");
+      self.reportError("Failed to get content length from response headers.");
+      return;
     }
 
     const total = parseInt(contentLength, 10);
@@ -30,7 +42,8 @@ self.onmessage = async (event) => {
     let chunks = [];
 
     if (!reader) {
-      throw new Error("Failed to get response body reader.");
+      self.reportError("Failed to get response body reader.");
+      return;
     }
     while (true) {
       const { done, value } = await reader.read();

@@ -339,7 +339,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
             }
 
             alert(
-              `An error has occurred, try reloading the page. Your progress is saved.\n${error}`
+              `An error has occurred, try reloading the page. Your progress is saved.\n${error.message}`
             );
             break;
         }
