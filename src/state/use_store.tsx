@@ -8,6 +8,11 @@ import isEqual from "lodash/isEqual";
 import { genres, decades } from "@/data/conditions";
 import { tokenToChord } from "@/data/token_to_chord";
 import { Midi } from "@tonejs/midi";
+import {
+  setMuteMetronome as setMuteMetronomePlayer,
+  setLoop as setLoopPlayer,
+  setBpm as setBpmPlayer,
+} from "@/playback/player";
 
 const deepCompareUpdate = (partial: any, state: any) => {
   if (partial.chords && isEqual(partial.chords, state.chords)) {
@@ -90,10 +95,13 @@ interface StoreState {
   setModelSize: (modelSize: number) => void;
 
   // Playback
+  muteMetronome: boolean;
+  setMuteMetronome: (muteMetronome: boolean) => void;
   bpm: number;
   setBpm: (bpm: number) => void;
   loop: boolean;
   setLoop: (loop: boolean) => void;
+  initializePlayback: () => void;
 
   // Suggestions
   enabledShortcuts: boolean; // When typing in the search bar, disable shortcuts
@@ -343,10 +351,26 @@ export const useStore = createWithEqualityFn<StoreState>()(
       setModelSize: (modelSize: number) => set({ modelSize }),
 
       // Playback
+      muteMetronome: false,
+      setMuteMetronome: (muteMetronome: boolean) => {
+        set({ muteMetronome });
+        setMuteMetronomePlayer(muteMetronome);
+      },
       bpm: 120,
-      setBpm: (bpm: number) => set({ bpm }),
+      setBpm: (bpm: number) => {
+        set({ bpm });
+        setBpmPlayer(bpm);
+      },
       loop: false,
-      setLoop: (loop: boolean) => set({ loop }),
+      setLoop: (loop: boolean) => {
+        set({ loop });
+        setLoopPlayer(loop);
+      },
+      initializePlayback: () => {
+        setMuteMetronomePlayer(get().muteMetronome);
+        setBpmPlayer(get().bpm);
+        setLoopPlayer(get().loop);
+      },
 
       // Suggestions
       enabledShortcuts: true,
@@ -434,6 +458,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         modelPath: state.modelPath,
         selectedGenres: state.selectedGenres,
         selectedDecades: state.selectedDecades,
+        muteMetronome: state.muteMetronome,
         bpm: state.bpm,
         loop: state.loop,
         defaultVariants: state.defaultVariants,

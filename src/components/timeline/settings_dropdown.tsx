@@ -5,14 +5,17 @@ interface Props {
   dropdownRef: React.RefObject<HTMLDivElement>;
   loop: boolean;
   setLoop: (newLoop: boolean) => void;
+  bpm: number;
+  setBpm: (newBpm: number) => void;
 }
 
 export default function SettingsDropdown({
   dropdownRef,
   loop,
   setLoop,
+  bpm,
+  setBpm,
 }: Props) {
-  const [bpm, setBpm] = useStore((state) => [state.bpm, state.setBpm]);
   const [localBpm, setLocalBpm] = useState(bpm);
 
   const handleBMPChange = (event: React.ChangeEvent<HTMLInputElement>) => {

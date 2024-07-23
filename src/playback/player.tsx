@@ -8,13 +8,13 @@ let metronomePart: Tone.Part;
 
 let playing = false;
 let loop = false;
-let bpm = 120; // Custom implementation of bpm is used to allow number input
+let bpm = 120;
 let timeNoteDuration: { time: number; note: number; duration: number }[] = [];
 let lastStartPlaying: number;
 
 // Initialize Tone.js
 Tone.loaded().then(() => {
-  Tone.Destination.volume.value = -8;
+  if (Tone.getDestination().volume) Tone.getDestination().volume.value = -8;
 
   synth = new Tone.Sampler({
     urls: {
@@ -93,7 +93,7 @@ export function playSequence(
   playheadPosition: number,
   setPlayheadPosition: (position: number) => void,
   setPlaying: (playing: boolean) => void,
-  metronome: boolean
+  muteMetronome: boolean
 ) {
   // Prepare the sequence
   timeNoteDuration = [];
@@ -136,7 +136,7 @@ export function playSequence(
 
     // Start the metronome
     let metronomeBeats = Array.from(
-      { length: totalTime * (bpm / 60) },
+      { length: Math.ceil(totalTime * (bpm / 60)) },
       (value, key) => key
     ).map((i) => i / (bpm / 60));
     metronomePart = new Tone.Part((time) => {
@@ -147,11 +147,11 @@ export function playSequence(
     metronomePart.loopEnd = "1m";
     metronomePart.start();
 
-    Tone.Transport.start();
+    Tone.getTransport().start();
 
     // Offset the current time by the playhead position
     const timePosition = playheadPosition / (bpm / 60);
-    Tone.Transport.seconds = timePosition;
+    Tone.getTransport().seconds = timePosition;
 
     // If the start time is in the middle of a chord, play the remaining part of the chord
     for (const note of timeNoteDuration) {
@@ -163,7 +163,7 @@ export function playSequence(
     }
 
     // Mute the metronome if needed (it is started either way to keep the timing and allow unpause)
-    if (!metronome) metronomePart.mute = true;
+    if (muteMetronome) metronomePart.mute = true;
 
     // Start moving the playhead
     updatePlayheadPosition(setPlayheadPosition, totalTime, setPlaying);
@@ -177,7 +177,7 @@ async function updatePlayheadPosition(
   setPlaying: (playing: boolean) => void
 ) {
   // Stop the playback if it is not playing
-  const timePosition = Tone.Transport.seconds;
+  const timePosition = Tone.getTransport().seconds;
   if (!playing) {
     setPlaying(false);
     stopPlayback();
@@ -188,7 +188,8 @@ async function updatePlayheadPosition(
   // Reset the playhead position if the end of the sequence is reached
   if (timePosition >= partDuration && playing) {
     if (loop) {
-      Tone.Transport.seconds = -0.01; // To avoid the first note being skipped
+      Tone.getTransport().stop();
+      Tone.getTransport().start();
       setPlayheadPosition(0);
     } else {
       setPlayheadPosition(0);
@@ -212,7 +213,7 @@ export function onPlayheadPositionChange(playheadPosition: number) {
   if (!playing) return;
 
   const timePosition = playheadPosition / (bpm / 60);
-  Tone.Transport.seconds = timePosition;
+  Tone.getTransport().seconds = timePosition;
 
   // Limit the number of calls to triggerAttackRelease
   if (lastStartPlaying + 500 > Date.now()) return;
@@ -231,8 +232,8 @@ export function onPlayheadPositionChange(playheadPosition: number) {
 export function stopPlayback() {
   playing = false;
 
-  Tone.Transport.stop();
-  Tone.Transport.cancel();
+  Tone.getTransport().stop();
+  Tone.getTransport().cancel();
 }
 
 export function setMuteMetronome(mute: boolean) {

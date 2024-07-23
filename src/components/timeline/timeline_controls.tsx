@@ -5,14 +5,7 @@ import { useIsMount } from "@/state/use_is_mount";
 import { shallow } from "zustand/shallow";
 import * as Tone from "tone";
 
-import {
-  playChord,
-  playSequence,
-  stopPlayback,
-  setMuteMetronome,
-  setBpm,
-  setLoop,
-} from "@/playback/player";
+import { playChord, playSequence, stopPlayback } from "@/playback/player";
 
 import SettingsDropdown from "./settings_dropdown";
 import DeleteAllDropdown from "./delete_all_dropdown";
@@ -47,9 +40,13 @@ export default function TimelineControls({
     stateWindowIndex,
     undo,
     redo,
+    muteMetronome,
+    setMuteMetronome,
     bpm,
+    setBpm,
     loop,
-    setStateLoop,
+    setLoop,
+    initializePlayback,
     enabledShortcuts,
     setSelectedToken,
     setSelectedVariant,
@@ -73,9 +70,13 @@ export default function TimelineControls({
       state.stateWindowIndex,
       state.undo,
       state.redo,
+      state.muteMetronome,
+      state.setMuteMetronome,
       state.bpm,
+      state.setBpm,
       state.loop,
       state.setLoop,
+      state.initializePlayback,
       state.enabledShortcuts,
       state.setSelectedToken,
       state.setSelectedVariant,
@@ -86,7 +87,21 @@ export default function TimelineControls({
     shallow
   );
 
-  const [metronome, setMetronome] = useState(false);
+  // Initialize the playback when the storage is hydrated
+  useEffect(() => {
+    const unsubscribe = useStore.persist.onHydrate(() => {
+      initializePlayback();
+    });
+
+    // In case the storage is already hydrated
+    if (useStore.persist.hasHydrated()) {
+      initializePlayback();
+    }
+
+    return () => {
+      unsubscribe();
+    };
+  }, [initializePlayback]);
 
   /* Shortcuts */
   const enabledShortcutsRef = useRef(enabledShortcuts);
@@ -105,7 +120,6 @@ export default function TimelineControls({
     KeyL: () => {
       const newState = !loopRef.current;
       setLoop(newState);
-      setStateLoop(newState);
     },
     KeyZ_Ctrl: undo,
     KeyY_Ctrl: redo,
@@ -203,7 +217,7 @@ export default function TimelineControls({
     selectedChord,
     playing,
     signature,
-    metronome,
+    muteMetronome,
     timelinePosition,
     zoom,
   ]);
@@ -304,7 +318,7 @@ export default function TimelineControls({
         playheadPositionRef.current,
         setPlayheadPosition,
         setPlaying,
-        metronome
+        muteMetronome
       );
     }
     setPlaying(!playing);
@@ -319,27 +333,21 @@ export default function TimelineControls({
 
   // Change the metronome state
   function changeMetronome() {
-    setMuteMetronome(metronome);
-    setMetronome(!metronome);
+    setMuteMetronome(!muteMetronomeRef.current);
   }
 
-  // Update the BPM and loop state of the player
+  // Keep track of the player states
+  const muteMetronomeRef = useRef(muteMetronome);
   useEffect(() => {
-    setBpm(bpm);
-  }, [bpm]);
+    muteMetronomeRef.current = muteMetronome;
+  }, [muteMetronome]);
 
   const bpmRef = useRef(bpm);
-
   useEffect(() => {
     bpmRef.current = bpm;
   }, [bpm]);
 
-  useEffect(() => {
-    setLoop(loop);
-  }, [loop]);
-
   const loopRef = useRef(loop);
-
   useEffect(() => {
     loopRef.current = loop;
   }, [loop]);
@@ -397,7 +405,7 @@ export default function TimelineControls({
       <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
         <button
           className={`w-full h-full select-none ${
-            !metronome && "filter brightness-75"
+            muteMetronome && "filter brightness-75"
           } flex flex-col justify-center items-center`}
           title="Metronome (M)"
           onClick={() => changeMetronome()}
@@ -427,7 +435,9 @@ export default function TimelineControls({
           <SettingsDropdown
             dropdownRef={playbackSettingsRef}
             loop={loop}
-            setLoop={setStateLoop}
+            setLoop={setLoop}
+            bpm={bpm}
+            setBpm={setBpm}
           />
         )}
       </div>
