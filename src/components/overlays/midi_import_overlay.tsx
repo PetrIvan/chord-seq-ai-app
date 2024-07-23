@@ -110,8 +110,10 @@ export default function MidiImportOverlay() {
 
       let bpm = 120;
       if (midiFile.header.tempos.length > 0)
-        bpm = midiFile.header.tempos[0].bpm;
-      if (importBpm) setBpm(Math.round(bpm));
+        bpm = Math.round(midiFile.header.tempos[0].bpm);
+      if (importBpm) {
+        setBpm(bpm);
+      }
 
       setIsMidiImportOverlayOpen(false);
       setEnabledShortcuts(true);
