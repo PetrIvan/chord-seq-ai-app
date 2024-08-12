@@ -1,7 +1,7 @@
 import QuickButtons from "@/components/landing_page/quick_buttons";
 import SupportUsButton from "@/components/landing_page/support_us_button";
 import SupportUsOverlay from "@/components/landing_page/support_us_overlay";
-import SupportUsText from "@/components/landing_page/support_us_text";
+import TrackedLink from "@/components/landing_page/tracked_link";
 
 export default function Home() {
   return (
@@ -226,7 +226,100 @@ export default function Home() {
             </p>
 
             {/* Only visible on mobile devices */}
-            <SupportUsText />
+            <p className="md:hidden text-lg md:text-xl text-zinc-300 pb-5">
+              If you want to support the development of this app, you can do so
+              on{" "}
+              <TrackedLink
+                href="https://patreon.com/xenomuse"
+                className="text-blue-400 hover:underline"
+                event="patreon-link"
+              >
+                Patreon
+              </TrackedLink>
+              , or if you prefer a one-time donation, you can use{" "}
+              <TrackedLink
+                href="https://paypal.me/xenomuse"
+                className="text-blue-400 hover:underline"
+                event="paypal-link"
+              >
+                PayPal
+              </TrackedLink>
+              .
+            </p>
+          </div>
+
+          {/* Social icons*/}
+          <div className="flex flex-row items-center justify-center space-x-[6%] max-h-20 px-5 pb-5 md:pb-0 max-w-96">
+            <a
+              href="https://www.youtube.com/@xenomuse-dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-full w-full"
+            >
+              <img
+                src="/youtube-logo.svg"
+                alt="YouTube channel"
+                className="h-full w-full"
+              />
+            </a>
+            <a
+              href="https://github.com/PetrIvan/chord-seq-ai-app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-full w-full"
+            >
+              <img
+                src="/github-logo.svg"
+                alt="GitHub repository"
+                className="h-full w-full p-[10%] filter brightness-0 invert"
+              />
+            </a>
+            <a
+              href="https://www.facebook.com/xenomuse.dev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-full w-full"
+            >
+              <img
+                src="/facebook-logo.png"
+                alt="Facebook page"
+                className="h-full w-full p-[10%]"
+              />
+            </a>
+            <a
+              href="https://www.reddit.com/user/XenoMuseDev"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-full w-full"
+            >
+              <img
+                src="/reddit-logo.svg"
+                alt="Reddit profile"
+                className="h-full w-full filter brightness-0 invert"
+              />
+            </a>
+            <TrackedLink
+              href="https://patreon.com/XenoMuse"
+              className="h-full w-full"
+              event="patreon-icon"
+            >
+              <img
+                src="/patreon-logo.svg"
+                alt="Support us on Patreon"
+                className="h-full w-full p-[10%]"
+              />
+            </TrackedLink>
+            <TrackedLink
+              href="https://paypal.me/XenoMuse"
+              className="h-full w-full"
+              event="paypal-icon"
+            >
+              <img
+                src="/paypal-logo.png"
+                alt="Support us on PayPal"
+                className="h-full w-full"
+              />
+            </TrackedLink>
           </div>
         </div>
       </div>
