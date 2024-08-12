@@ -8,12 +8,12 @@ export default function Home() {
     <div>
       <SupportUsOverlay />
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
-        <header className="w-full flex flew-row justify-between items-center backdrop-blur-md p-2 cursor-default">
+        <header className="w-full flex flex-row justify-between items-center backdrop-blur-md p-2 cursor-default">
           <h1>
             <img
               src="/logo.svg"
               alt="Compose with ChordSeqAI: Your AI Chord Progression Assistant"
-              className="h-15 w-15 mr-1"
+              className="mr-1"
             />
           </h1>
 
@@ -51,7 +51,10 @@ export default function Home() {
                 autoPlay
                 muted
                 loop
-              />
+              >
+                Your browser does not support the video tag. Demo of adding a
+                chord in the ChordSeqAI interface.
+              </video>
             </div>
           </div>
 
@@ -72,7 +75,10 @@ export default function Home() {
                 autoPlay
                 muted
                 loop
-              />
+              >
+                Your browser does not support the video tag. Demo of specifying
+                chord progression style and genre in ChordSeqAI.
+              </video>
             </div>
           </div>
 
@@ -93,7 +99,10 @@ export default function Home() {
                 autoPlay
                 muted
                 loop
-              />
+              >
+                Your browser does not support the video tag. Demo of exporting
+                chord progressions as MIDI files from ChordSeqAI.
+              </video>
             </div>
           </div>
 
@@ -230,7 +239,7 @@ export default function Home() {
               If you want to support the development of this app, you can do so
               on{" "}
               <TrackedLink
-                href="https://patreon.com/xenomuse"
+                href="https://patreon.com/XenoMuse"
                 className="text-blue-400 hover:underline"
                 event="patreon-link"
               >
@@ -238,7 +247,7 @@ export default function Home() {
               </TrackedLink>
               , or if you prefer a one-time donation, you can use{" "}
               <TrackedLink
-                href="https://paypal.me/xenomuse"
+                href="https://paypal.me/XenoMuse"
                 className="text-blue-400 hover:underline"
                 event="paypal-link"
               >
