@@ -74,8 +74,8 @@ export default function Overlay({
             src="/close.svg"
             title="Close (Esc)"
             onClick={() => {
-              if (callOnClose) callOnClose();
               setEnabledShortcuts(true);
+              if (callOnClose) callOnClose();
               setIsOverlayOpen(false);
             }}
           />

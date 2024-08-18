@@ -6,6 +6,7 @@ import { genres, decades } from "@/data/conditions";
 
 import ModelDropdown from "./model_dropdown";
 import StyleDropdown from "./style_dropdown";
+import StepByStepTutorial from "../overlays/step_by_step_tutorial";
 
 export default function ModelSelection() {
   const [
@@ -118,14 +119,22 @@ export default function ModelSelection() {
     );
 
     return (
-      <button
-        className="flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 hover:bg-zinc-800 rounded-r-lg"
-        title="Change style"
-        ref={openStyleDropdownButtonRef}
-        onClick={() => setShowStyleDropdown(!showStyleDropdown)}
-      >
-        <p className="truncate">{`${genreText}; ${decadeText}`}</p>
-      </button>
+      <>
+        <button
+          className="flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 hover:bg-zinc-800 rounded-r-lg"
+          title="Change style"
+          ref={openStyleDropdownButtonRef}
+          onClick={() => setShowStyleDropdown(!showStyleDropdown)}
+        >
+          <p className="truncate">{`${genreText}; ${decadeText}`}</p>
+        </button>
+        <StepByStepTutorial
+          step={7}
+          text="You can specify the genre and decade here"
+          position="below"
+          elementRef={openStyleDropdownButtonRef}
+        />
+      </>
     );
   }
 

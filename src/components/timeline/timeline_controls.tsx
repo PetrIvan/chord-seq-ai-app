@@ -9,6 +9,7 @@ import { playChord, playSequence, stopPlayback } from "@/playback/player";
 
 import SettingsDropdown from "./settings_dropdown";
 import DeleteAllDropdown from "./delete_all_dropdown";
+import StepByStepTutorial from "../overlays/step_by_step_tutorial";
 import { tokenToChord } from "@/data/token_to_chord";
 
 interface Props {
@@ -400,6 +401,8 @@ export default function TimelineControls({
     };
   }, []);
 
+  const addButtonRef = useRef<HTMLButtonElement>(null);
+
   return (
     <div className="grid grid-cols-[7fr_13fr] justify-stretch h-[8dvh] min-w-[50%] max-w-[70dvh] space-x-[2dvh]">
       <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
@@ -481,7 +484,7 @@ export default function TimelineControls({
           <img src="/trash.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full  select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
           title="Delete all chords (Ctrl+Del)"
           onClick={() => setIsDeleteAllOpen(!isDeleteAllOpen)}
           ref={openDeleteAllButtonRef}
@@ -492,9 +495,26 @@ export default function TimelineControls({
           className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
           title="Add chord (A)"
           onClick={() => addChordAndScroll()}
+          ref={addButtonRef}
         >
           <img src="/plus.svg" alt="Add" className="h-full w-full" />
         </button>
+        <StepByStepTutorial
+          step={0}
+          text="Add a blank chord by clicking on the plus icon"
+          position="below"
+          elementRef={addButtonRef}
+          canContinue={chords.length > 0}
+          autoContinue={true}
+        />
+        <StepByStepTutorial
+          step={4}
+          text="Add another chord"
+          position="below"
+          elementRef={addButtonRef}
+          canContinue={chords.length > 1}
+          autoContinue={true}
+        />
         {isDeleteAllOpen && (
           <DeleteAllDropdown
             dropdownRef={deleteAllRef}

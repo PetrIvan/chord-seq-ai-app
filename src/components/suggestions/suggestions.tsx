@@ -15,6 +15,7 @@ import SearchBar from "./search_bar";
 import Decay from "./decay";
 import Chord from "./chord";
 import ChordGrid from "./chord_grid";
+import StepByStepTutorial from "../overlays/step_by_step_tutorial";
 
 interface Props {
   chords: {
@@ -649,6 +650,34 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         >
           {content}
         </div>
+        <StepByStepTutorial
+          step={2}
+          text="Wait for the AI model to load, it may take a while"
+          position="above"
+          elementRef={contentContainerRef}
+          // Allow only when chords are predicted
+          canContinue={
+            !isDownloadingModel &&
+            !isLoadingSession &&
+            !chordProbsLoading &&
+            selectedChord !== -1
+          }
+          autoContinue={true}
+        />
+        <StepByStepTutorial
+          step={3}
+          text="Click on any chord to use it in your song"
+          position="above"
+          elementRef={contentContainerRef}
+          canContinue={chords[0]?.token !== -1}
+        />
+        <StepByStepTutorial
+          step={6}
+          text="Choose the second chord; the color indicates the predicted probability"
+          position="above"
+          elementRef={contentContainerRef}
+          canContinue={chords[1]?.token !== -1}
+        />
       </div>
     </div>
   );

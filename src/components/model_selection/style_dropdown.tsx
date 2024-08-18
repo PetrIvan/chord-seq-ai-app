@@ -14,6 +14,8 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
     selectedDecades,
     setSelectedDecades,
     customScrollbarEnabled,
+    isStepByStepTutorialOpen,
+    tutorialStep,
   ] = useStore(
     (state) => [
       state.selectedGenres,
@@ -21,6 +23,8 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
       state.selectedDecades,
       state.setSelectedDecades,
       state.customScrollbarEnabled,
+      state.isStepByStepTutorialOpen,
+      state.tutorialStep,
     ],
     shallow
   );
@@ -121,6 +125,9 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
   return (
     <div
       className="absolute z-20 left-0 w-full rounded-[0.5dvw] top-[100%] shadow-lg bg-zinc-900 flex flex-row items-stretch justify-center text-center"
+      style={{
+        zIndex: isStepByStepTutorialOpen && tutorialStep === 7 ? "150" : "",
+      }}
       ref={styleDropdownRef}
     >
       {/* Tab selection */}

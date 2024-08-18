@@ -141,12 +141,20 @@ interface StoreState {
   setWelcomeFirstTime: (welcomeFirstTime: boolean) => void;
   isWelcomeOverlayOpen: boolean;
   setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) => void;
+  watchedVideoTutorial: boolean;
+  setWatchedVideoTutorial: (watchedVideoTutorial: boolean) => void;
 
   // New features overlay
   version: number;
   setVersion: (version: number) => void;
   isNewFeaturesOverlayOpen: boolean;
   setIsNewFeaturesOverlayOpen: (isNewFeaturesOverlayOpen: boolean) => void;
+
+  // Step-by-step tutorial
+  isStepByStepTutorialOpen: boolean;
+  setIsStepByStepTutorialOpen: (isStepByStepTutorialOpen: boolean) => void;
+  tutorialStep: number;
+  setTutorialStep: (tutorialStep: number) => void;
 
   // Support us overlay
   isSupportUsOverlayOpen: boolean;
@@ -424,6 +432,9 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isWelcomeOverlayOpen: false,
       setIsWelcomeOverlayOpen: (isWelcomeOverlayOpen: boolean) =>
         set({ isWelcomeOverlayOpen }),
+      watchedVideoTutorial: false,
+      setWatchedVideoTutorial: (watchedVideoTutorial: boolean) =>
+        set({ watchedVideoTutorial }),
 
       // New features overlay
       version: 0,
@@ -431,6 +442,13 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isNewFeaturesOverlayOpen: false,
       setIsNewFeaturesOverlayOpen: (isNewFeaturesOverlayOpen: boolean) =>
         set({ isNewFeaturesOverlayOpen }),
+
+      // Step-by-step tutorial
+      isStepByStepTutorialOpen: false,
+      setIsStepByStepTutorialOpen: (isStepByStepTutorialOpen: boolean) =>
+        set({ isStepByStepTutorialOpen }),
+      tutorialStep: 0,
+      setTutorialStep: (tutorialStep: number) => set({ tutorialStep }),
 
       // Support us overlay
       isSupportUsOverlayOpen: false,

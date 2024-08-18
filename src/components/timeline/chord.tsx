@@ -1,10 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef, use } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
 import { tokenToChord } from "@/data/token_to_chord";
 import { playChord } from "@/playback/player";
+
+import StepByStepTutorial from "../overlays/step_by_step_tutorial";
 
 interface Props {
   index: number;
@@ -23,6 +25,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
     zoom,
     resizingAnyChord,
     setResizingChord,
+    isStepByStepTutorialOpen,
   ] = useStore(
     (state) => [
       state.chords,
@@ -33,6 +36,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       state.zoom,
       state.resizingChord,
       state.setResizingChord,
+      state.isStepByStepTutorialOpen,
     ],
     shallow
   );
@@ -73,6 +77,12 @@ export default function Chord({ index, token, duration, variant }: Props) {
     resizingAnyChordRef.current = resizingAnyChord;
   }, [resizingAnyChord]);
 
+  const isStepByStepTutorialOpenRef = useRef(isStepByStepTutorialOpen);
+
+  useEffect(() => {
+    isStepByStepTutorialOpenRef.current = isStepByStepTutorialOpen;
+  }, [isStepByStepTutorialOpen]);
+
   // Keep track of the zoom, chords and signature
   const zoomRef = useRef(zoom);
   const chordsRef = useRef(chords);
@@ -108,6 +118,11 @@ export default function Chord({ index, token, duration, variant }: Props) {
     if (!element) return;
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (isStepByStepTutorialOpenRef.current) {
+        element.style.cursor = "pointer";
+        return;
+      }
+
       // Indicate that the chord can be resized
       if (isAtResizePosition(e, element) || resizingAnyChordRef.current) {
         element.style.cursor = "ew-resize";
@@ -163,6 +178,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
     if (!element) return;
 
     const handleMouseDown = (e: MouseEvent) => {
+      if (isStepByStepTutorialOpenRef.current) return;
+
       if (isAtResizePosition(e, element) && e.button === 0) {
         setResizingThisChord(true);
 
@@ -173,6 +190,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
 
     const handleMouseUp = () => {
       setResizingThisChord(false);
+
+      if (isStepByStepTutorialOpenRef.current) return;
 
       if (resizingAnyChordRef.current) {
         setResizingChord(false);
@@ -201,38 +220,65 @@ export default function Chord({ index, token, duration, variant }: Props) {
     else setSelectedChord(index);
   }
 
+  const highlightElementRef = useRef<HTMLDivElement>(null);
+
   return (
-    <div
-      className={`h-full ${resizingAnyChordRef.current && "cursor-ew-resize"}`}
-      style={{ paddingInline: `${chordPadding}dvw` }}
-    >
-      <button
-        className={`${
-          token === -1
-            ? selectedChord === index
-              ? "bg-zinc-700 text-white"
-              : "bg-zinc-800 text-zinc-100"
-            : selectedChord === index
-            ? "bg-violet-500 text-white"
-            : "bg-violet-700 text-zinc-100"
-        } ${
-          resizingAnyChord ? "" : "hover:filter hover:brightness-110"
-        } flex justify-center items-center py-[2dvh] rounded-[1dvh] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
-        style={{ width: `${width}dvw` }}
-        onClick={
-          resizingThisChordRef.current
-            ? () => {}
-            : () => {
-                changeSelected();
-              }
-        }
-        ref={chordElementRef}
-        title={`${selectedChord === index ? "Des" : "S"}elect this chord`}
+    <>
+      <div
+        className={`h-full ${
+          resizingAnyChordRef.current && "cursor-ew-resize"
+        }`}
+        style={{ paddingInline: `${chordPadding}dvw` }}
+        ref={highlightElementRef}
       >
-        <p className="select-none overflow-hidden">
-          {token === -1 ? "?" : tokenToChord[token][variant]}
-        </p>
-      </button>
-    </div>
+        <button
+          className={`${
+            token === -1
+              ? selectedChord === index
+                ? "bg-zinc-700 text-white"
+                : "bg-zinc-800 text-zinc-100"
+              : selectedChord === index
+              ? "bg-violet-500 text-white"
+              : "bg-violet-700 text-zinc-100"
+          } ${
+            resizingAnyChord ? "" : "hover:filter hover:brightness-110"
+          } flex justify-center items-center py-[2dvh] rounded-[1dvh] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
+          style={{ width: `${width}dvw` }}
+          onClick={
+            resizingThisChordRef.current
+              ? () => {}
+              : () => {
+                  changeSelected();
+                }
+          }
+          ref={chordElementRef}
+          title={`${selectedChord === index ? "Des" : "S"}elect this chord`}
+        >
+          <p className="select-none overflow-hidden">
+            {token === -1 ? "?" : tokenToChord[token][variant]}
+          </p>
+        </button>
+      </div>
+      {index === 0 && (
+        <StepByStepTutorial
+          step={1}
+          text="Click on the chord to select it"
+          position="right"
+          elementRef={highlightElementRef}
+          canContinue={selectedChord === index}
+          autoContinue={true}
+        />
+      )}{" "}
+      {index === 1 && (
+        <StepByStepTutorial
+          step={5}
+          text="Select the second chord"
+          position="right"
+          elementRef={highlightElementRef}
+          canContinue={selectedChord === index}
+          autoContinue={true}
+        />
+      )}
+    </>
   );
 }
