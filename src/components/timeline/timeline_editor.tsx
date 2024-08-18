@@ -21,6 +21,7 @@ export default function TimelineEditor() {
     setPlayheadPosition,
     stateWindow,
     initializeStateWindow,
+    isStepByStepTutorialOpen,
   ] = useStore(
     (state) => [
       state.signature,
@@ -31,6 +32,7 @@ export default function TimelineEditor() {
       state.setPlayheadPosition,
       state.stateWindow,
       state.initializeStateWindow,
+      state.isStepByStepTutorialOpen,
     ],
     shallow
   );
@@ -87,6 +89,12 @@ export default function TimelineEditor() {
     lastPositionRef.current = lastPosition;
   }, [lastPosition]);
 
+  const isStepByStepTutorialOpenRef = useRef(isStepByStepTutorialOpen);
+
+  useEffect(() => {
+    isStepByStepTutorialOpenRef.current = isStepByStepTutorialOpen;
+  }, [isStepByStepTutorialOpen]);
+
   const isOnTimeline = (clientY: number, rect: DOMRect) => {
     const fromTop = clientY - rect.top;
     const fromBottom = rect.bottom - clientY;
@@ -97,6 +105,8 @@ export default function TimelineEditor() {
   };
 
   const handleTimelineDrag = (event: MouseEvent) => {
+    if (isStepByStepTutorialOpenRef.current) return;
+
     if (timelineRef.current && middleMouseDraggingRef.current) {
       const dx = pxToDvw(event.clientX) - lastPositionRef.current;
 
@@ -106,6 +116,8 @@ export default function TimelineEditor() {
   };
 
   const handleDragStart = (event: MouseEvent) => {
+    if (isStepByStepTutorialOpenRef.current) return;
+
     setLastPosition(pxToDvw(event.clientX));
     if (
       timelineRef.current &&
@@ -145,6 +157,8 @@ export default function TimelineEditor() {
   }, [zoom]);
 
   const handleZoom = (event: WheelEvent) => {
+    if (isStepByStepTutorialOpenRef.current) return;
+
     event.preventDefault();
 
     const newZoom = zoom + event.deltaY * -0.00075;
@@ -153,22 +167,22 @@ export default function TimelineEditor() {
     setZoom(clampedZoom);
 
     // Zoom in on the mouse position
-    if (timelineRef.current) {
-      const rect = timelineRef.current.getBoundingClientRect();
+    if (!timelineRef.current) return;
 
-      // Mouse position from the left start of the timeline
-      const x = pxToDvw(event.clientX - rect.left) - timelineStart;
+    const rect = timelineRef.current.getBoundingClientRect();
 
-      // Calculate the position change required to correctly zoom on the cursor
-      const zoomChange = clampedZoom - zoomRef.current;
-      const relativePosition =
-        (x - timelinePositionRef.current) / zoomRef.current;
-      const positionChange = zoomChange * relativePosition;
+    // Mouse position from the left start of the timeline
+    const x = pxToDvw(event.clientX - rect.left) - timelineStart;
 
-      setTimelinePosition(
-        Math.min(0, timelinePositionRef.current - positionChange)
-      );
-    }
+    // Calculate the position change required to correctly zoom on the cursor
+    const zoomChange = clampedZoom - zoomRef.current;
+    const relativePosition =
+      (x - timelinePositionRef.current) / zoomRef.current;
+    const positionChange = zoomChange * relativePosition;
+
+    setTimelinePosition(
+      Math.min(0, timelinePositionRef.current - positionChange)
+    );
   };
 
   useEffect(() => {
@@ -250,6 +264,8 @@ export default function TimelineEditor() {
 
   // Set the playhead position based on current cursor position
   const handlePlayheadUpdate = (event: MouseEvent) => {
+    if (isStepByStepTutorialOpenRef.current) return;
+
     if (!timelineRef.current || !holdingMouseRef.current) return;
 
     const rect = timelineRef.current.getBoundingClientRect();
@@ -266,6 +282,8 @@ export default function TimelineEditor() {
   };
 
   const handleMouseDown = (event: MouseEvent) => {
+    if (isStepByStepTutorialOpenRef.current) return;
+
     const rect = timelineRef?.current?.getBoundingClientRect();
 
     if (!rect || !isOnTicks(event.clientY, rect) || event.button !== 0) return;
