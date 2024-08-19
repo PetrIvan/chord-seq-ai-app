@@ -57,7 +57,7 @@ export default function Overlay({
 
   return (
     isOverlayOpen && (
-      <div className="absolute z-30 bg-zinc-950 bg-opacity-50 h-[100dvh] w-[100dvw] flex flex-col items-center justify-center">
+      <div className="fixed inset-0 z-30 bg-zinc-950 bg-opacity-50 flex flex-col items-center justify-center">
         <div
           className={
             `relative bg-zinc-900 h-[80dvh] w-[70dvw] rounded-[0.5dvw] p-[2dvh] ` +
@@ -82,7 +82,7 @@ export default function Overlay({
           <div
             className={
               `w-full flex flex-col items-center justify-center space-y-[2dvh] px-[6dvh] ` +
-              `${enabledOverflow ? "h-fit min-h-full" : "h-[70dvh]"}`
+              `${enabledOverflow ? "h-fit min-h-full" : "h-full"}`
             }
           >
             {children}

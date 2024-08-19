@@ -1,13 +1,14 @@
 "use client";
 import ModelSelection from "@/components/model_selection/model_selection";
 import TransposeImportExport from "@/components/transpose_import_export/transpose_import_export";
-import GetHelp from "@/components/get_help";
+import SupportHelp from "@/components/support_help";
 import TimelineEditor from "@/components/timeline/timeline_editor";
 import Suggestions from "@/components/suggestions/suggestions";
 import VariantOverlay from "./overlays/variant_overlay";
 import WelcomeOverlay from "./overlays/welcome_overlay";
 import NewFeaturesOverlay from "./overlays/new_features_overlay";
 import MidiImportOverlay from "./overlays/midi_import_overlay";
+import SupportUsOverlay from "./overlays/support_us_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
@@ -85,11 +86,12 @@ export default function App() {
       <VariantOverlay />
       <WelcomeOverlay />
       <NewFeaturesOverlay />
+      <SupportUsOverlay />
       <div className="min-h-screen min-w-full grid grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] backdrop-blur-[max(2dvw,4dvh)] gap-[1dvw] p-[1dvw]">
-        <div className="grid grid-cols-[15fr_5fr_2fr] gap-[1dvw] w-full min-w-0">
+        <div className="grid grid-cols-[25fr_7fr_5fr] gap-[1dvw] w-full min-w-0">
           <ModelSelection />
           <TransposeImportExport />
-          <GetHelp />
+          <SupportHelp />
         </div>
         <TimelineEditor />
         <Suggestions />

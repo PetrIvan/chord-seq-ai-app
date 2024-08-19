@@ -24,6 +24,7 @@ export default function TransposeImportExport() {
     zoom,
     setIsMidiImportOverlayOpen,
     setMidiFile,
+    incrementTimesExported,
   ] = useStore(
     (state) => [
       state.chords,
@@ -38,6 +39,7 @@ export default function TransposeImportExport() {
       state.zoom,
       state.setIsMidiImportOverlayOpen,
       state.setMidiFile,
+      state.incrementTimesExported,
     ],
     shallow
   );
@@ -289,6 +291,7 @@ export default function TransposeImportExport() {
 
   // Export given the format
   function handleExport(format: string) {
+    incrementTimesExported();
     if (format === ".chseq") {
       const jsonData = JSON.stringify({ chords: chords, signature: signature });
       const blob = new Blob([jsonData], { type: "application/json" });

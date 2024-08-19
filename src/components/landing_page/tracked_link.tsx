@@ -17,7 +17,13 @@ export default function TrackedLink({
       target="_blank"
       rel="noopener noreferrer"
       className={className}
-      onClick={() => (globalThis as any).umami.track(event)}
+      onClick={() => {
+        try {
+          (globalThis as any).umami.track(event);
+        } catch {
+          console.error("Failed to track event");
+        }
+      }}
     >
       {children}
     </a>

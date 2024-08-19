@@ -1,7 +1,7 @@
 import QuickButtons from "@/components/landing_page/quick_buttons";
 import SupportUsButton from "@/components/landing_page/support_us_button";
-import SupportUsOverlay from "@/components/landing_page/support_us_overlay";
 import TrackedLink from "@/components/landing_page/tracked_link";
+import SupportUsOverlay from "@/components/overlays/support_us_overlay";
 
 export default function Home() {
   return (
