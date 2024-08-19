@@ -159,6 +159,14 @@ interface StoreState {
   // Support us overlay
   isSupportUsOverlayOpen: boolean;
   setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) => void;
+  isSupportUsAfterExport: boolean;
+  setIsSupportUsAfterExport: (isSupportUsAfterExport: boolean) => void;
+  isSupportUsLandingPage: boolean;
+  setIsSupportUsLandingPage: (isSupportUsLandingPage: boolean) => void;
+  timesExported: number;
+  incrementTimesExported: () => void;
+  dontShowSupportUsOverlay: boolean;
+  setDontShowSupportUsOverlay: (dontShowSupportUsOverlay: boolean) => void;
 
   // MIDI import overlay
   isMidiImportOverlayOpen: boolean;
@@ -454,6 +462,18 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isSupportUsOverlayOpen: false,
       setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) =>
         set({ isSupportUsOverlayOpen }),
+      isSupportUsAfterExport: false,
+      setIsSupportUsAfterExport: (isSupportUsAfterExport: boolean) =>
+        set({ isSupportUsAfterExport }),
+      isSupportUsLandingPage: false,
+      setIsSupportUsLandingPage: (isSupportUsLandingPage: boolean) =>
+        set({ isSupportUsLandingPage }),
+      timesExported: 0,
+      incrementTimesExported: () =>
+        set({ timesExported: get().timesExported + 1 }),
+      dontShowSupportUsOverlay: false,
+      setDontShowSupportUsOverlay: (dontShowSupportUsOverlay: boolean) =>
+        set({ dontShowSupportUsOverlay }),
 
       // MIDI import overlay
       isMidiImportOverlayOpen: false,
@@ -481,6 +501,8 @@ export const useStore = createWithEqualityFn<StoreState>()(
         loop: state.loop,
         defaultVariants: state.defaultVariants,
         welcomeFirstTime: state.welcomeFirstTime,
+        timesExported: state.timesExported,
+        dontShowSupportUsOverlay: state.dontShowSupportUsOverlay,
         version: state.version,
       }),
     }
