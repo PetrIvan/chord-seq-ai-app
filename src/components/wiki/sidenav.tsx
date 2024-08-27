@@ -1,7 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
+
+import { useStore } from "@/state/use_store";
 
 import { wikiTree, WikiTreeNode } from "@/data/wiki_tree.ts";
 import { findPageNameInTree } from "@/wiki/utils";
@@ -40,9 +42,18 @@ function Details(
   fullPath: string,
   currentPath: string
 ) {
+  const [wikiSidenavOpen, setWikiSidenavOpen] = useStore((state) => [
+    state.wikiSidenavOpen,
+    state.setWikiSidenavOpen,
+  ]);
+
   // Handle open/close animations
-  const [animationOpen, setAnimationOpen] = useState(true);
-  const [detailsOpen, setDetailsOpen] = useState(true);
+  const [animationOpen, setAnimationOpen] = useState(
+    wikiSidenavOpen.get(fullPath) ?? true
+  );
+  const [detailsOpen, setDetailsOpen] = useState(
+    wikiSidenavOpen.get(fullPath) ?? true
+  );
 
   const details = useRef<HTMLDetailsElement>(null);
   const toggleBox = useRef<HTMLDivElement>(null);
@@ -53,6 +64,9 @@ function Details(
 
     function handleClick(e: MouseEvent) {
       e.preventDefault();
+
+      wikiSidenavOpen.set(fullPath, !animationOpen);
+      setWikiSidenavOpen(wikiSidenavOpen);
 
       if (animationOpen) {
         setAnimationOpen(false);
@@ -76,7 +90,7 @@ function Details(
       toggleBoxValue?.removeEventListener("click", handleClick);
       detailsValue?.removeEventListener("animationend", handleAnimationEnd);
     };
-  }, [animationOpen]);
+  }, [animationOpen, fullPath, setWikiSidenavOpen, wikiSidenavOpen]);
 
   // Wait for the DOM to load before animating to prevent animation on page load
   useEffect(() => {
@@ -173,6 +187,30 @@ export default function Sidenav({
   children,
   ...props
 }: Props) {
+  const [wikiSidenavScroll, setWikiSidenavScroll] = useStore((state) => [
+    state.wikiSidenavScroll,
+    state.setWikiSidenavScroll,
+  ]);
+
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const navEl = navRef.current;
+    if (!navEl) return;
+
+    navEl.scrollTop = wikiSidenavScroll;
+
+    const handleScroll = () => {
+      setWikiSidenavScroll(navEl.scrollTop);
+    };
+
+    navEl.addEventListener("scroll", handleScroll);
+
+    return () => {
+      navEl.removeEventListener("scroll", handleScroll);
+    };
+  }, [wikiSidenavScroll, setWikiSidenavScroll]);
+
   return (
     <nav
       {...props}
@@ -181,6 +219,7 @@ export default function Sidenav({
         className +
         (customScrollbarEnabled ? " custom-scrollbar" : "")
       }
+      ref={navRef}
     >
       <ul>{SidenavLayer(wikiTree, "/wiki", currentPath)}</ul>
       {children}
