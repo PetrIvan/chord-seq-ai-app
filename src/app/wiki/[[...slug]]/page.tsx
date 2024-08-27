@@ -12,6 +12,8 @@ import remarkGfm from "remark-gfm";
 
 import { wikiTree, WikiTreeNode } from "@/data/wiki_tree.ts";
 import { findPageNameInTree } from "@/wiki/utils";
+
+import NotFound from "@/components/not_found";
 import WikiLayout from "@/components/wiki/layout";
 
 interface WikiPageProps {
@@ -24,12 +26,7 @@ export default async function WikiPage({ params }: WikiPageProps) {
 
   const mdx = await getMDX(params.slug, components);
 
-  if (!mdx || !mdx.content)
-    return (
-      <WikiLayout pagePath="/404" source="">
-        <div>404 - Page Not Found</div>
-      </WikiLayout>
-    );
+  if (!mdx || !mdx.content) return <NotFound />;
 
   return (
     <WikiLayout pagePath={pagePath} source={mdx.source}>
