@@ -151,44 +151,6 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
     };
   }, []);
 
-  // Animation for the details element
-  const [animationOpen, setAnimationOpen] = useState(false);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-
-  const details = useRef<HTMLDetailsElement>(null);
-  const toggleBox = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let toggleBoxValue = toggleBox.current;
-    let detailsValue = details.current;
-
-    function handleClick(e: MouseEvent) {
-      e.preventDefault();
-
-      if (animationOpen) {
-        setAnimationOpen(false);
-      } else {
-        setDetailsOpen(true);
-        setAnimationOpen(true);
-      }
-    }
-
-    function handleAnimationEnd(e: AnimationEvent) {
-      e.stopPropagation();
-      if (e.animationName === "details-close") {
-        setDetailsOpen(false);
-      }
-    }
-
-    toggleBox.current?.addEventListener("click", handleClick);
-    details.current?.addEventListener("animationend", handleAnimationEnd);
-
-    return () => {
-      toggleBoxValue?.removeEventListener("click", handleClick);
-      detailsValue?.removeEventListener("animationend", handleAnimationEnd);
-    };
-  }, [animationOpen]);
-
   return (
     <>
       <ProgressBar
@@ -245,14 +207,16 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
               style={{
                 top:
                   isSidenavOpen || isSearchOpen
-                    ? `calc(${-topOffset}px + 7rem)`
+                    ? `calc(${-topOffset}px + 6.864rem)`
                     : "",
               }}
             >
               {/* Background effect */}
               <div
                 className="absolute z-20 pointer-events-none top-0 inset-x-0 max-h-screen select-none flex items-center justify-center overflow-hidden"
-                style={{ top: isSidenavOpen || isSearchOpen ? "-7rem" : "" }}
+                style={{
+                  top: isSidenavOpen || isSearchOpen ? "-6.864rem" : "",
+                }}
               >
                 <Image
                   className="filter opacity-65"
@@ -266,13 +230,7 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
 
               {/* MDX content */}
               <div className="flex-1 min-w-0 flex flex-col space-y-0.5 text-justify z-20">
-                <MobileTableOfContents
-                  source={source}
-                  detailsOpen={detailsOpen}
-                  animationOpen={animationOpen}
-                  details={details}
-                  toggleBox={toggleBox}
-                />
+                <MobileTableOfContents source={source} />
                 {children}
                 {pagePath !== "" && <NavigationButtons pagePath={pagePath} />}
               </div>

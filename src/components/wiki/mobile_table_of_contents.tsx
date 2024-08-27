@@ -1,36 +1,34 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { useState } from "react";
+
 import TableOfContents from "./table_of_contents";
 import { getHeadings } from "@/wiki/utils";
 
 interface Props {
   source: string;
-  detailsOpen: boolean;
-  animationOpen: boolean;
-  details: any;
-  toggleBox: any;
 }
 
-export default function MobileTableOfContents({
-  source,
-  detailsOpen,
-  animationOpen,
-  details,
-  toggleBox,
-}: Props) {
+export default function MobileTableOfContents({ source }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsOpen(!isOpen);
+  };
+
   return (
     getHeadings(source).length > 0 && (
       <div className="lg:hidden">
-        <details
+        <div
           className={`bg-zinc-900 rounded-md mb-4 p-2 px-4 ${
-            animationOpen
-              ? "[&>ul]:animate-details-open [&>summary>svg]:-rotate-90"
-              : "[&>ul]:animate-details-close"
+            isOpen ? "[&>div>svg]:-rotate-90" : ""
           }`}
-          open={detailsOpen}
-          ref={details}
         >
-          <summary
+          <div
             className="flex items-center justify-between cursor-pointer"
-            ref={toggleBox}
+            onClick={handleToggle}
           >
             On this page
             {/* Arrow SVG */}
@@ -50,14 +48,22 @@ export default function MobileTableOfContents({
                 d="m1 1 4 4 4-4"
               />
             </svg>
-          </summary>
+          </div>
 
-          <TableOfContents
-            headings={getHeadings(source)}
-            activeId={""} // Mobile TOC doesn't need highlighting, because it is not sticky
-            className="pt-2"
-          />
-        </details>
+          {/* Animated container for the list */}
+          <motion.div
+            initial={{ height: isOpen ? "auto" : 0 }}
+            animate={{ height: isOpen ? "auto" : 0 }}
+            transition={{ height: { duration: 0.4, ease: "easeInOut" } }}
+            style={{ overflow: "hidden" }}
+          >
+            <TableOfContents
+              headings={getHeadings(source)}
+              activeId={""} // Mobile TOC doesn't need highlighting, because it is not sticky
+              className="pt-2"
+            />
+          </motion.div>
+        </div>
       </div>
     )
   );

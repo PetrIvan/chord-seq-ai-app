@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import Link from "next/link";
+import { useState, useLayoutEffect, useRef } from "react";
+import { motion } from "framer-motion";
 
 import { useStore } from "@/state/use_store";
-
 import { wikiTree, WikiTreeNode } from "@/data/wiki_tree.ts";
 import { findPageNameInTree } from "@/wiki/utils";
 
@@ -47,77 +47,22 @@ function Details(
     state.setWikiSidenavOpen,
   ]);
 
-  // Handle open/close animations
-  const [animationOpen, setAnimationOpen] = useState(
-    wikiSidenavOpen.get(fullPath) ?? true
-  );
-  const [detailsOpen, setDetailsOpen] = useState(
-    wikiSidenavOpen.get(fullPath) ?? true
-  );
+  const [isOpen, setIsOpen] = useState(wikiSidenavOpen.get(fullPath) ?? true);
 
-  const details = useRef<HTMLDetailsElement>(null);
-  const toggleBox = useRef<HTMLDivElement>(null);
+  const handleToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
 
-  useEffect(() => {
-    let toggleBoxValue = toggleBox.current;
-    let detailsValue = details.current;
+    wikiSidenavOpen.set(fullPath, !isOpen);
+    setWikiSidenavOpen(wikiSidenavOpen);
 
-    function handleClick(e: MouseEvent) {
-      e.preventDefault();
-
-      wikiSidenavOpen.set(fullPath, !animationOpen);
-      setWikiSidenavOpen(wikiSidenavOpen);
-
-      if (animationOpen) {
-        setAnimationOpen(false);
-      } else {
-        setDetailsOpen(true);
-        setAnimationOpen(true);
-      }
-    }
-
-    function handleAnimationEnd(e: AnimationEvent) {
-      e.stopPropagation();
-      if (e.animationName === "details-close") {
-        setDetailsOpen(false);
-      }
-    }
-
-    toggleBox.current?.addEventListener("click", handleClick);
-    details.current?.addEventListener("animationend", handleAnimationEnd);
-
-    return () => {
-      toggleBoxValue?.removeEventListener("click", handleClick);
-      detailsValue?.removeEventListener("animationend", handleAnimationEnd);
-    };
-  }, [animationOpen, fullPath, setWikiSidenavOpen, wikiSidenavOpen]);
-
-  // Wait for the DOM to load before animating to prevent animation on page load
-  useEffect(() => {
-    function onReady() {
-      details.current?.querySelector("ul")?.classList.remove("preload");
-    }
-
-    if (document.readyState !== "loading") {
-      setTimeout(onReady, 500);
-    } else {
-      document.addEventListener("DOMContentLoaded", onReady);
-    }
-  }, []);
+    setIsOpen(!isOpen);
+  };
 
   return (
-    <details
-      className={`${
-        animationOpen
-          ? "[&>ul]:animate-details-open [&>summary>svg]:-rotate-90"
-          : "[&>ul]:animate-details-close"
-      }`}
-      open={detailsOpen}
-      ref={details}
-    >
-      <summary
+    <div className={`${isOpen ? "[&>div>svg]:-rotate-90" : ""}`}>
+      <div
         className="pb-2 flex items-center justify-between cursor-pointer"
-        ref={toggleBox}
+        onClick={handleToggle}
       >
         {PageLink(
           fullPath,
@@ -142,12 +87,19 @@ function Details(
             d="m1 1 4 4 4-4"
           />
         </svg>
-      </summary>
+      </div>
 
-      <ul className="pl-4 h-fit overflow-hidden transition-opacity duration-500 preload">
-        {SidenavLayer(value, fullPath, currentPath)}
-      </ul>
-    </details>
+      {/* Animated container for the list */}
+      <motion.div
+        key={fullPath}
+        initial={{ height: isOpen ? "auto" : 0 }}
+        animate={{ height: isOpen ? "auto" : 0 }}
+        transition={{ height: { duration: 0.4, ease: "easeInOut" } }}
+        style={{ overflow: "hidden" }}
+      >
+        <ul className="pl-4">{SidenavLayer(value, fullPath, currentPath)}</ul>
+      </motion.div>
+    </div>
   );
 }
 
@@ -173,9 +125,10 @@ function SidenavLayer(tree: WikiTreeNode, path: string, currentPath: string) {
   });
 }
 
-interface Props extends React.HTMLAttributes<HTMLElement> {
+interface Props {
   currentPath: string;
   customScrollbarEnabled: boolean;
+  animate?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
@@ -183,9 +136,9 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 export default function Sidenav({
   currentPath,
   customScrollbarEnabled,
+  animate,
   className,
   children,
-  ...props
 }: Props) {
   const [wikiSidenavScroll, setWikiSidenavScroll] = useStore((state) => [
     state.wikiSidenavScroll,
@@ -212,8 +165,11 @@ export default function Sidenav({
   }, [wikiSidenavScroll, setWikiSidenavScroll]);
 
   return (
-    <nav
-      {...props}
+    <motion.nav
+      initial={{ x: animate ? "-16rem" : 0 }}
+      animate={{ x: 0 }}
+      exit={{ x: animate ? "-16rem" : 0 }}
+      transition={{ x: { duration: 0.4, ease: "easeInOut" } }}
       className={
         "fixed top-0 inset-0 w-64 shrink-0 p-4 overflow-y-auto border-r border-zinc-800 " +
         className +
@@ -223,6 +179,6 @@ export default function Sidenav({
     >
       <ul>{SidenavLayer(wikiTree, "/wiki", currentPath)}</ul>
       {children}
-    </nav>
+    </motion.nav>
   );
 }
