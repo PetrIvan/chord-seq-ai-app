@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSearch } from "@/wiki/use_search";
+import { useRouter } from "next/navigation";
+import { isEqual } from "lodash";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -43,6 +45,94 @@ export default function Search({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const closeDropdown = useCallback(() => {
+    setHighlightedIndex(-1);
+    setQuery("");
+
+    setIsDropdownOpen(false);
+    if (isOverlay && setIsSearchOpen) setIsSearchOpen(false);
+  }, [isOverlay, setIsSearchOpen]);
+
+  // Keyboard shortcuts
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const prevResults = useRef(results);
+  const router = useRouter();
+  const listItemRefs = useRef<HTMLLIElement[]>([]);
+
+  useEffect(() => {
+    // Reset the highlighted index if the results change
+    if (!isEqual(results, prevResults.current)) {
+      if (
+        highlightedIndex > -1 &&
+        results[highlightedIndex].slug !==
+          prevResults.current[highlightedIndex].slug
+      ) {
+        setHighlightedIndex(-1);
+      }
+
+      prevResults.current = results;
+    }
+  }, [highlightedIndex, results, query]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Focus the input on Ctrl + K
+      if (e.key === "k" && e.ctrlKey) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+
+      // Close the dropdown on escape
+      if (e.key === "Escape") {
+        inputRef.current?.blur();
+        closeDropdown();
+      }
+
+      // Change the highlighted index on arrow up/down
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+
+        if (highlightedIndex === -1) setHighlightedIndex(results.length - 1);
+        else setHighlightedIndex(highlightedIndex - 1);
+      }
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+
+        if (highlightedIndex === results.length - 1) setHighlightedIndex(-1);
+        else setHighlightedIndex(highlightedIndex + 1);
+      }
+
+      // Open the selected result on enter
+      if (e.key === "Enter" && highlightedIndex > -1) {
+        router.push(`/wiki/${results[highlightedIndex].slug}`);
+        closeDropdown();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [
+    isOverlay,
+    setIsSearchOpen,
+    highlightedIndex,
+    results,
+    router,
+    closeDropdown,
+  ]);
+
+  // Scroll the highlighted item into view
+  useEffect(() => {
+    if (highlightedIndex > -1 && listItemRefs.current[highlightedIndex]) {
+      listItemRefs.current[highlightedIndex].scrollIntoView({
+        block: "nearest",
+        behavior: "smooth",
+      });
+    }
+  }, [highlightedIndex]);
 
   // Auto-focus the input when the dropdown is opened
   const inputRef = useRef<HTMLInputElement>(null);
@@ -89,6 +179,24 @@ export default function Search({
           }}
           ref={inputRef}
         />
+        {!isOverlay && query.trim() === "" && (
+          <p className="text-zinc-500 px-2">Ctrl + K</p>
+        )}
+        {query.trim() !== "" && (
+          <Image
+            src="/close.svg"
+            alt="Clear"
+            title="Clear search"
+            width={100}
+            height={100}
+            className="w-5 h-5 cursor-pointer contrast-[66%] hover:contrast-100"
+            onClick={() => {
+              setIsDropdownOpen(false);
+              setQuery("");
+              inputRef.current?.focus();
+            }}
+          />
+        )}
       </div>
       {results.length > 0 && isDropdownOpen && (
         <>
@@ -103,19 +211,27 @@ export default function Search({
                 isOverlay ? "" : "border"
               }`}
             >
-              {results.map((result) => (
+              {results.map((result, index) => (
                 <li
-                  className={`w-full overflow-hidden hover:bg-zinc-800 last:rounded-b-xl ${
+                  className={`w-full overflow-hidden last:rounded-b-xl ${
                     isOverlay ? "" : "first:rounded-t-xl"
+                  } ${
+                    highlightedIndex === index
+                      ? "bg-zinc-800"
+                      : "hover:bg-zinc-800"
                   }`}
                   key={result.slug}
+                  ref={(el) => {
+                    if (el) {
+                      listItemRefs.current[index] = el;
+                    }
+                  }}
                 >
                   <Link
                     className="w-full whitespace-nowrap line-clamp-1 p-2 px-4"
                     href={`/wiki/${result.slug}`}
                     onClick={() => {
-                      setIsDropdownOpen(false);
-                      if (isOverlay && setIsSearchOpen) setIsSearchOpen(false);
+                      closeDropdown();
                     }}
                   >
                     <p className="truncate min-w-0 overflow-hidden text-zinc-500">

@@ -1,3 +1,7 @@
+"use client";
+
+import { useEffect } from "react";
+import { useBreakpoint } from "@/state/use_breakpoint";
 import Search from "./search";
 
 interface Props {
@@ -11,6 +15,21 @@ export default function MobileSearch({
   setIsSearchOpen,
   customScrollbarEnabled,
 }: Props) {
+  const isAboveLg = useBreakpoint("lg");
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "k" && e.ctrlKey && !isAboveLg) setIsSearchOpen(true);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setIsSearchOpen, isAboveLg]);
+
   return (
     isSearchOpen && (
       <div

@@ -19,8 +19,12 @@ function PageLink(
     currentPath === fullPath
       ? "font-semibold text-zinc-50"
       : "hover:text-zinc-50";
-  const borderClass = `absolute top-0 -left-2 h-[2.5rem] w-full border-l border-zinc-800 hover:border-zinc-600 cursor-pointer transition-colors duration-200 ${
+  const borderClass = `absolute top-0 -left-2 h-[2.5rem] w-full cursor-pointer transition-colors duration-200 ${
     currentPath === fullPath ? "border-zinc-600" : ""
+  } ${
+    fullPath.split("/").length > 3
+      ? " border-l border-zinc-800 hover:border-zinc-600"
+      : ""
   }`;
 
   return disableInteraction ? (

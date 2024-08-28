@@ -62,6 +62,7 @@ export default function Header({
               className="w-5 h-5 lg:hidden cursor-pointer"
               src="/search.svg"
               alt="Search icon"
+              title="Search (Ctrl+K)"
               width={100}
               height={100}
               onClick={() => setIsSearchOpen(true)}

@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
 
 import Sidenav from "./sidenav";
 
@@ -16,6 +19,19 @@ export default function MobileSidenav({
   customScrollbarEnabled,
   pagePath,
 }: Props) {
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setIsSidenavOpen(false);
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [setIsSidenavOpen]);
+
   return (
     <AnimatePresence>
       {isSidenavOpen && (
@@ -35,7 +51,8 @@ export default function MobileSidenav({
             >
               <Image
                 src="/close.svg"
-                alt=""
+                title="Close (Esc)"
+                alt="Close"
                 className="absolute top-6 right-4 h-5 w-5 cursor-pointer"
                 width={100}
                 height={100}
