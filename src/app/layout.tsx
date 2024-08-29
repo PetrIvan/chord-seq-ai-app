@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { Open_Sans } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -54,7 +55,10 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" className={`${openSans.variable}`}>
-        <body className="font-sans text-white">{children}</body>
+        <body className="font-sans text-white">
+          <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
+          {children}
+        </body>
         <Script
           defer
           src="https://eu.umami.is/script.js"

@@ -1,24 +1,24 @@
 import QuickButtons from "@/components/landing_page/quick_buttons";
-import SupportUsButton from "@/components/landing_page/support_us_button";
 import TrackedLink from "@/components/landing_page/tracked_link";
 import SupportUsOverlay from "@/components/overlays/support_us_overlay";
+import Header from "@/components/header";
+
+import Image from "next/image";
 
 export default function Home() {
   return (
     <div>
       <SupportUsOverlay />
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
-        <header className="w-full flex flex-row justify-between items-center backdrop-blur-md p-2 cursor-default">
-          <h1>
-            <img
-              src="/logo.svg"
-              alt="Compose with ChordSeqAI: Your AI Chord Progression Assistant"
-              className="mr-1"
-            />
-          </h1>
-
-          <SupportUsButton />
-        </header>
+        <Header
+          isTop={true}
+          sticky={false}
+          h1Logo={true}
+          customScrollbarEnabled={false}
+          searchEnabled={false}
+          sidenavEnabled={false}
+          borderEnabled={false}
+        />
         <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
           <h2 className="text-3xl md:text-5xl text-white font-semibold mb-5 max-w-xl">
             Your AI-powered chord progression copilot
@@ -234,8 +234,7 @@ export default function Home() {
               .
             </p>
 
-            {/* Only visible on mobile devices */}
-            <p className="md:hidden text-lg md:text-xl text-zinc-300 pb-5">
+            <p className="text-lg md:text-xl text-zinc-300 pb-5">
               If you want to support the development of this app, you can do so
               on{" "}
               <TrackedLink
@@ -265,10 +264,12 @@ export default function Home() {
               rel="noopener noreferrer"
               className="h-full w-full"
             >
-              <img
+              <Image
                 src="/youtube-logo.svg"
                 alt="YouTube channel"
                 className="h-full w-full"
+                width={100}
+                height={100}
               />
             </a>
             <a
@@ -277,10 +278,12 @@ export default function Home() {
               rel="noopener noreferrer"
               className="h-full w-full"
             >
-              <img
+              <Image
                 src="/github-logo.svg"
                 alt="GitHub repository"
                 className="h-full w-full p-[10%] filter brightness-0 invert"
+                width={98}
+                height={96}
               />
             </a>
             <a
@@ -289,10 +292,12 @@ export default function Home() {
               rel="noopener noreferrer"
               className="h-full w-full"
             >
-              <img
+              <Image
                 src="/facebook-logo.png"
                 alt="Facebook page"
                 className="h-full w-full p-[10%]"
+                width={100}
+                height={100}
               />
             </a>
             <a
@@ -301,10 +306,12 @@ export default function Home() {
               rel="noopener noreferrer"
               className="h-full w-full"
             >
-              <img
+              <Image
                 src="/reddit-logo.svg"
                 alt="Reddit profile"
                 className="h-full w-full filter brightness-0 invert"
+                width={100}
+                height={100}
               />
             </a>
             <TrackedLink
@@ -312,10 +319,12 @@ export default function Home() {
               className="h-full w-full"
               event="patreon-icon"
             >
-              <img
+              <Image
                 src="/patreon-logo.svg"
                 alt="Support us on Patreon"
                 className="h-full w-full p-[10%]"
+                width={100}
+                height={100}
               />
             </TrackedLink>
             <TrackedLink
@@ -323,10 +332,12 @@ export default function Home() {
               className="h-full w-full"
               event="paypal-icon"
             >
-              <img
+              <Image
                 src="/paypal-logo.png"
                 alt="Support us on PayPal"
                 className="h-full w-full"
+                width={100}
+                height={100}
               />
             </TrackedLink>
           </div>

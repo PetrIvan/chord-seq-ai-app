@@ -1,54 +1,95 @@
+"use client";
+
 import React from "react";
 
+import { getSelectorsByUserAgent } from "react-device-detect";
+import { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 import { findPageNameInTree } from "@/wiki/utils";
-import Search from "./search";
+import Search from "./wiki/search";
 
 interface Props {
   isTop: boolean;
-  pagePath: string;
+  pagePath?: string;
   customScrollbarEnabled: boolean;
-  setIsSidenavOpen: (value: boolean) => void;
-  setIsSearchOpen: (value: boolean) => void;
+  setIsSidenavOpen?: (value: boolean) => void;
+  setIsSearchOpen?: (value: boolean) => void;
+  sticky?: boolean;
+  h1Logo?: boolean;
   searchEnabled?: boolean;
   sidenavEnabled?: boolean;
+  borderEnabled?: boolean;
 }
 
 export default function Header({
   isTop,
-  pagePath,
+  pagePath = "/",
   customScrollbarEnabled,
   setIsSidenavOpen,
   setIsSearchOpen,
+  sticky = true,
+  h1Logo = false,
   searchEnabled = true,
   sidenavEnabled = true,
+  borderEnabled = true,
 }: Props) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useLayoutEffect(() => {
+    const userAgent = navigator.userAgent;
+    const selectors = getSelectorsByUserAgent(userAgent);
+    setIsMobile(selectors.isMobile);
+  }, []);
+
   const parts = pagePath.split("/").slice(1);
 
   return (
     <header
-      className={`top-0 sticky z-40 flex flex-col justify-center w-full backdrop-blur transition-colors duration-500 ${
+      className={`top-0 ${
+        sticky ? "sticky" : ""
+      } z-40 flex flex-col justify-center w-full backdrop-blur transition-colors duration-500 ${
         isTop ? "bg-transparent" : "bg-zinc-950/50"
-      } border-b border-b-zinc-800 cursor-default`}
+      } ${borderEnabled ? "border-b border-b-zinc-800" : ""} cursor-default`}
     >
       <div className="flex flex-row justify-between items-center p-2">
         <Link href="/" className="flex items-center">
-          <Image
-            src="/logo.svg"
-            alt="ChordSeqAI"
-            className="h-12 w-full hidden md:block"
-            width={161}
-            height={38}
-          />
-          <Image
-            src="/app-icon.svg"
-            alt="ChordSeqAI"
-            className="h-12 w-12 md:hidden"
-            width={100}
-            height={100}
-          />
+          {h1Logo ? (
+            <h1>
+              <Image
+                src="/logo.svg"
+                alt="Compose with ChordSeqAI: Your AI Chord Progression Suggester"
+                className="h-12 w-full hidden md:block"
+                width={161}
+                height={38}
+              />
+              <Image
+                src="/app-icon.svg"
+                alt="Compose with ChordSeqAI: Your AI Chord Progression Suggester"
+                className="h-12 w-12 md:hidden"
+                width={100}
+                height={100}
+              />
+            </h1>
+          ) : (
+            <>
+              <Image
+                src="/logo.svg"
+                alt="ChordSeqAI"
+                className="h-12 w-full hidden md:block"
+                width={161}
+                height={38}
+              />
+              <Image
+                src="/app-icon.svg"
+                alt="ChordSeqAI"
+                className="h-12 w-12 md:hidden"
+                width={100}
+                height={100}
+              />
+            </>
+          )}
         </Link>
         {searchEnabled && (
           <Search
@@ -65,11 +106,13 @@ export default function Header({
               title="Search (Ctrl+K)"
               width={100}
               height={100}
-              onClick={() => setIsSearchOpen(true)}
+              onClick={() => {
+                if (setIsSearchOpen) setIsSearchOpen(true);
+              }}
             />
           )}
           <Link href="/wiki">Wiki</Link>
-          <Link href="/app">App</Link>
+          {!isMobile && <Link href="/app">App</Link>}
           <Link
             className="selection-none"
             href="https://github.com/PetrIvan/chord-seq-ai-app"
@@ -95,7 +138,9 @@ export default function Header({
             className="h-5 w-5 cursor-pointer"
             width={100}
             height={100}
-            onClick={() => setIsSidenavOpen(true)}
+            onClick={() => {
+              if (setIsSidenavOpen) setIsSidenavOpen(true);
+            }}
           />
           <div className="flex flex-row items-center justify-center space-x-2 cursor-text">
             {parts.map((part, index) => {

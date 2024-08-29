@@ -4,11 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { getSelectorsByUserAgent } from "react-device-detect";
 import { useBreakpoint } from "@/state/use_breakpoint";
 
-import { AppProgressBar as ProgressBar } from "next-nprogress-bar";
-
 import Image from "next/image";
 
-import Header from "./header";
+import Header from "../header";
 import Sidenav from "./sidenav";
 import TableOfContents from "./table_of_contents";
 import MobileSidenav from "./mobile_sidenav";
@@ -152,98 +150,90 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
   }, []);
 
   return (
-    <>
-      <ProgressBar
-        height="4px"
-        color="#5B21B6"
-        options={{ showSpinner: false }}
-        shallowRouting={true}
+    <div className="text-zinc-300">
+      {/* Background */}
+      <div className="fixed inset-0 -z-20">
+        <Image
+          className="filter bg-zinc-950 object-cover"
+          src="/background-blurred.png"
+          alt=""
+          fill
+        />
+        <div className="fixed inset-0 bg-zinc-950/50" />
+      </div>
+
+      {/* Absolute elements */}
+      <MobileSidenav
+        isSidenavOpen={isSidenavOpen}
+        setIsSidenavOpen={setIsSidenavOpen}
+        customScrollbarEnabled={customScrollbarEnabled}
+        pagePath={pagePath}
       />
-      <div className="text-zinc-300">
-        {/* Background */}
-        <div className="fixed inset-0 -z-20">
-          <Image
-            className="filter bg-zinc-950 object-cover"
-            src="/background-blurred.png"
-            alt=""
-            fill
-          />
-          <div className="fixed inset-0 bg-zinc-950/50" />
-        </div>
+      <MobileSearch
+        isSearchOpen={isSearchOpen}
+        setIsSearchOpen={setIsSearchOpen}
+        customScrollbarEnabled={customScrollbarEnabled}
+      />
 
-        {/* Absolute elements */}
-        <MobileSidenav
-          isSidenavOpen={isSidenavOpen}
-          setIsSidenavOpen={setIsSidenavOpen}
-          customScrollbarEnabled={customScrollbarEnabled}
-          pagePath={pagePath}
-        />
-        <MobileSearch
-          isSearchOpen={isSearchOpen}
-          setIsSearchOpen={setIsSearchOpen}
+      {/* Main content */}
+      <Header
+        isTop={isTop}
+        pagePath={pagePath}
+        customScrollbarEnabled={customScrollbarEnabled}
+        setIsSidenavOpen={setIsSidenavOpen}
+        setIsSearchOpen={setIsSearchOpen}
+      />
+      <div className="w-full flex flex-row">
+        <Sidenav
+          className="hidden lg:block z-20 mt-[4rem] bg-zinc-950/20 backdrop-blur-md"
+          currentPath={`/wiki${pagePath}`}
           customScrollbarEnabled={customScrollbarEnabled}
         />
 
-        {/* Main content */}
-        <Header
-          isTop={isTop}
-          pagePath={pagePath}
-          customScrollbarEnabled={customScrollbarEnabled}
-          setIsSidenavOpen={setIsSidenavOpen}
-          setIsSearchOpen={setIsSearchOpen}
-        />
-        <div className="w-full flex flex-row">
-          <Sidenav
-            className="hidden lg:block z-20 mt-[4rem] bg-zinc-950/20 backdrop-blur-md"
-            currentPath={`/wiki${pagePath}`}
-            customScrollbarEnabled={customScrollbarEnabled}
-          />
-
-          <div className="lg:pl-[16rem] lg:pr-[16rem] max-w-full">
+        <div className="lg:pl-[16rem] lg:pr-[16rem] max-w-full">
+          <div
+            className={`w-full flex flex-row lg:overflow-y-auto custom-scrollbar p-5 lg:pl-10 ${
+              isSidenavOpen || isSearchOpen ? "fixed" : "overflow-y-auto"
+            }`}
+            style={{
+              top:
+                isSidenavOpen || isSearchOpen
+                  ? `calc(${-topOffset}px + 6.864rem)`
+                  : "",
+            }}
+          >
+            {/* Background effect */}
             <div
-              className={`w-full flex flex-row lg:overflow-y-auto custom-scrollbar p-5 lg:pl-10 ${
-                isSidenavOpen || isSearchOpen ? "fixed" : "overflow-y-auto"
-              }`}
+              className="absolute z-20 pointer-events-none top-0 inset-x-0 max-h-screen select-none flex items-center justify-center overflow-hidden"
               style={{
-                top:
-                  isSidenavOpen || isSearchOpen
-                    ? `calc(${-topOffset}px + 6.864rem)`
-                    : "",
+                top: isSidenavOpen || isSearchOpen ? "-6.864rem" : "",
               }}
             >
-              {/* Background effect */}
-              <div
-                className="absolute z-20 pointer-events-none top-0 inset-x-0 max-h-screen select-none flex items-center justify-center overflow-hidden"
-                style={{
-                  top: isSidenavOpen || isSearchOpen ? "-6.864rem" : "",
-                }}
-              >
-                <Image
-                  className="filter opacity-65"
-                  src="/background-effect.png"
-                  alt=""
-                  width={1500}
-                  height={750}
-                  priority={true}
-                />
-              </div>
-
-              {/* MDX content */}
-              <div className="flex-1 min-w-0 flex flex-col space-y-0.5 text-justify z-20">
-                <MobileTableOfContents source={source} />
-                {children}
-                {pagePath !== "" && <NavigationButtons pagePath={pagePath} />}
-              </div>
-
-              <TableOfContents
-                headings={getHeadings(source)}
-                activeId={activeId}
-                className="hidden lg:block pt-[6rem] fixed right-0 top-0 w-64 px-5"
+              <Image
+                className="filter opacity-65"
+                src="/background-effect.png"
+                alt=""
+                width={1500}
+                height={750}
+                priority={true}
               />
             </div>
+
+            {/* MDX content */}
+            <div className="flex-1 min-w-0 flex flex-col space-y-0.5 text-justify z-20">
+              <MobileTableOfContents source={source} />
+              {children}
+              {pagePath !== "" && <NavigationButtons pagePath={pagePath} />}
+            </div>
+
+            <TableOfContents
+              headings={getHeadings(source)}
+              activeId={activeId}
+              className="hidden lg:block pt-[6rem] fixed right-0 top-0 w-64 px-5"
+            />
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 import { getSelectorsByUserAgent } from "react-device-detect";
+import Image from "next/image";
+import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
@@ -25,23 +27,29 @@ export default function QuickButtons() {
         </p>
       )}
 
-      <a
+      <Link
         href="https://github.com/PetrIvan/chord-seq-ai-app"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center justify-center bg-white text-black py-7 px-6 rounded-full shadow-md border-2 border-zinc-900 text-xl md:text-2xl font-medium transition duration-300 ease-in-out hover:brightness-90 w-48 h-12"
       >
-        <img src="/github-logo.svg" alt="GitHub" className="mr-2 h-6 w-6" />
+        <Image
+          src="/github-logo.svg"
+          alt="GitHub"
+          className="mr-2 h-6 w-6"
+          width={98}
+          height={96}
+        />
         GitHub
-      </a>
+      </Link>
 
       {!isMobile && (
-        <a
+        <Link
           className="flex items-center justify-center py-7 px-6 rounded-full shadow-md border-2 text-xl md:text-2xl font-medium w-48 h-12 border-white text-white bg-gradient-to-bl from-[#8C205C] to-[#5C51A6] transition duration-300 ease-in-out hover:brightness-90"
           href="/app"
         >
           Launch App
-        </a>
+        </Link>
       )}
     </div>
   );

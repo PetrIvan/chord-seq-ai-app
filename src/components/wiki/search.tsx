@@ -1,6 +1,8 @@
+"use client";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSearch } from "@/wiki/use_search";
-import { useRouter } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
 import { isEqual } from "lodash";
 
 import Link from "next/link";
