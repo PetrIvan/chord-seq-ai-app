@@ -199,9 +199,9 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
             customScrollbarEnabled={customScrollbarEnabled}
           />
 
-          <div className="lg:pl-[18rem] lg:pr-[16rem] max-w-full">
+          <div className="lg:pl-[16rem] lg:pr-[16rem] max-w-full">
             <div
-              className={`w-full flex flex-row lg:overflow-y-auto custom-scrollbar p-5 ${
+              className={`w-full flex flex-row lg:overflow-y-auto custom-scrollbar p-5 lg:pl-10 ${
                 isSidenavOpen || isSearchOpen ? "fixed" : "overflow-y-auto"
               }`}
               style={{
