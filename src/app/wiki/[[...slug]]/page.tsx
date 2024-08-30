@@ -57,6 +57,9 @@ export async function generateMetadata(
       description: pageDescription,
       images: [{ url: "/og.png" }],
     },
+    alternates: {
+      canonical: `/wiki${params.slug ? "/" + params.slug.join("/") : ""}`,
+    },
   };
 }
 

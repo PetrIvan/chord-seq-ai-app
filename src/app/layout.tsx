@@ -39,6 +39,9 @@ export const metadata: Metadata = {
       "Compose beautiful chord progressions in your browser, with the help of AI, for free. Open-source project, code available on GitHub.",
     images: [{ url: "/og.png" }],
   },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 const openSans = Open_Sans({
