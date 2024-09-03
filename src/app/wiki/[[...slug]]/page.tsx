@@ -13,6 +13,12 @@ import remarkGfm from "remark-gfm";
 import { wikiTree, WikiTreeNode } from "@/data/wiki_tree.ts";
 import { findPageNameInTree } from "@/wiki/utils";
 
+import Blocks from "@/components/wiki/blocks";
+import InlineIcon from "@/components/wiki/inline_icon";
+import LargeImage from "@/components/wiki/large_image";
+import QuestionAnswer from "@/components/wiki/question_answer";
+import QuickLinkBlock from "@/components/wiki/quick_link_block";
+
 import NotFound from "@/components/not_found";
 import WikiLayout from "@/components/wiki/layout";
 
@@ -22,7 +28,13 @@ interface WikiPageProps {
 
 export default async function WikiPage({ params }: WikiPageProps) {
   let pagePath = `/${(params.slug || []).join("/")}`;
-  const components = useMDXComponents({});
+  const components = useMDXComponents({
+    Blocks,
+    InlineIcon,
+    LargeImage,
+    QuestionAnswer,
+    QuickLinkBlock,
+  });
 
   const mdx = await getMDX(params.slug, components);
 

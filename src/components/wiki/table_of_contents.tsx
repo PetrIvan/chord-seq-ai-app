@@ -18,7 +18,7 @@ export default function TableOfContents({
   className,
 }: Props) {
   return (
-    <ul className={"flex-col space-y-1 " + className}>
+    <ul className={"flex-col space-y-1 h-full lg:overflow-y-auto " + className}>
       {headings.map((heading) => (
         <li key={heading.id}>
           <Link

@@ -9,7 +9,6 @@ import { chordToNotes } from "@/data/chord_to_notes";
 import { shallow } from "zustand/shallow";
 import { clone, isEqual } from "lodash";
 import { playChord } from "@/playback/player";
-import { AutoSizer, Grid, GridCellProps } from "react-virtualized";
 
 import SearchBar from "./search_bar";
 import Decay from "./decay";
@@ -639,7 +638,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           <Decay />
         </div>
       )}
-      <div className="flex-1 bg-zinc-900 w-full max-h-screen pl-[0.5dvw] flex flex-col justify-center items-center rounded-[0.5dvw] min-h-0">
+      <div className="flex-1 bg-zinc-900 w-full max-h-screen pl-[0.5dvw] flex flex-col justify-center items-center rounded-b-[0.5dvw] min-h-0">
         <div
           className={`w-full h-full ${
             selectedChord === -1

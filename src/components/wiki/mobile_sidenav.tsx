@@ -53,7 +53,7 @@ export default function MobileSidenav({
                 src="/close.svg"
                 title="Close (Esc)"
                 alt="Close"
-                className="absolute top-6 right-4 h-5 w-5 cursor-pointer"
+                className="absolute top-6 right-3 h-6 w-6 cursor-pointer"
                 width={100}
                 height={100}
                 onClick={() => setIsSidenavOpen(false)}

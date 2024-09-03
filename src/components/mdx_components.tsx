@@ -125,6 +125,30 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       />
     ),
     td: (props) => <td {...props} className="p-2" />,
+    code: (props) => (
+      <code
+        {...props}
+        className="font-mono bg-zinc-800 rounded-md px-1 text-base text-zinc-50"
+        style={{
+          wordBreak: "keep-all", // Prevents breaking within words
+          whiteSpace: "normal", // Allows text wrapping
+        }}
+      >
+        {typeof props.children === "string"
+          ? props.children.replace(/\//g, "/\u200B").replace(/_/g, "_\u200B") // Allows breaking long strings
+          : props.children}
+      </code>
+    ),
+    img: (props) => (
+      <Image
+        src={props.src as string}
+        className="rounded-lg"
+        layout="responsive"
+        alt={props.alt as string}
+        width={16}
+        height={9}
+      />
+    ),
     ...components,
   };
 }

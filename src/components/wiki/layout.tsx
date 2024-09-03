@@ -220,16 +220,16 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
             </div>
 
             {/* MDX content */}
-            <div className="flex-1 min-w-0 flex flex-col space-y-0.5 text-justify z-20">
+            <div className="flex-1 min-w-0 flex flex-col space-y-2 text-justify z-20">
               <MobileTableOfContents source={source} />
               {children}
-              {pagePath !== "" && <NavigationButtons pagePath={pagePath} />}
+              {pagePath !== "/" && <NavigationButtons pagePath={pagePath} />}
             </div>
 
             <TableOfContents
               headings={getHeadings(source)}
               activeId={activeId}
-              className="hidden lg:block pt-[6rem] fixed right-0 top-0 w-64 px-5"
+              className="hidden lg:block pt-[6rem] pb-5 fixed right-0 top-0 w-64 px-5 scrollbar-none"
             />
           </div>
         </div>

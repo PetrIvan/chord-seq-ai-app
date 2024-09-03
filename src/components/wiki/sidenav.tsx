@@ -17,9 +17,9 @@ function PageLink(
 ) {
   const wrapperClass =
     currentPath === fullPath
-      ? "font-semibold text-zinc-50"
-      : "hover:text-zinc-50";
-  const borderClass = `absolute top-0 -left-2 h-[2.5rem] w-full cursor-pointer transition-colors duration-200 ${
+      ? "font-semibold text-zinc-50 grid"
+      : "hover:text-zinc-50 grid";
+  const borderClass = `h-full absolute top-0 -left-2 w-full cursor-pointer transition-colors duration-200 ${
     currentPath === fullPath ? "border-zinc-600" : ""
   } ${
     fullPath.split("/").length > 3
@@ -30,12 +30,12 @@ function PageLink(
   return disableInteraction ? (
     <div className={wrapperClass}>
       {title}
-      <div className={borderClass} />
+      <div className={borderClass} style={{ gridArea: "1 / 1 / 2 / 2" }} />
     </div>
   ) : (
     <Link className={wrapperClass} href={fullPath}>
       {title}
-      <div className={borderClass} />
+      <div className={borderClass} style={{ gridArea: "1 / 1 / 2 / 2" }} />
     </Link>
   );
 }
