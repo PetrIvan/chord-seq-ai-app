@@ -238,12 +238,19 @@ export default function Search({
                   >
                     <p className="truncate min-w-0 overflow-hidden text-zinc-500">
                       <span className="text-zinc-300">
-                        <span className="font-semibold inline-block">
-                          {result.title}
+                        <span className="font-semibold inline-block capitalize">
+                          {result.slug.split("/").length > 1
+                            ? result.slug
+                                .replace(/-/g, " ")
+                                .replace(/\//g, " / ")
+                                .split("#")[0]
+                            : result.title}
                         </span>
                         : {result.heading}
-                      </span>{" "}
-                      - {result.summary}
+                      </span>
+                      {result.summary.trim() === ""
+                        ? ""
+                        : " - " + result.summary}
                     </p>
                   </Link>
                 </li>

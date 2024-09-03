@@ -24,12 +24,11 @@ export function useSearch(query: string) {
             { name: "heading", weight: 0.4 },
             { name: "summary", weight: 0.5 },
           ],
-          threshold: 0.3,
+          threshold: 0.4,
           ignoreLocation: true,
           isCaseSensitive: false,
           shouldSort: true,
           includeScore: true,
-          includeMatches: true,
         });
 
         let results = fuse.search(query.trim());

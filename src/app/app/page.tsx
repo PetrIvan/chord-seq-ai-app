@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 const App = dynamic(() => import("@/components/app"), {
-  ssr: true,
+  ssr: false,
   loading: () => <LoadingScreen />,
 });
 

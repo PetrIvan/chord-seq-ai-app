@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { remark } from 'remark';
+import strip from 'strip-markdown';
 import { readFile } from 'fs/promises';
 
 const wikiTree = JSON.parse(
@@ -29,20 +31,28 @@ function getAllMdxFiles(dirPath, arrayOfFiles = []) {
   return arrayOfFiles;
 }
 
-function buildSearchIndex() {
+async function extractPlainTextFromMDX(mdxContent) {
+  // Process the MDX content with remark and strip-markdown
+  const processedContent = await remark()
+    .use(strip)
+    .process(mdxContent);
+
+  return processedContent.toString();
+};
+
+async function buildSearchIndex() {
   const mdxFiles = getAllMdxFiles(wikiDirectory);
 
   const index = [];
   const generatedTree = {};
 
-  mdxFiles.forEach((file) => {
+  for (const file of mdxFiles) {
     const content = fs.readFileSync(file, "utf8");
     const { data, content: mdxContent } = matter(content);
 
     // Remove MDX-specific characters from the content
+    // CONTINUE HERE, add something
     const cleanContent = mdxContent
-      .replace(/!\[[^\]]*\]\([^)]+\)/g, "")
-      .replace(/`/g, " ")
       .replace(/\r/g, " ")
       .trim();
 
@@ -60,17 +70,15 @@ function buildSearchIndex() {
       .replace(".mdx", "");
 
     // Build the search index entries
-    sections.forEach((section) => {
+    for (const section of sections) {
       const heading = section.match(/^#+ (.+)/)?.[1].trim() || title;
-      const summary = section
-        .replace(/^#+ .+/, "")
-        .replace(/\s+/g, " ")
-        .replace(/\n/g, " ")
-        .trim();
+      let summary = await extractPlainTextFromMDX(section.replace(/^#+ .+/, ""));
+      summary = summary.replace(/\s+/g, " ").replace(/\n/g, " ").trim();
 
       // Create a slug from the file path and heading
       let slug = relativePath;
-      if (heading.toLowerCase() !== title.toLowerCase())
+      // Add a heading if not h1
+      if (!section.match(/^# /))
         slug += "#" + heading.toLowerCase().replace(/\s+/g, "-");
 
       index.push({
@@ -79,7 +87,7 @@ function buildSearchIndex() {
         heading,
         summary,
       });
-    });
+    }
 
     // Build the generated tree
     const parts = relativePath.split("/");
@@ -94,7 +102,7 @@ function buildSearchIndex() {
       }
       if (current[part].children) current = current[part].children;
     });
-  });
+  }
 
   // Ensure the predefined tree matches the generated tree
   function compareTrees(
@@ -104,8 +112,8 @@ function buildSearchIndex() {
   ) {
     for (const key in generatedNode) {
       const predefinedChild = predefinedNode[key];
-      const generatedChild = generatedNode[key];
 
+      // Ensure the predefined tree has the same node
       if (!predefinedChild) {
         throw new Error(
           `Missing node in predefined tree at path: ${path}/${key}`
@@ -117,17 +125,9 @@ function buildSearchIndex() {
       const predefinedChild = predefinedNode[key];
       const generatedChild = generatedNode[key];
 
+      // Ensure the generated tree has the same node
       if (!generatedChild) {
         throw new Error(`No MDX files found at path: ${path}/${key}`);
-      }
-
-      // Check name and slug consistency
-      if (
-        predefinedChild.name.toLowerCase() !== generatedChild.name.toLowerCase()
-      ) {
-        throw new Error(
-          `Name mismatch at path: ${path}/${key}. Expected: "${generatedChild.name}", Found: "${predefinedChild.name}"`
-        );
       }
 
       // Recursively compare child nodes
