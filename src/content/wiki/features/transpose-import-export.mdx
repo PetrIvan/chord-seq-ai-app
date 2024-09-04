@@ -1,0 +1,38 @@
+---
+title: Transpose, Import, Export
+description: Transpose, import, and export chord progressions seamlessly in ChordSeqAI.
+---
+
+# Transpose, Import, Export
+
+This menu provides additional features for transposing, importing, and exporting chord progressions. It is located at the top right of the app, next to the model and style selection.
+
+<LargeImage
+    src="/wiki/features/transpose-import-export.png"
+    alt="An interface showing the icons to transpose, import, and export the chord progression. The transpose icon is denoted by two eighth notes with an arrow pointing up and down. The import icon is denoted by a file with an arrow pointing inside. The export icon is denoted by a folder file an arrow pointing outside."
+    width={1150}
+    height={300}
+/>
+
+## Transposition
+
+You can transpose (i.e., move all chords by a few steps) a chord progression via the left icon <InlineIcon src="/transpose.svg" /> at the top right menu or by using the shortcut `T`. After opening the menu, select how many semitones to transpose by (`Up Arrow`/`Down Arrow`); negative integers transpose down. Confirming (`Enter`) will apply the changes, you can close the menu by clicking outside the box (`Esc` or `T`).
+
+## Import
+
+You can import either a `.chseq` file or a MIDI file by clicking on the import icon <InlineIcon src="/import.svg" /> (`I`) and selecting the file in the file dialog. Importing `.chseq` files works automatically, however, MIDI files need a bit of setup.
+
+### Parsing MIDI files
+
+When importing a MIDI file, an overlay will appear with the parser settings. You can select the tracks to import (choose the ones with chords), quantization (how many beats a single chord, i.e. the shortest, spans) and its mode (whether to consider all notes from the part or only some), and whether to also import the tempo in BPM. After confirming by pressing import (`Enter`), the chords will be parsed and loaded into the app. If the import didn't work as expected, you can try again with different settings.
+
+<LargeImage
+    src="/wiki/features/midi-import.png"
+    alt="Import MIDI modal in the app. The modal allows setting quantization in beats with a value of 4 and selecting a quantization mode from a dropdown set to 'closest'. An option to import BPM is checked on the right. Below, there is a list of tracks to select for harmony, including Melody (sounds like lead 8), Bass (sounds like electric bass), Piano (sounds like bright acoustic piano), and Overdriven Guitar. The 'Import' button is at the bottom of the modal, and a close button is in the top-right corner."
+    width={1920}
+    height={1080}
+/>
+
+## Export
+
+To export a chord progression, click on the export icon <InlineIcon src="/export.svg" /> (`E`) and select the format you want to export to. The `.chseq` format is recommended for saving your progress; exporting MIDI files can be useful for use with other music production software. Many Digital Audio Workstations (DAWs) support drag-and-drop to import MIDI files, so you can drag the exported file directly to your DAW.

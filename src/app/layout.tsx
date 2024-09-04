@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { Open_Sans } from "next/font/google";
+import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -38,6 +39,9 @@ export const metadata: Metadata = {
       "Compose beautiful chord progressions in your browser, with the help of AI, for free. Open-source project, code available on GitHub.",
     images: [{ url: "/og.png" }],
   },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 const openSans = Open_Sans({
@@ -54,7 +58,10 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" className={`${openSans.variable}`}>
-        <body className="font-sans text-white">{children}</body>
+        <body className="font-sans text-white custom-scrollbar">
+          <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
+          {children}
+        </body>
         <Script
           defer
           src="https://eu.umami.is/script.js"

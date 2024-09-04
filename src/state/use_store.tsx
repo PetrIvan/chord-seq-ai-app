@@ -177,6 +177,12 @@ interface StoreState {
   // UI
   customScrollbarEnabled: boolean;
   setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) => void;
+
+  // Wiki
+  wikiSidenavOpen: Map<string, boolean>;
+  setWikiSidenavOpen: (wikiSidenavOpen: Map<string, boolean>) => void;
+  wikiSidenavScroll: number;
+  setWikiSidenavScroll: (wikiSidenavScroll: number) => void;
 }
 
 export const useStore = createWithEqualityFn<StoreState>()(
@@ -486,6 +492,14 @@ export const useStore = createWithEqualityFn<StoreState>()(
       customScrollbarEnabled: true,
       setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) =>
         set({ customScrollbarEnabled }),
+
+      // Wiki
+      wikiSidenavOpen: new Map(),
+      setWikiSidenavOpen: (wikiSidenavOpen: Map<string, boolean>) =>
+        set({ wikiSidenavOpen }),
+      wikiSidenavScroll: 0,
+      setWikiSidenavScroll: (wikiSidenavScroll: number) =>
+        set({ wikiSidenavScroll }),
     }),
     {
       // Saving

@@ -65,3 +65,9 @@ body {
   overflow: hidden;
   white-space: nowrap;
 }
+
+@layer components {
+  .custom-scrollbar {
+    @apply scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full;
+  }
+}

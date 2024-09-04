@@ -2,6 +2,9 @@
 const withPWA = require("next-pwa");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
+const withMDX = require('@next/mdx')({
+  extension: /\.mdx?$/
+});
 
 const nextConfig = {
   ...withPWA({
@@ -11,10 +14,13 @@ const nextConfig = {
   })
 }
 
-module.exports = {
+module.exports = withMDX({
   ...nextConfig,
   reactStrictMode: true,
   output: "export",
+  images: {
+    unoptimized: true,
+  },
   webpack: (config, {  }) => {
 
     config.resolve.extensions.push(".ts", ".tsx");
@@ -61,5 +67,6 @@ module.exports = {
     );
 
     return config;
-  }
-}
+  },
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+});

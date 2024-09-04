@@ -1,0 +1,47 @@
+---
+title: Architecture
+description: An overview of the technical architecture of ChordSeqAI.
+---
+
+# Architecture
+
+This page provides an overview of the technical architecture of ChordSeqAI. It describes the structure of the app and the main design decisions. Check out the [web stack](/wiki/technical/web-stack) for more information on the technologies used.
+
+## File structure
+
+The app is built using [Next.js](https://nextjs.org/) with TypeScript, using the new App Router. The main components are located in the `src/components` directory, while the pages are in the `src/app` directory. Other folders in `src` include data, hooks, and additional utilities.
+
+The components use subfolders for specific functionality and usage, such as `ui` for custom UI components, `timeline` for the timeline component, and `suggestions` for the suggestions component. General-purpose components are located directly in the `components` folder.
+
+React component files follow the snake_case naming convention, with the main component named after the component itself in CamelCase. For example, `src/components/timeline/timeline_controls.tsx` contains the `TimelineControls` component.
+
+## State management
+
+The state of the app is managed by [Zustand](https://github.com/pmndrs/zustand), a small and fast state management library. It is used to store most of the app's data, especially when it needs to be shared between components or persisted across page reloads.
+
+The app state is defined in `src/state/use_store.tsx`, where it is exported as a custom hook `useStore`. Components can access the state by importing and using this hook, effectively subscribing to changes in a specific part of the state.
+
+## Styling guidelines
+
+The app uses [Tailwind CSS](https://tailwindcss.com/) for styling. ChordSeqAI app components are styled using mostly `dvh` and `dvw` units, which are relative to the viewport height and width, respectively. This ensures that the app is responsive and looks good on different screen sizes.
+
+Corners are rounded with a radius of `1dvh` or `md`. The color palette is consistent across the app, with primary colors being shades of violet and secondary colors being shades of zinc. Blue 400 is also used occasionally, primarily for links and the playhead. Shadows and borders are used sparingly to maintain a clean and modern look.
+
+## AI models
+
+The app uses AI models to generate chord progressions. The models are loaded using [ONNX Runtime](https://onnxruntime.ai/). They are stored in the `public/models` directory and are loaded dynamically when needed. The `src/components/suggestions/suggestions.tsx` file requests suggestions from `src/models/models.tsx`, which communicates with a web worker to run the models. Check out [models](/wiki/technical/models) for more information.
+
+## Audio playback
+
+Audio playback is handled by [Tone.js](https://tonejs.github.io/). The app uses the Tone.js library to play the generated chord progressions. The playback controls are located in `src/components/timeline/timeline_controls.tsx`,
+playback settings have their own `settings_dropdown.tsx` component. The playhead is a separate component that moves along the timeline as the chords are played. The actual audio playback is done by the `src/playback/player.tsx` script, it communicates with the components to play the chords with the correct settings.
+
+## Wiki rendering
+
+The wiki pages are rendered using [MDX](https://mdxjs.com/), a format that allows embedding JSX components in Markdown files. This enables the use of React components in the wiki pages, such as icons, images, and interactive elements. The wiki pages are located in the `src/content/wiki` directory, `src/components/wiki` contains the components used to render the pages.
+
+The wiki pages are structured using frontmatter metadata at the beginning of the file. This metadata includes the title and description of the page, which are used for SEO and navigation purposes. The content of the page is written in Markdown format, with JSX components embedded where needed.
+
+## Deployment
+
+This app is deployed on GitHub Pages. The deployment process is automated using GitHub Actions. When changes are pushed to the `main` branch, the app is built and deployed to GitHub Pages. The deployment script is located in `.github/workflows/nextjs.yml`. Since ChordSeqAI is a static site, it can be hosted on GitHub Pages without the need for a server, which limits some functionality but ensures fast loading times and easy maintenance.

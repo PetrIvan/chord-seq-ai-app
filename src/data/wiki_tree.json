@@ -1,0 +1,57 @@
+{
+  "introduction": {
+    "name": "Introduction"
+  },
+  "getting-started": {
+    "name": "Getting Started",
+    "children": {
+      "guided-tour": { "name": "Guided Tour" },
+      "usage": { "name": "Usage" },
+      "faq": { "name": "FAQ" }
+    }
+  },
+  "features": {
+    "name": "Features",
+    "children": {
+      "overview": { "name": "Overview" },
+      "timeline": { "name": "Timeline" },
+      "suggestions": { "name": "Suggestions" },
+      "model-and-style": { "name": "Model and Style" },
+      "transpose-import-export": { "name": "Transpose, Import, Export" },
+      "chord-variants": { "name": "Chord Variants" },
+      "keyboard-shortcuts": { "name": "Keyboard Shortcuts" },
+      "troubleshooting": { "name": "Troubleshooting" },
+      "change-log": { "name": "Change Log" }
+    }
+  },
+  "community-and-support": {
+    "name": "Community & Support",
+    "children": {
+      "social-media": { "name": "Social Media" },
+      "bug-report": { "name": "Bug Report" },
+      "feature-request": { "name": "Feature Request" },
+      "support-us": { "name": "Support Us" }
+    }
+  },
+  "music-theory": {
+    "name": "Music Theory",
+    "children": {
+      "introduction": { "name": "Introduction" },
+      "basic-concepts": { "name": "Basic Concepts" },
+      "understanding-chords": { "name": "Understanding Chords" },
+      "chord-progressions": { "name": "Chord Progressions" },
+      "glossary": { "name": "Glossary" }
+    }
+  },
+  "technical": {
+    "name": "Technical",
+    "children": {
+      "installation": { "name": "Installation" },
+      "web-stack": { "name": "Web Stack" },
+      "architecture": { "name": "Architecture" },
+      "contribute": { "name": "Contribute" },
+      "models": { "name": "Models" },
+      "privacy": { "name": "Privacy" }
+    }
+  }
+}

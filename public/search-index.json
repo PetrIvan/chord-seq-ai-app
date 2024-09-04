@@ -1,0 +1,986 @@
+[
+  {
+    "slug": "community-and-support/bug-report",
+    "title": "Bug Report",
+    "heading": "Bug Report",
+    "summary": "If you encounter a bug or issue while using ChordSeqAI, we encourage you to report it to us so that we can investigate and resolve the problem. Your feedback is valuable in helping us improve the app and provide a better experience for all users. Contact us by sending an email or by creating an issue on our GitHub repository. When reporting a bug, please include the following information to help us identify and address the issue: Describe the bug A clear and concise description of what the bug is. To Reproduce Steps to reproduce the behavior, e.g.: Go to '...' Click on '...' Select '...' See error Expected behavior A clear and concise description of what you expected to happen. Screenshots If applicable, add screenshots to help explain your problem. Desktop (please complete the following information): OS: \\[e.g. iOS] Browser: \\[e.g. chrome, safari] Browser Version: \\[e.g. 22] Smartphone (please complete the following information): Device: \\[e.g. iPhone15] OS: \\[e.g. iOS8.1] Browser: \\[e.g. stock browser, safari] Browser Version: \\[e.g. 22] Additional context Add any other context about the problem here."
+  },
+  {
+    "slug": "community-and-support/feature-request",
+    "title": "Feature Request",
+    "heading": "Feature Request",
+    "summary": "If you have an idea for a new feature or improvement that you would like to see in ChordSeqAI, we encourage you to share it with us. Your feedback is essential in helping us understand the needs and preferences of our users and shape the future development of the app. To submit a feature request, please create a new discussion on our GitHub Discussions page. You can also vote on existing feature requests to show your support for specific ideas and help us prioritize our development efforts. When submitting a feature request, please provide as much information as possible to help us understand your suggestion. You can describe your idea in detail, provide examples or use cases, and discuss how the feature would benefit you and other users. We welcome all suggestions and feedback and will consider each request carefully as we plan future updates to ChordSeqAI."
+  },
+  {
+    "slug": "community-and-support/social-media",
+    "title": "Social Media",
+    "heading": "Social Media",
+    "summary": "Follow us on social media to stay up-to-date with the latest news, updates, and announcements from ChordSeqAI. We regularly post about new features, improvements, and other exciting developments in the app. Connect with us on your favorite platforms to join the ChordSeqAI community and engage with other users. You can also contact us by mail."
+  },
+  {
+    "slug": "community-and-support/social-media#youtube",
+    "title": "Social Media",
+    "heading": "YouTube",
+    "summary": "Subscribe to our YouTube channel to watch video tutorials, feature overviews, and other content related to ChordSeqAI. Our channel is a valuable resource for learning how to use the app effectively and exploring its various capabilities."
+  },
+  {
+    "slug": "community-and-support/social-media#github-discussions",
+    "title": "Social Media",
+    "heading": "GitHub Discussions",
+    "summary": "Join the conversation on our GitHub Discussions page to ask questions, share feedback, and connect with other users. GitHub Discussions is a great place to interact with the ChordSeqAI community, get help with any issues you may encounter, and contribute to the ongoing development of the app."
+  },
+  {
+    "slug": "community-and-support/social-media#facebook",
+    "title": "Social Media",
+    "heading": "Facebook",
+    "summary": "Like our Facebook page to receive updates, news, and announcements about ChordSeqAI directly in your feed. Stay informed about new features, and other important information related to the app by following us on Facebook."
+  },
+  {
+    "slug": "community-and-support/social-media#patreon",
+    "title": "Social Media",
+    "heading": "Patreon",
+    "summary": "Support ChordSeqAI by becoming a Patreon and gain access to exclusive content. Your contributions help us continue to improve and expand the app, ensuring that we can deliver the best possible experience to our users."
+  },
+  {
+    "slug": "community-and-support/support-us",
+    "title": "Support Us",
+    "heading": "Support Us",
+    "summary": "ChordSeqAI is a free and open-source project developed by a solo developer. Since we don't run ads or charge for the app, we rely on the support of our users to help cover the costs of development, maintenance, and hosting. If you enjoy using ChordSeqAI and would like to support its continued development, there are several ways you can help."
+  },
+  {
+    "slug": "community-and-support/support-us#spread-the-word",
+    "title": "Support Us",
+    "heading": "Spread the word",
+    "summary": "One of the best ways to support ChordSeqAI is by spreading the word and sharing the app with others. Tell your friends, family, and fellow musicians about ChordSeqAI and encourage them to give it a try. Sharing the app on social media, forums, and other platforms can help us reach a wider audience and grow the ChordSeqAI community."
+  },
+  {
+    "slug": "community-and-support/support-us#support-us-financially",
+    "title": "Support Us",
+    "heading": "Support us financially",
+    "summary": "If you would like to support ChordSeqAI financially, you can make a donation to help cover the costs of development and hosting. Your contributions are greatly appreciated and help us continue to improve and expand the app for all users. You can make a one-time donation on PayPal or subscribe to become a Patreon to gain access to exclusive content."
+  },
+  {
+    "slug": "community-and-support/support-us#contribute-to-the-codebase",
+    "title": "Support Us",
+    "heading": "Contribute to the codebase",
+    "summary": "If you have experience with web development and would like to contribute to the codebase, you can help us improve ChordSeqAI by fixing bugs, adding new features, and optimizing the app's performance. Check out our contribution guidelines for more information on how to get started with contributing to the project."
+  },
+  {
+    "slug": "features/change-log",
+    "title": "Change Log",
+    "heading": "Change Log",
+    "summary": "This page lists the changes made to ChordSeqAI, including new features, improvements, and bug fixes. We recommend checking this page regularly to stay up-to-date with the latest updates and enhancements. Dates are according to UTC+0 in the format YYYY-MM-DD marking the release date."
+  },
+  {
+    "slug": "features/change-log#september-2024-updates",
+    "title": "Change Log",
+    "heading": "September 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-09-04",
+    "title": "Change Log",
+    "heading": "2024-09-04",
+    "summary": "Created a new wiki. The wiki is now available at chordseqai.com/wiki."
+  },
+  {
+    "slug": "features/change-log#august-2024-updates",
+    "title": "Change Log",
+    "heading": "August 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-08-19",
+    "title": "Change Log",
+    "heading": "2024-08-19",
+    "summary": "Added support us to the app. Added a heart icon in the top right corner of the app. Clicking the heart icon will open a dialog with options to support us. Upon exporting a progression for the 1st, 10th, and 25th time, the dialog will automatically open. Users can select to never see the dialog again by clicking the checkbox in the dialog."
+  },
+  {
+    "slug": "features/change-log#2024-08-18",
+    "title": "Change Log",
+    "heading": "2024-08-18",
+    "summary": "Added a step-by-step tutorial to the app. Added a guided tour that will show the user how to use the app. Shown when the user opens the app for the first time and skips the video tutorial. Can be accessed at any time by clicking the question mark icon in the top right corner and selecting guided tour. Instead of showing only the first video, the entire ChordSeqAI Essentials series is available."
+  },
+  {
+    "slug": "features/change-log#2024-08-13",
+    "title": "Change Log",
+    "heading": "2024-08-13",
+    "summary": "Landing page improvements. Changed the showcase videos to reflect the latest layout. Fixed a few typos and added video alt text."
+  },
+  {
+    "slug": "features/change-log#2024-08-12",
+    "title": "Change Log",
+    "heading": "2024-08-12",
+    "summary": "Added social media icons to the footer. Added icons for YouTube, GitHub, Facebook, Reddit, Patreon, and PayPal."
+  },
+  {
+    "slug": "features/change-log#july-2024-updates",
+    "title": "Change Log",
+    "heading": "July 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-07-23",
+    "title": "Change Log",
+    "heading": "2024-07-23",
+    "summary": "Moved the inference to a web worker and refactored the playback code. Inference is now done in a web worker to prevent the app from freezing during predicting suggestions. Refactored the playback code to avoid state inconsistencies."
+  },
+  {
+    "slug": "features/change-log#2024-07-22",
+    "title": "Change Log",
+    "heading": "2024-07-22",
+    "summary": "Upgraded the models and user interface surrounding them. Added WebGPU support for faster inference. Optimized suggestion rendering for better performance. Added MB downloaded indication for the models. Updated the models to improve suggestion quality without increasing the size. Added info about models to the model selection menu."
+  },
+  {
+    "slug": "features/change-log#2024-07-12",
+    "title": "Change Log",
+    "heading": "2024-07-12",
+    "summary": "Improved MIDI import to parse more complex files. Added support for multiple tracks. Added quantization and mode selection. Added tempo import. Scrollbars now have a custom design on most browsers."
+  },
+  {
+    "slug": "features/change-log#2024-07-09",
+    "title": "Change Log",
+    "heading": "2024-07-09",
+    "summary": "Technical improvements. Updated packages to the latest versions. Created robots.txt file. Added Umami events."
+  },
+  {
+    "slug": "features/change-log#2024-07-08",
+    "title": "Change Log",
+    "heading": "2024-07-08",
+    "summary": "User experience improvements. Enhanced responsiveness to support a wider range of devices. Added new shortcuts for various actions. Added a new icon for chord variants to open them instead of right-clicking. Added a new icon for deleting all chords instead of right-clicking on the delete icon. Changed the default model to the Conditional Transformer M. Added an overlay describing new features directly in the app. GitHub Discussions are now preferred over GitHub Issues for feature requests and discussions. Fixed a few bugs regarding edge-case scenarios and typos."
+  },
+  {
+    "slug": "features/change-log#june-2024-updates",
+    "title": "Change Log",
+    "heading": "June 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-06-19",
+    "title": "Change Log",
+    "heading": "2024-06-19",
+    "summary": "Improved filtering by notes in the suggestions. Added exact, at least, and at most note filtering. Added a button to include variants in the suggestions."
+  },
+  {
+    "slug": "features/change-log#april-2024-updates",
+    "title": "Change Log",
+    "heading": "April 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-04-22",
+    "title": "Change Log",
+    "heading": "2024-04-22",
+    "summary": "Added a tutorial section to the landing page. Added a section with tutorial videos to the landing page. Fixed a few graphical issues."
+  },
+  {
+    "slug": "features/change-log#march-2024-updates",
+    "title": "Change Log",
+    "heading": "March 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-03-04",
+    "title": "Change Log",
+    "heading": "2024-03-04",
+    "summary": "Added playback looping. Added the ability to loop the playback to the playback settings."
+  },
+  {
+    "slug": "features/change-log#february-2024-updates",
+    "title": "Change Log",
+    "heading": "February 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-02-26",
+    "title": "Change Log",
+    "heading": "2024-02-26",
+    "summary": "Improved search functionality. Included exact and multiple keywords search for chord symbols. Sorted the suggestions for the first chord by the root note. Enabled identical consecutive chords in the progression, although setting it as the last suggestion."
+  },
+  {
+    "slug": "features/change-log#2024-02-22",
+    "title": "Change Log",
+    "heading": "2024-02-22",
+    "summary": "Added a support us button on the landing page. Added a button to support us on the landing page. On mobile devices, there is a section with links instead."
+  },
+  {
+    "slug": "features/change-log#2024-02-18",
+    "title": "Change Log",
+    "heading": "2024-02-18",
+    "summary": "Added an option to delete all chords. Right-clicking on the delete icon will delete all chords."
+  },
+  {
+    "slug": "features/change-log#2024-02-17",
+    "title": "Change Log",
+    "heading": "2024-02-17",
+    "summary": "SEO improvements. Added JSON-LD structured data. Added Open Graph metadata. Changed the title of the landing page."
+  },
+  {
+    "slug": "features/change-log#2024-02-15",
+    "title": "Change Log",
+    "heading": "2024-02-15",
+    "summary": "UI consistency. Unified text sizing, colors, and rounding. Changed the logo to an SVG file. Clearer tips when no chords were found in the suggestions."
+  },
+  {
+    "slug": "features/change-log#2024-02-08",
+    "title": "Change Log",
+    "heading": "2024-02-08",
+    "summary": "Added a welcome overlay with a video tutorial. Added an overlay that welcomes the users and shows a short video tutorial."
+  },
+  {
+    "slug": "features/change-log#january-2024-updates",
+    "title": "Change Log",
+    "heading": "January 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-01-18",
+    "title": "Change Log",
+    "heading": "2024-01-18",
+    "summary": "Added Umami Analytics. Added Umami Analytics to track visits."
+  },
+  {
+    "slug": "features/change-log#2024-01-17",
+    "title": "Change Log",
+    "heading": "2024-01-17",
+    "summary": "Bug fixes and improvements. The metronome should now be more precise. Fixed a hover text and wrapping issue."
+  },
+  {
+    "slug": "features/change-log#2024-01-11",
+    "title": "Change Log",
+    "heading": "2024-01-11",
+    "summary": "Landing page redesign. Redesigned the landing page to be more user-friendly. Added a few sections - core features showcase, models, how to learn more, and contact us."
+  },
+  {
+    "slug": "features/change-log#2024-01-10",
+    "title": "Change Log",
+    "heading": "2024-01-10",
+    "summary": "Unified the font, mobile accessibility. Enforced a single font across the app, with a similar fallback. Dynamically shows the launch app button only on desktop devices. Improved app not supported on mobile devices text size."
+  },
+  {
+    "slug": "features/change-log#2024-01-08",
+    "title": "Change Log",
+    "heading": "2024-01-08",
+    "summary": "Added a percentage downloaded indication for the models. During model loading, the percentage downloaded is shown. Fixed a bug with models not loading correctly on some browsers."
+  },
+  {
+    "slug": "features/change-log#2024-01-07",
+    "title": "Change Log",
+    "heading": "2024-01-07",
+    "summary": "Deployed the app. Initial deployment of ChordSeqAI to the web."
+  },
+  {
+    "slug": "features/change-log#2023-updates",
+    "title": "Change Log",
+    "heading": "2023 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2023-12-31",
+    "title": "Change Log",
+    "heading": "2023-12-31",
+    "summary": "Added a README and fixed a few bugs. Added a README with the project description. Fixed a few bugs."
+  },
+  {
+    "slug": "features/change-log#2023-12-18",
+    "title": "Change Log",
+    "heading": "2023-12-18",
+    "summary": "Added chord variants. Added the ability to select different inversions and notations for chords. Added a piano visualization for the selected chord."
+  },
+  {
+    "slug": "features/change-log#2023-12-13",
+    "title": "Change Log",
+    "heading": "2023-12-13",
+    "summary": "MVP release."
+  },
+  {
+    "slug": "features/change-log#2023-11-15",
+    "title": "Change Log",
+    "heading": "2023-11-15",
+    "summary": "Initial commit from Create Next App."
+  },
+  {
+    "slug": "features/change-log#development-before-the-web-app-was-started",
+    "title": "Change Log",
+    "heading": "Development before the web app was started",
+    "summary": "2023-11-15: Finished model development. 2023-10-03: Analyzed the data. 2023-09-24: Collected data. 2023-09-07: Created a project vision and plan until the end of the year. 2023-09-05: Started the project."
+  },
+  {
+    "slug": "features/chord-variants",
+    "title": "Chord Variants",
+    "heading": "Chord Variants",
+    "summary": "Chord variants allow you to specify different voicings and notations for chords. Its interface also provides a way to visualize the chord on the piano."
+  },
+  {
+    "slug": "features/chord-variants#select-a-chord-variant",
+    "title": "Chord Variants",
+    "heading": "Select a chord variant",
+    "summary": "Chord variants are available for the currently selected chord in the timeline controls under the chord variant icon (V), and upon hovering over a suggestion denoted by the same icon. When open from the timeline, you can replace the selected chord with a different variant or replace all the identical chords in your progression with this variant. Variants included in suggestions instead enable using them for the selected chord or setting them as default. The variant overlay visualizes the current variant by highlighting notes on the piano. Below the piano, you can see all the available variants of the chord. Clicking on any of them will change the visualization. Closing (Esc) the overlay will cancel the changes."
+  },
+  {
+    "slug": "features/chord-variants#best-practices",
+    "title": "Chord Variants",
+    "heading": "Best practices",
+    "summary": "While you might try to use variants to compose chord voicings, this is not recommended, as there isn't currently a way to enter your custom voicings. Additionally, you may make the chord progression less readable by using less common symbols. Only use chord variants when you specifically want to use another symbol for that chord, such as to differentiate between Am7 and C6."
+  },
+  {
+    "slug": "features/keyboard-shortcuts",
+    "title": "Keyboard Shortcuts",
+    "heading": "Keyboard Shortcuts",
+    "summary": "ChordSeqAI provides a variety of keyboard shortcuts to help you navigate the app more efficiently. These shortcuts can be used to perform common actions without having to use the mouse, saving you time and effort. This page lists all the available keyboard shortcuts in ChordSeqAI as well as some mouse actions that can be used to interact with the app."
+  },
+  {
+    "slug": "features/keyboard-shortcuts#timeline",
+    "title": "Keyboard Shortcuts",
+    "heading": "Timeline",
+    "summary": "| Functionality | Shortcut | |----------------------------------------------|------------------------| | Undo | Ctrl + Z | | Redo | Ctrl + Y | | Open chord variant overlay | V | | Add chord | A | | Delete the selected chord | Delete | | Delete all chords | Ctrl + Delete | | Move selection to the right | Right Arrow | | Move selection to the left | Left Arrow | | Deselect a chord | Esc | | Zoom in/out | Mouse wheel | | Move the view | Mouse wheel drag |"
+  },
+  {
+    "slug": "features/keyboard-shortcuts#playback",
+    "title": "Keyboard Shortcuts",
+    "heading": "Playback",
+    "summary": "| Functionality | Shortcut | |----------------------------------------------|------------------------| | Enable/disable metronome | M | | Start/pause playback | Spacebar | | Open playback settings | S | | Enable/disable looping | L | | Change the playhead location | Click on the ticks |"
+  },
+  {
+    "slug": "features/keyboard-shortcuts#transpose,-import,-export",
+    "title": "Keyboard Shortcuts",
+    "heading": "Transpose, import, export",
+    "summary": "| Functionality | Shortcut | |----------------------------------------------|------------------------| | Open transpose menu | T | | Import | I | | Open export menu | E |"
+  },
+  {
+    "slug": "features/keyboard-shortcuts#other",
+    "title": "Keyboard Shortcuts",
+    "heading": "Other",
+    "summary": "| Functionality | Shortcut | |----------------------------------------------|------------------------| | Close a menu | Esc | | Confirm the menu action | Enter | | Increase menu value | Up Arrow | | Decrease menu value | Down Arrow | | Use the first, second, ..., tenth suggestion | 1,2, ..., 9, 0 |"
+  },
+  {
+    "slug": "features/model-and-style",
+    "title": "Model and Style",
+    "heading": "Model and Style Selection",
+    "summary": "The AI model and music style are key components of ChordSeqAI that help you compose chord progressions with AI. The model generates chord suggestions based on the preceding chords in the progression, while the style allows you to specify the genre or decade of the music you are composing."
+  },
+  {
+    "slug": "features/model-and-style#select-the-model",
+    "title": "Model and Style",
+    "heading": "Select the model",
+    "summary": "ChordSeqAI offers three different kinds of models for generating chord suggestions: Recurrent Network: A simple, fast model, but the predictions are less accurate compared to the other models. Use this model only if you are working on a slower device that cannot handle the other models. Transformer: A more advanced model that provides better suggestions than the recurrent network. The Transformer model comes in three variants: small, medium, and large. The larger the model, the better the suggestions, but the inference time will be slower. Conditional Transformer: A model that uses styling to generate suggestions. You can select multiple genres and decades to specify the style of the music you are composing. To select a model, click on the top split button with the model name. Only conditional models allow you to specify the style, which splits the button into two parts: one for the model and one for the style. The rest of the models will show just the model name. We recommend using the (Conditional) Transformer models for the best suggestions, using style if you know what you are going for. The medium variants are a good balance between speed and accuracy, while the large variants provide better suggestions at the cost of slower inference. Check out the technical details to learn more about the models."
+  },
+  {
+    "slug": "features/model-and-style#specify-the-style",
+    "title": "Model and Style",
+    "heading": "Specify the style",
+    "summary": "The style selection is only available for the conditional Transformer models. You can select the genre or decade of the music you are composing by selecting the appropriate options from the style menu. Custom weighting can also be specified to put a relative emphasis on certain genres or decades. You can leave the genre, decade, or both empty, the models were trained to be robust to missing style information. If you want to mix styles, you can select multiple genres and decades, possibly with custom weighting to emphasize one over the other. The weights should be small integer values to be interpretable; the relative difference is what matters, as the weights are later normalized anyway. In other words, setting the genre Rock to 1 and Pop to 2 is the same as setting Rock to 10 and Pop to 20; you won't get ten times more Rock and Pop in the latter case."
+  },
+  {
+    "slug": "features/overview",
+    "title": "Overview",
+    "heading": "Overview",
+    "summary": "Dive deep into the features of the ChordSeqAI app to get the most out of it. This structured description will help you understand the main features of ChordSeqAI and how to use them. Alternatively, you can check out the usage page for a high-level overview without getting into details."
+  },
+  {
+    "slug": "features/overview#shortcuts-and-autosave",
+    "title": "Overview",
+    "heading": "Shortcuts and autosave",
+    "summary": "Most interactions in ChordSeqAI support keyboard-only input; to learn the shortcut (hotkey) for some button, hover over it. When describing a feature, the shortcut is usually mentioned in parentheses (e.g., Ctrl + Z). After any modification to the chord progression or settings, the state of the app is saved automatically. It is kept in the browser local storage, it will remain there until you delete the site data. In particular, chords, signature, model and style selection, playback settings, default variants, and some preferences are saved."
+  },
+  {
+    "slug": "features/overview#app-layout",
+    "title": "Overview",
+    "heading": "App layout",
+    "summary": "The ChordSeqAI app is divided into several sections, each with its own purpose. The main sections are: Timeline: The main area where you compose the chord progression. Suggestions: Shows the suggested chords based on the preceding chords. Model and style selection: Allows you to select the AI model and music style. Transpose, import, export: Additional features for transposing, importing, and exporting chord progressions."
+  },
+  {
+    "slug": "features/overview#other-elements",
+    "title": "Overview",
+    "heading": "Other elements",
+    "summary": "Some components are present in the app but are not part of the main layout. These include: Chord variants: Shows the alternative chord voicings and notations for the selected chord. MIDI import: Allows you to parse a MIDI file and load its chord progression into the app."
+  },
+  {
+    "slug": "features/suggestions",
+    "title": "Suggestions",
+    "heading": "Suggestions",
+    "summary": "Suggestions are a key feature of ChordSeqAI that helps you compose chord progressions with AI. They provide chord recommendations based on the preceding chords in the progression, allowing you to explore new ideas and experiment with different harmonies."
+  },
+  {
+    "slug": "features/suggestions#get-suggestions",
+    "title": "Suggestions",
+    "heading": "Get suggestions",
+    "summary": "When you select any chord in the timeline, this element will show which chord it should be based on the context of the preceding chords. The suggestions are displayed below the timeline, and you can click on any suggested chord to replace the selected chord with it. More options can be found by scrolling down, there are around a thousand chords available (5,000 when inversions and alternate notations are counted)."
+  },
+  {
+    "slug": "features/suggestions#loading",
+    "title": "Suggestions",
+    "heading": "Loading",
+    "summary": "The suggestions are generated by the AI model in real-time locally in your browser. The first time you select a chord with a new model, it will start downloading first, which may take a while depending on your internet connection speed. The model is cached in your browser, so it will be faster the next time you use it. Then, an ONNX session is created for the model, which downloads WebAssembly binaries for the model and runs it in the browser. Finally, the context is sent to the model (may be accelerated by GPU) and the suggestions are generated. Generally, the first time you select a chord with a new model, it may take a few seconds to load the suggestions. After that, the suggestions will be generated almost instantly (depending on the model and your device)."
+  },
+  {
+    "slug": "features/suggestions#chord-suggestion",
+    "title": "Suggestions",
+    "heading": "Chord suggestion",
+    "summary": "The suggested chords are displayed as colored blocks with the chord symbol. When you hover over a suggestion, a chord variant button will appear, allowing you to explore different voicings and notations for that chord. Additionally, a tooltip will show the model-predicted probability of the chord occurring given the context and the original variant (if it is not the default one). The first 10 suggestions can be selected via the keyboard by pressing the number keys 1, 2, ..., 0 (not the numpad). The first chord has no previous context and key invariance is assumed, so the probability is equally distributed among the different keys and they are instead sorted by their root note. The last suggestion is always the previous chord (with 0.00% probability, as identical consecutive chords are not encouraged by our approach). Models were trained to be roughly equivariant to the key, so the suggestions should be similar for the same progression in different keys. However, the suggestions may vary slightly due to the model's probabilistic nature and the training data."
+  },
+  {
+    "slug": "features/suggestions#searching",
+    "title": "Suggestions",
+    "heading": "Searching",
+    "summary": ""
+  },
+  {
+    "slug": "features/suggestions#by-symbol",
+    "title": "Suggestions",
+    "heading": "By symbol",
+    "summary": "By clicking in the search box, you can filter chords by their symbol. The suggestions will be updated to show only the chords that match the search query. Queries are case-insensitive and can be partial, so you can search for chords by typing their symbol or part of it. Chords remain sorted by their probability, so the most likely chords matching the query will be shown first. Multiple keywords can be used to search for chords that match all of them (logical AND). For example, typing maj7 C will show only major seventh chords with the letter C in the symbol. Double quotes can be used to search for exact matches, for example, \"Cmaj7\" will show only the C major seventh chord. Filters are only applied based on the default variant; enable Include variants to search within all variants (the symbol of the matched variant will be shown instead of the default one). This can be useful if you cannot find a chord that you expect to be supported, as even some common chords are inversions of each other (e.g., Am7 and C6)."
+  },
+  {
+    "slug": "features/suggestions#by-notes",
+    "title": "Suggestions",
+    "heading": "By notes",
+    "summary": "The piano icon opens the search by-notes dialog, where you can select the notes you want to include in the chord by clicking on the keyboard. The suggestions will be updated to show only the chords that contain the selected notes. There are three types of matching: Exact (only chords that contain all the selected notes), At least (chords that contain the selected notes, but may contain additional notes), and At most (chords that contain some of the selected notes, but may not contain all of them). Similarly, as with the search by symbol, there is an Any variant checkbox that allows you to search for chords that contain the selected notes in any variant (i.e., in any order, with any octave, and any potential duplicates). This can be useful if you are looking for a chord that contains specific notes but you are not sure about the exact voicing, hence it is enabled by default. The At most mode is particularly useful for finding chords belonging to a scale, as it will show all chords that can be built with the selected notes. For example, selecting the notes C, D, E, F, G, A, and B in At most mode will show all the diatonic chords in the key of C major (when the Any variant checkbox is enabled). Searching by notes can be combined with searching by symbol, so you can filter chords by both their symbol and notes. For example, you can search for all major seventh chords that contain the notes C, E, and G."
+  },
+  {
+    "slug": "features/suggestions#decay",
+    "title": "Suggestions",
+    "heading": "Decay",
+    "summary": "The coloring of the suggestions is based on the model-predicted probability in a logarithmic way (i.e., half the probability is a fixed brightness difference, until it reaches zero). This means that the most likely chords are colored in a brighter shade, while the less likely chords are colored in a darker shade. The coloring of the suggestions is also affected by the decay slider. It enables entering values between 3 (on the left) and 9 (on the right), with the default being 6 (the exact numbers are not shown to the user). In particular, the color is linearly interpolated between purple and black based on the value of this expression: 1 - (ln(prob) + decay) / decay. A lower decay value will make only the most likely chords bright, while a higher decay value will make more chords brighter. The decay slider is useful for visualizing the probability distribution of the suggestions since it is not always easy to distinguish between the different shades of purple."
+  },
+  {
+    "slug": "features/timeline",
+    "title": "Timeline",
+    "heading": "Timeline",
+    "summary": "The timeline is the main area where you compose the chord progression. It consists of a series of chords, playback controls, timeline controls, and a time signature selector."
+  },
+  {
+    "slug": "features/timeline#view",
+    "title": "Timeline",
+    "heading": "View",
+    "summary": "The timeline displays the chords in a horizontal layout. Each chord is represented by a colored block with the chord symbol, its length represents the duration. The chords are arranged in a sequence from left to right, representing the progression of the song. To move the view, click and drag the scroll wheel across the timeline. You can also zoom in and out by scrolling up and down."
+  },
+  {
+    "slug": "features/timeline#chord",
+    "title": "Timeline",
+    "heading": "Chord",
+    "summary": "Each chord can be selected by clicking on it, which will highlight the chord. The selection is used for various operations like adding a chord after it, deleting it, or changing its variant. Selecting a chord also shows suggestions via the AI model. To deselect a chord, click on it again or use Esc. You can also change the selection by using the arrow keys (Left Arrow/Right Arrow) to move to the previous or next chord. Reaching the end of the timeline in either direction will deselect the current chord; using the arrow keys with no chord selected will select the first or last chord (Right Arrow/Left Arrow, respectively). You can change the duration of the chord by dragging its right edge. It will snap to the nearest beat, which is determined by the time signature."
+  },
+  {
+    "slug": "features/timeline#playhead",
+    "title": "Timeline",
+    "heading": "Playhead",
+    "summary": "The playhead is a blue vertical line that moves across the timeline to indicate the current position during playback. You can click or drag anywhere on the ticks (lines indicating the beats) to move the playhead to a specific position. This works both during playback and when stopped."
+  },
+  {
+    "slug": "features/timeline#timeline-controls",
+    "title": "Timeline",
+    "heading": "Timeline controls",
+    "summary": "The timeline controls are located at the top of the timeline to the right of the playback controls. They include the following elements: Undo (Ctrl + Z) / Redo (Ctrl + Y): Allows you to undo or redo the last action. Chord variants (V): Opens the chord variants panel to select a different voicing or notation for the selected chord. Delete (Del): Deletes the selected chord from the timeline. Delete all (Ctrl + Del): Deletes all chords from the timeline. Add chord (A): Append a new chord after the selected chord or at the end. Modifications to the chord progression, chord selection, and time signature changes can be undone or redone up to 64 steps back. The undo/redo history is lost when the page is reloaded."
+  },
+  {
+    "slug": "features/timeline#playback-controls",
+    "title": "Timeline",
+    "heading": "Playback controls",
+    "summary": "The playback controls are located at the top of the timeline to the left of the timeline controls. They include the following elements: Metronome (M): Toggles the metronome on or off. Play / Pause (Space): Starts or pauses the playback. Playback settings (S): Opens the playback settings to adjust the tempo and looping. After opening the playback settings, you can adjust the tempo in the BPM field (Up Arrow/Down Arrow). Looping can be enabled/disabled anytime by L. Pressing Esc or S again will close the playback settings."
+  },
+  {
+    "slug": "features/timeline#playback",
+    "title": "Timeline",
+    "heading": "Playback",
+    "summary": "During playback, the playhead moves across the timeline, and the chords are played in sequence. The playhead will automatically go back to the start when it reaches the end of the timeline, terminating the playback or starting again if looping is enabled. Any modifications of the chord progression during playback will stop it to avoid inconsistencies. This also includes changing the tempo."
+  },
+  {
+    "slug": "features/timeline#time-signature",
+    "title": "Timeline",
+    "heading": "Time signature",
+    "summary": "It is located at the left part of the timeline. The upper number (nominator) determines the number of beats in a measure, and the lower number (denominator) determines the note value that represents one beat. Changing the time signature will adjust the ticks and the default chord duration. The time signature can be changed by clicking on it and modifying the values in the dropdown. The default time signature is 4/4, the numerator can be integers up to 16, and the denominator can be powers of 2 from 1 to 32 (corresponding to a whole note up to a 32nd note). Since chords snap to the nearest beat, the denominator will determine the smallest note value that can be used in the timeline. For example, with 4/4, the smallest note value is a quarter note, and with 6/8, it is an eighth note. When changing the time signature, the chords will retain their original durations (i.e., a quarter note will remain a quarter note even if the signature changes)."
+  },
+  {
+    "slug": "features/transpose-import-export",
+    "title": "Transpose, Import, Export",
+    "heading": "Transpose, Import, Export",
+    "summary": "This menu provides additional features for transposing, importing, and exporting chord progressions. It is located at the top right of the app, next to the model and style selection."
+  },
+  {
+    "slug": "features/transpose-import-export#transposition",
+    "title": "Transpose, Import, Export",
+    "heading": "Transposition",
+    "summary": "You can transpose (i.e., move all chords by a few steps) a chord progression via the left icon at the top right menu or by using the shortcut T. After opening the menu, select how many semitones to transpose by (Up Arrow/Down Arrow); negative integers transpose down. Confirming (Enter) will apply the changes, you can close the menu by clicking outside the box (Esc or T)."
+  },
+  {
+    "slug": "features/transpose-import-export#import",
+    "title": "Transpose, Import, Export",
+    "heading": "Import",
+    "summary": "You can import either a .chseq file or a MIDI file by clicking on the import icon (I) and selecting the file in the file dialog. Importing .chseq files works automatically, however, MIDI files need a bit of setup."
+  },
+  {
+    "slug": "features/transpose-import-export#parsing-midi-files",
+    "title": "Transpose, Import, Export",
+    "heading": "Parsing MIDI files",
+    "summary": "When importing a MIDI file, an overlay will appear with the parser settings. You can select the tracks to import (choose the ones with chords), quantization (how many beats a single chord, i.e. the shortest, spans) and its mode (whether to consider all notes from the part or only some), and whether to also import the tempo in BPM. After confirming by pressing import (Enter), the chords will be parsed and loaded into the app. If the import didn't work as expected, you can try again with different settings."
+  },
+  {
+    "slug": "features/transpose-import-export#export",
+    "title": "Transpose, Import, Export",
+    "heading": "Export",
+    "summary": "To export a chord progression, click on the export icon (E) and select the format you want to export to. The .chseq format is recommended for saving your progress; exporting MIDI files can be useful for use with other music production software. Many Digital Audio Workstations (DAWs) support drag-and-drop to import MIDI files, so you can drag the exported file directly to your DAW."
+  },
+  {
+    "slug": "features/troubleshooting",
+    "title": "Troubleshooting",
+    "heading": "Troubleshooting",
+    "summary": "This page provides solutions to common issues you may encounter while using ChordSeqAI. If you are experiencing a problem that is not listed here or the solutions provided do not resolve the issue, please contact us for further assistance. Before proceeding with the troubleshooting steps, ensure that you are connected to the internet. Refresh the page and check if the issue persists. If the problem continues, follow the steps below to resolve it. \\<QuestionAnswer question=\"The AI model is not generating suggestions\" Some browsers may not support ONNX Runtime, which are used by ChordSeqAI to generate chord suggestions. If you are experiencing issues with the AI model, try using a different browser that supports ONNX Runtime or updating your current browser to the latest version. We recommend using modern browsers, such as Google Chrome or Mozilla Firefox. \\<QuestionAnswer question=\"Maximum number of chords reached\" ChordSeqAI has a limit of 255 chords per progression. If you have reached the maximum number of chords, you will not be able to add more chords to the progression. To resolve this issue, you can either delete some chords to make room for new ones or start a new progression by exporting the current one and deleting all chords to create a new progression. \\<QuestionAnswer question=\"Playback is lagging or stuttering\" If you are experiencing lag or stuttering during playback, it may be due to high CPU usage or insufficient system resources. Try closing other applications or browser tabs that are running in the background to free up system resources. ChordSeqAI uses Tone.js for audio playback, which requires a modern browser and a stable internet connection for optimal performance. \\<QuestionAnswer question=\"The app shows a blank screen or an error message even after refreshing\" It may be possible that you've imported a corrupted or invalid file that is causing the app to crash. Try deleting the site data for ChordSeqAI in your browser settings to reset the app, however, be aware that this will also delete your progress. After refreshing, the app should load correctly."
+  },
+  {
+    "slug": "getting-started/faq",
+    "title": "FAQ",
+    "heading": "FAQ",
+    "summary": "Here you will find answers to frequently asked questions about ChordSeqAI. If you have a question that is not answered here, feel free to contact us. \\<QuestionAnswer question=\"What is ChordSeqAI?\" ChordSeqAI is a web app that uses AI to suggest the next chord in a chord progression. It is designed to help musicians compose chord progressions by providing suggestions based on the preceding chords. \\<QuestionAnswer question=\"How can ChordSeqAI be used for professional music production?\" You can export the produced chord progression as a MIDI file and use it in a different music production software (e.g. in DAWs). \\<QuestionAnswer question=\"Which devices are supported by ChordSeqAI?\" chordSeqAI is currently optimized for desktop and laptop devices. Touchscreen devices are not fully supported. \\<QuestionAnswer question=\"Is attribution required for the chord progressions?\" Everything you produce using this app is yours, therefore no attribution is needed. \\<QuestionAnswer question=\"What information do the models use to produce suggestions?\" The preceding chords without their variants are used. The duration of a chord is ignored for now, identical consecutive chords get merged. \\<QuestionAnswer question=\"How can I contribute to the project?\" If you like the project and want to contribute, you can help by spreading the word, giving feedback, supporting us financially, or contributing to the codebase. \\<QuestionAnswer question=\"What kind of user data does ChordSeqAI track?\" ChordSeqAI employs Umami Analytics for basic usage statistics, focusing on privacy and anonymity. We collect minimal, anonymized data solely to enhance app functionality and user experience. No personal or detailed usage data is tracked. Check out the privacy section for more information."
+  },
+  {
+    "slug": "getting-started/guided-tour",
+    "title": "Guided Tour",
+    "heading": "Guided Tour",
+    "summary": "This guided tour will help you get started with the ChordSeqAI app. You will learn how to use the app to compose chord progressions with AI. This is an alternative to the built-in guided tour, feel free to use the one you prefer."
+  },
+  {
+    "slug": "getting-started/guided-tour#add-a-blank-chord",
+    "title": "Guided Tour",
+    "heading": "Add a blank chord",
+    "summary": "Click on the plus icon (alternatively shortcut A) at the top of the timeline to add a new chord. It will be initialized as an empty chord, denoted by ?."
+  },
+  {
+    "slug": "getting-started/guided-tour#select-the-blank-chord",
+    "title": "Guided Tour",
+    "heading": "Select the blank chord",
+    "summary": "Click on the blank chord to select it. The chord will be highlighted."
+  },
+  {
+    "slug": "getting-started/guided-tour#wait-for-the-ai-to-load",
+    "title": "Guided Tour",
+    "heading": "Wait for the AI to load",
+    "summary": "After selecting the first chord, the AI model will start loading. It may take a while for the first time as the model is downloading, but it should be pretty quick after that."
+  },
+  {
+    "slug": "getting-started/guided-tour#select-the-first-chord",
+    "title": "Guided Tour",
+    "heading": "Select the first chord",
+    "summary": "After the AI model is loaded, click on any chord from the suggestions to select it. Scroll down to see more options."
+  },
+  {
+    "slug": "getting-started/guided-tour#add-another-chord",
+    "title": "Guided Tour",
+    "heading": "Add another chord",
+    "summary": "Click on the plus icon again (A) to add another chord. It will be appended after the selected chord."
+  },
+  {
+    "slug": "getting-started/guided-tour#select-the-second-chord",
+    "title": "Guided Tour",
+    "heading": "Select the second chord",
+    "summary": "Click on the newly added chord to select it. The chord will get highlighted, and the AI will start predicting the suggestions."
+  },
+  {
+    "slug": "getting-started/guided-tour#choose-the-second-chord",
+    "title": "Guided Tour",
+    "heading": "Choose the second chord",
+    "summary": "Click on any chord from the suggestions to select it. The colors indicate how well the chord fits with the previous one."
+  },
+  {
+    "slug": "getting-started/guided-tour#repeat-the-process",
+    "title": "Guided Tour",
+    "heading": "Repeat the process",
+    "summary": "Continue adding and selecting chords to build your chord progression. The AI will suggest chords that fit well together."
+  },
+  {
+    "slug": "getting-started/guided-tour#specify-the-genre-and-decade-(optional)",
+    "title": "Guided Tour",
+    "heading": "Specify the genre and decade (optional)",
+    "summary": "ChordSeqAI allows you to specify the style used for chord suggestions. Click on the right part of the split button above the timeline to select the genre and decade."
+  },
+  {
+    "slug": "getting-started/guided-tour#that's-it-for-the-guided-tour!",
+    "title": "Guided Tour",
+    "heading": "That's it for the guided tour!",
+    "summary": "You have completed the guided tour of the ChordSeqAI app. Now you can start composing chord progressions with AI. If you want to export the progression, use the shortcut E or click on . Happy composing!"
+  },
+  {
+    "slug": "getting-started/usage",
+    "title": "Usage",
+    "heading": "Usage",
+    "summary": "Ideal if you want to dive a bit deeper without getting into every detail. This high-level overview will help you understand the main features of ChordSeqAI and how to use them to compose chord progressions with AI. Alternatively, jump right into features for a more detailed structured description."
+  },
+  {
+    "slug": "getting-started/usage#shortcuts-and-autosave",
+    "title": "Usage",
+    "heading": "Shortcuts and autosave",
+    "summary": "Keyboard shortcuts, also sometimes called hotkeys, are available for most of the functions of the app. When you hover over an element of a component, it shows you what happens on click as well as the shortcut for it. The state of the app is automatically saved locally in the browser, so you will not lose progress unless you delete the site data."
+  },
+  {
+    "slug": "getting-started/usage#add-and-delete-chords",
+    "title": "Usage",
+    "heading": "Add and delete chords",
+    "summary": "The plus icon (shortcut A) at the top of the timeline can be used to add a new chord. It is initialized as an empty chord, denoted by ?. Clicking on it will select it and suggestions will show, selection can also be handled by the arrow keys. The selected chord can be deleted by the delete icon (Del) located near the plus icon. The entire timeline can be cleared by the delete all icon (Ctrl + Del). If you accidentally delete something, you can undo and redo the changes by the arrow icons (Ctrl + Z, Ctrl + Y)."
+  },
+  {
+    "slug": "getting-started/usage#timeline",
+    "title": "Usage",
+    "heading": "Timeline",
+    "summary": "The timeline is the main area where you compose the chord progression. It shows the chords you have added. The selected chord is highlighted. You can move the view horizontally to see more chords by dragging the scroll wheel and zoom in/out by scrolling up/down. Chords cannot be shuffled, but you can insert a chord between two existing chords by selecting a chord and adding a new one. You can change the duration of a chord by hovering over the right edge of it and dragging. It will snap to the beats, visualized by the vertical lines (ticks)."
+  },
+  {
+    "slug": "getting-started/usage#suggestions",
+    "title": "Usage",
+    "heading": "Suggestions",
+    "summary": "Located below the timeline after selecting any chord. Clicking on any suggested chord will replace the selected chord with it. You can search the chords by their symbol or by the notes. If you cannot find the chord you are looking for, try enabling Include Variants."
+  },
+  {
+    "slug": "getting-started/usage#customizing-signature",
+    "title": "Usage",
+    "heading": "Customizing Signature",
+    "summary": "A 4/4 signature is the most common in Western music, but you may need another variant. Simply clicking on the signature will display a menu to change it to something else."
+  },
+  {
+    "slug": "getting-started/usage#playback",
+    "title": "Usage",
+    "heading": "Playback",
+    "summary": "Clicking on the play icon (Space) will start the playback. The blue playhead will start moving and chords playing, clicking on the icon again will pause it. You can move the playhead by clicking or dragging your mouse on the ticks, but letting the playback finish will automatically move the playhead to the start. A metronome can be turned on (M); the tempo (in beats per minute) and looping (L) can be specified from the playback settings (S)."
+  },
+  {
+    "slug": "getting-started/usage#selecting-models-and-styles",
+    "title": "Usage",
+    "heading": "Selecting models and styles",
+    "summary": "Clicking on the top split button will allow you to change the model and style. Only the models with ✨ allow you to specify the style, the rest will show without a split button. Recurrent Network is the simplest, fastest model, but it may not have enough capacity to suit your needs. We recommend using this model only on slower devices. Transformer models and their S, M, and L variants (standing for small, medium, and large) are a better option. A bigger model may produce better suggestions at the cost of slower inference. Conditional Transformer models are the models that use styling. Multiple genres and decades can be selected and custom weighting can be applied to put a relative emphasis on them."
+  },
+  {
+    "slug": "getting-started/usage#transpose,-import,-export",
+    "title": "Usage",
+    "heading": "Transpose, Import, Export",
+    "summary": "Transposition (T) can be accomplished via the left icon at the top right menu. Negative semitone values can be entered to transpose down. You can import (I) and export (E) the sequence you are composing in the .chseq format (recommended for saving), but you can also use MIDI files."
+  },
+  {
+    "slug": "getting-started/usage#chord-variants",
+    "title": "Usage",
+    "heading": "Chord Variants",
+    "summary": "Recommended for advanced users. By opening the variant menu in the timeline for the currently selected chord (V) or suggestions via its button , you can specify which inversion or notation to use. Clicking on any variant will change the visualization on the piano. The changes can be either applied once or to all chords when open from the timeline, otherwise, it can be used once or set as default. You can close this menu from the close icon (alternatively Esc). While you might try to use variants to compose chord voicings, this is not recommended. Only use chord variants when you specifically want to use another symbol for that chord. Scientific pitch notation, also known as American standard pitch notation, is used. Sharps are used instead of flats for note names to make the notation easier to read and understand."
+  },
+  {
+    "slug": "introduction",
+    "title": "Introduction",
+    "heading": "Introduction",
+    "summary": "ChordSeqAI is a project that aims to democratize chord progression composition by using AI as a guide in the vast space of possibilities. It aims to be a supportive tool rather than a replacement, enhancing creativity, offering new perspectives in musical composition, and helping to overcome writer's block. The project is open-source and free to use, the code is available on GitHub."
+  },
+  {
+    "slug": "introduction#how-to-use-the-wiki",
+    "title": "Introduction",
+    "heading": "How to use the wiki",
+    "summary": "The ChordSeqAI wiki is organized into different sections to help you navigate and find the information you need. Each section has pages that cover specific topics related to the ChordSeqAI project. You can use the sidebar to browse the sections and pages. The table of contents provides an overview of the content of each page. When you finish reading a page, you can click on a link to go to the next page or return to the previous one. Use the search bar to find specific information or topics within the wiki. The search bar also supports shortcuts to quickly navigate to specific pages. Start searching by using Ctrl + K on your keyboard, use the arrow keys to navigate the results, and press Enter to open the selected page. To exit the search mode, press Esc."
+  },
+  {
+    "slug": "introduction#desktop-layout",
+    "title": "Introduction",
+    "heading": "Desktop layout",
+    "summary": "The sidebar is visible on the left side of the screen, allowing you to quickly navigate between sections and pages. You can click on the section titles to expand or collapse the list of pages within each section. The search bar is located at the top of the header, and the table of contents is on the right side of the screen."
+  },
+  {
+    "slug": "introduction#mobile-layout",
+    "title": "Introduction",
+    "heading": "Mobile layout",
+    "summary": "On smaller screens, the sidebar is hidden by default, and you can access it by clicking on the menu icon in the top left corner of the screen. This will open the sidebar, where you can navigate between sections and pages, and close it by clicking on the close icon or outside the sidebar. Just like on a desktop, you can click on the section titles to expand or collapse the list of pages within each section. Open the search bar by clicking on the search icon in the top right corner of the screen. The table of contents is located at the top of the page titled On this page, allowing you to expand and collapse it."
+  },
+  {
+    "slug": "introduction#what-are-chord-progressions?",
+    "title": "Introduction",
+    "heading": "What are chord progressions?",
+    "summary": "A chord progression is a sequence of chords, where each chord is a set of at least three notes played together. It is the harmonic backbone of a piece of music and can evoke different emotions and moods. They are the building blocks of songs and can be simple or complex, depending on the style and genre of music. Over the years, it has become increasingly popular to start with a chord progression when composing a song, as it sets the tone and direction of the music, often inspiring melodies and lyrics. The composition of harmony is not a primitive task, as the standard methods of finding chords fitting into the context produce a large space of possibilities. Chord progressions follow specific patterns and rules that have evolved over centuries of musical tradition, which may be challenging to master for many musicians. Instead of relying on intuition or music theory knowledge, ChordSeqAI offers an alternative approach to composing chord progressions by using AI to suggest chords that fit well together. It can help you explore new ideas and experiment with different styles, making the harmony-first approach more accessible."
+  },
+  {
+    "slug": "introduction#how-can-i-use-chordseqai-in-my-workflow?",
+    "title": "Introduction",
+    "heading": "How can I use ChordSeqAI in my workflow?",
+    "summary": "When starting a new project, you can use ChordSeqAI to create a chord progression that sets the mood and direction of your music. You can experiment with different styles, genres, and models to find the perfect fit for your project. The AI can suggest chords that you might not have thought of, helping you break out of creative ruts and explore new possibilities. After finding a chord progression that you like, you can export it as a MIDI file and import it into your favorite music production software. From there, you can build on the chord progression, using different voicings and adding melodies, lyrics, and other elements to create a complete song."
+  },
+  {
+    "slug": "music-theory/basic-concepts",
+    "title": "Basic Concepts",
+    "heading": "Basic Concepts",
+    "summary": "This section introduces the fundamental concepts of music theory that are essential for understanding and creating chord progressions. If you are new to music theory, this overview will help you grasp the basic principles and terminology used in ChordSeqAI. If you are an experienced musician, you may skip this section."
+  },
+  {
+    "slug": "music-theory/basic-concepts#the-building-blocks-of-music",
+    "title": "Basic Concepts",
+    "heading": "The building blocks of music",
+    "summary": "Music is made up of several elements, including the overall structure, rhythm, melody, harmony, timbre, and dynamics. Understanding these elements can help you create and analyze music more effectively."
+  },
+  {
+    "slug": "music-theory/basic-concepts#structure",
+    "title": "Basic Concepts",
+    "heading": "Structure",
+    "summary": "The structure of a piece of music refers to its organization and form. Music is typically organized into sections, such as verses, choruses, and bridges, that follow a specific pattern. The structure of a piece can influence its mood, style, and overall impact on the listener."
+  },
+  {
+    "slug": "music-theory/basic-concepts#rhythm",
+    "title": "Basic Concepts",
+    "heading": "Rhythm",
+    "summary": "Rhythm is the pattern of sounds and silences in music. It is created by the arrangement of notes and rests in a piece of music. Rhythm is essential for establishing the tempo and groove of a piece and can vary in complexity and style."
+  },
+  {
+    "slug": "music-theory/basic-concepts#melody",
+    "title": "Basic Concepts",
+    "heading": "Melody",
+    "summary": "Melody is the sequence of notes that form the main theme or tune of a piece of music. Melodies are typically made up of a series of pitches that are arranged in a specific order. Melodies can be simple or complex, depending on the style and genre of music."
+  },
+  {
+    "slug": "music-theory/basic-concepts#harmony",
+    "title": "Basic Concepts",
+    "heading": "Harmony",
+    "summary": "Harmony refers to multiple melodies or notes that are played or sung together to create a pleasing sound. Historically, harmony was considered a byproduct of melody, with melodies forming the basis of musical composition. However, recent trends in musical composition have seen a shift in this perspective, with harmony often being treated as an independent entity with individual melodies having less importance."
+  },
+  {
+    "slug": "music-theory/basic-concepts#timbre",
+    "title": "Basic Concepts",
+    "heading": "Timbre",
+    "summary": "Timbre refers to the quality or color of a sound. It is what allows us to distinguish between different instruments or voices, even when they are playing the same pitch at the same volume. Timbre is influenced by various factors, including the instrument or voice producing the sound, the playing technique, and the acoustics of the performance space."
+  },
+  {
+    "slug": "music-theory/basic-concepts#dynamics",
+    "title": "Basic Concepts",
+    "heading": "Dynamics",
+    "summary": "Dynamics are the variations in loudness and intensity in music. They help create contrast and shape in a piece of music, adding interest and emotion to the performance. Dynamics can range from very soft to very loud and can change rapidly or gradually throughout a piece."
+  },
+  {
+    "slug": "music-theory/basic-concepts#notes-and-pitches",
+    "title": "Basic Concepts",
+    "heading": "Notes and pitches",
+    "summary": "In music, notes are symbols that represent the pitch and duration of a sound. Pitches are the specific frequencies of sound that correspond to the notes on a musical scale. Understanding notes and pitches is essential for reading and writing music, as well as creating chord progressions. Western music is based on a system of 12 notes, known as the chromatic scale. These notes are named using the letters A through G, with sharps (#) and flats (b) used to indicate higher or lower pitches, respectively. The chromatic scale repeats every octave, with each note being a half step apart from the next."
+  },
+  {
+    "slug": "music-theory/basic-concepts#intervals",
+    "title": "Basic Concepts",
+    "heading": "Intervals",
+    "summary": "Intervals are the distance between two pitches in music. They are measured in half steps and can be classified as consonant or dissonant based on their harmonic properties. We call the distance between two notes a second, third, fourth, fifth, sixth, seventh, or octave, depending on the number of notes in between. They can also be classified as major, minor, perfect, augmented, or diminished, depending on their size and quality."
+  },
+  {
+    "slug": "music-theory/basic-concepts#scales-and-keys",
+    "title": "Basic Concepts",
+    "heading": "Scales and keys",
+    "summary": "Scales are a series of notes arranged in a specific order that form the basis of melody and harmony in music. The most common scale in Western music is the major scale, which consists of seven notes arranged in a specific pattern of whole and half steps. Scales can be moved to different starting notes to create different keys. A key is a set of notes that form the tonal center of a piece of music. The key signature indicates which notes are sharp or flat in a particular key. For example, the simplest key is C major, which has no sharps or flats in its key signature (all white keys on a piano). Minor scales are another common type of scale in Western music. They have a different pattern of whole and half steps than major scales and are often used to create a darker or more melancholic mood in music. The simplest of them is A minor, which has no sharps or flats, just like C major, but starts on A."
+  },
+  {
+    "slug": "music-theory/chord-progressions",
+    "title": "Chord Progressions",
+    "heading": "Chord progressions",
+    "summary": "Chord progressions are the backbone of harmony in music. They are a series of chords played or sung in a specific order to create a sense of movement and direction in a piece of music. Although each chord may be associated with a specific mood, they can be used in various ways to create different emotional effects in music. Chords gain their true meaning and function when they are used in the context of a chord progression."
+  },
+  {
+    "slug": "music-theory/chord-progressions#what-are-chord-progressions?",
+    "title": "Chord Progressions",
+    "heading": "What are chord progressions?",
+    "summary": "A chord progression is a series of chords played in sequence. Each chord in a progression has a specific function and relationship to the other chords in the sequence. Chord progressions are typically used to create tension and release, establish a tonal center, and guide the listener through different sections of a piece of music. The concept of tonality refers to the relationship between chords and the key of a piece of music. This concept gives rise to the notion of diatonic chords, which are chords that belong to a specific key and are derived from the notes of the corresponding scale. We usually use Roman numerals to represent diatonic chords, with uppercase numerals indicating major chords and lowercase numerals indicating minor chords. For example, in the key of C major, the diatonic chords are as follows: I (C major), ii (D minor), iii (E minor), IV (F major), V (G major), vi (A minor), and vii° (B diminished). These chords can be combined in various ways to create different chord progressions that evoke different emotions and moods. The simplest look at chord progressions is through the lens of functional harmony, which categorizes chords into three main functions: tonic (I), dominant (V), and subdominant (IV). The tonic function is the most stable and provides a sense of resolution, while the dominant function creates tension and leads to resolution. The subdominant function is a transitional function that connects the tonic and dominant functions."
+  },
+  {
+    "slug": "music-theory/chord-progressions#examples-of-chord-progressions",
+    "title": "Chord Progressions",
+    "heading": "Examples of chord progressions",
+    "summary": "Given functional harmony, we can already see some common chord progressions that are used in various styles of music. For example, I-IV-V-I creates a sense of resolution and stability. It is commonly used to establish the tonal center of a piece and create a sense of closure. When we want to get into slightly more complex territory, we can create chord progressions just with the diatonic chords. The most common 4-chord progression is I-V-vi-IV, which is used in countless pop and rock songs and has a catchy and uplifting sound. Working with larger progressions can benefit from the analysis of individual functions. Candence is a sequence of chords that creates a sense of resolution or finality. The most common cadence is the authentic cadence (V-I), which creates a strong sense of resolution and closure. By extending the authentic cadence with another pre-dominant chord, we can create the famous ii-V-I progression that is used in Jazz and other styles of music."
+  },
+  {
+    "slug": "music-theory/chord-progressions#advanced-chord-progressions",
+    "title": "Chord Progressions",
+    "heading": "Advanced chord progressions",
+    "summary": "The circle of fifths is another powerful tool at your disposal, which is a sequence of chords that move in fifths. You can start with C major, move all the tones in perfect fifths, and you will end up with G major, D major, A major, and so on, eventually returning back to C major. Chords that are close to each other in the circle of fifths have a strong harmonic relationship and can be used to create smooth and natural-sounding progressions. You may also want to experiment with modal interchange, which involves borrowing chords from parallel keys or modes to create more colorful and harmonically rich progressions. For example, you can use chords from the parallel minor key in a major key progression to create a darker and more emotional sound. However, when you want to delve into complex and sophisticated progressions, introducing non-diatonic chords, upper chord extensions, and other alterations, the space of possibilities becomes vast and hard to navigate. This is where ChordSeqAI can help you explore new ideas, experiment with different chord progressions, and learn more about music theory. By suggesting the next chord in a progression, ChordSeqAI can guide you through the process of creating harmonically rich and emotionally engaging music."
+  },
+  {
+    "slug": "music-theory/glossary",
+    "title": "Glossary",
+    "heading": "Glossary",
+    "summary": "This glossary provides an overview of the essential terms and concepts of music theory that are used in ChordSeqAI. If you are new to music theory, this glossary will help you grasp the basic principles and terminology. If you are an experienced musician, you may use this glossary as a reference guide. | Term | Definition | |------|------------| | Augmented chord | A chord made up of a root note, a major third, and an augmented fifth. | | Cadence | A sequence of chords that creates a sense of resolution or finality. The most common cadence is the authentic cadence (V-I). | | Chord | A group of three or more notes played or sung together to create a pleasing sound. Chords are the building blocks of harmony in music. | | Chord progression | A series of chords played in sequence to create a sense of movement and direction in a piece of music; the backbone of harmony in music. | | Chord quality | A term that describes the sound and character of a chord, such as major, minor, diminished, or augmented. | | Diatonic chords | Chords that belong to a specific key and are derived from the notes of the corresponding scale. | | Diminished chord | A chord made up of a root note, a minor third, and a diminished fifth. | | Functional harmony | A system that categorizes chords into three main functions: tonic (I), dominant (V), and subdominant (IV). | | Interval | The distance between two pitches in music, measured in half steps. | | Inversion | A chord in which the root note is not the lowest note. | | Key | A set of notes that form the tonal center of a piece of music. The key signature indicates which notes are sharp or flat in a particular key. | | Melody | The sequence of notes that form the main theme or tune of a piece of music. | | Scale | A series of notes arranged in a specific order that form the basis of melody and harmony in music. | | Timbre | The quality or color of a sound that allows us to distinguish between different instruments or voices. | | Tonic | The first note of a scale and the tonal center of a piece of music. The tonic chord is the most stable and provides a sense of resolution. | | Triad | The simplest type of chord, made up of a root note, a third, and a fifth. |"
+  },
+  {
+    "slug": "music-theory/introduction",
+    "title": "Introduction to Music Theory",
+    "heading": "Introduction to Music Theory",
+    "summary": "Music theory is the study of the structure, elements, and principles of music. Understanding music theory can help musicians and composers create, perform, and analyze music more effectively. This section provides an overview of music theory so that you may use ChordSeqAI more efficiently. If you are an experienced musician, you may skip this section."
+  },
+  {
+    "slug": "music-theory/introduction#what-is-music-theory?",
+    "title": "Introduction to Music Theory",
+    "heading": "What is music theory?",
+    "summary": "Music theory is the study of the principles and elements that govern music. It is not a set of rules that must be followed but rather a framework that helps musicians understand how music works. Music theory provides a common language and vocabulary for musicians to communicate and collaborate effectively. Music theory encompasses a wide range of topics, including music notation, general principles and structures, composition, evolution of music, and more. It helps musicians analyze and interpret music, compose new pieces, and understand the historical context of different musical styles."
+  },
+  {
+    "slug": "music-theory/introduction#how-can-chordseqai-help-you-learn-music-theory?",
+    "title": "Introduction to Music Theory",
+    "heading": "How can ChordSeqAI help you learn music theory?",
+    "summary": "ChordSeqAI is an AI-powered web app that helps musicians and composers create chord progressions. By using ChordSeqAI, you can experiment with different chord progressions, explore new musical ideas, and learn more about music theory. The app can not only teach you the relationships between chords but also help you understand chord notation."
+  },
+  {
+    "slug": "music-theory/understanding-chords",
+    "title": "Understanding Chords",
+    "heading": "Understanding Chords",
+    "summary": "Chords are the building blocks of harmony in music. They are made up of three or more notes played or sung together to create a pleasing sound. Understanding chords is important for creating and analyzing music, as they form the basis of harmony and chord progressions."
+  },
+  {
+    "slug": "music-theory/understanding-chords#what-are-chords?",
+    "title": "Understanding Chords",
+    "heading": "What are chords?",
+    "summary": "A chord is a group of three or more notes that are played or sung together. Chords are typically made up of a root note, a third, and a fifth, but they can contain additional notes to create different sounds and textures. To construct the triad, the simplest type of chord, you start with the root note, go up a third, and then up another third to get the fifth. These thirds can be either major or minor, depending on the scale and the starting note. For example, in the C major scale, the triad built on the first note (C) would be C-E-G (C major), while the triad built on the second note (D) would be D-F-A (D minor)."
+  },
+  {
+    "slug": "music-theory/understanding-chords#types-of-chords",
+    "title": "Understanding Chords",
+    "heading": "Types of chords",
+    "summary": "There are several types of chords, each with its own unique sound and function in music. Some common types of chords include: Major chords: Made up of a root note, a major third, and a perfect fifth. They have a bright and happy sound and are often used to create a sense of resolution and stability. Minor chords: Made up of a root note, a minor third, and a perfect fifth. They have a darker and more melancholic sound than major but are still considered quite stable and consonant. Diminished chords: Made up of a root note, a minor third, and a diminished fifth. They have a tense and dissonant sound and are often used to create tension and suspense in music. Augmented chords: Made up of a root note, a major third, and an augmented fifth. They have a bright and unstable sound and are often used to create a sense of tension and instability. Starting from these basic types, you can create more complex chords by adding additional notes, such as sevenths, ninths, elevenths, and thirteenths. These extended chords can add color and richness to your chord progressions and create more interesting harmonies. You can also alter the notes in a chord by raising or lowering them by a half step to create different chord qualities, such as augmented, diminished, or suspended chords."
+  },
+  {
+    "slug": "music-theory/understanding-chords#chord-notation",
+    "title": "Understanding Chords",
+    "heading": "Chord notation",
+    "summary": "Chords are typically notated using chord symbols, which consist of a root note and a chord quality. Let's look at some examples: C: C major chord, made up of the notes C-E-G. There is no chord quality specified, so it is assumed to be major. Cm: C minor chord, made up of the notes C-Eb-G. The lowercase \"m\" indicates a minor chord quality. Cdim: C diminished chord, made up of the notes C-Eb-Gb. The \"dim\" indicates a diminished chord quality. Caug: C augmented chord, made up of the notes C-E-G#. The \"aug\" indicates an augmented chord quality. Chord symbols can also include additional information, such as added notes (e.g., C7 for a C dominant seventh chord) or alterations (e.g., Cmaj7#11 for a C major seventh chord with a sharp eleventh). Finally, chord symbols can be written in different inversions, where the root note is not the lowest in the chord (e.g., C/E for a C major chord with E in the bass). This notation can also be used to indicate an added bass note, such as G/C for a G major chord with C in the bass. We call these slash chords. One interesting aspect is that the same chord can be notated in different ways. For example, a C major seventh chord can also be written as Cmaj7, CM7, or C∆7. While this may enable you to choose the notation that best fits your style or context, it can also lead to confusion if you are not familiar with all the possible variations. Sadly, there is no universal standard for chord notation, so it is essential to be aware of the different conventions used in music. Understanding chord notation may seem daunting at first, but with practice, you will become more comfortable reading and writing chord symbols. ChordSeqAI can help you in this process because you can see and hear the chords you create in real-time, which can make it easier to understand how different chords are constructed and how they sound in context."
+  },
+  {
+    "slug": "technical/architecture",
+    "title": "Architecture",
+    "heading": "Architecture",
+    "summary": "This page provides an overview of the technical architecture of ChordSeqAI. It describes the structure of the app and the main design decisions. Check out the web stack for more information on the technologies used."
+  },
+  {
+    "slug": "technical/architecture#file-structure",
+    "title": "Architecture",
+    "heading": "File structure",
+    "summary": "The app is built using Next.js with TypeScript, using the new App Router. The main components are located in the src/components directory, while the pages are in the src/app directory. Other folders in src include data, hooks, and additional utilities. The components use subfolders for specific functionality and usage, such as ui for custom UI components, timeline for the timeline component, and suggestions for the suggestions component. General-purpose components are located directly in the components folder. React component files follow the snake\\_case naming convention, with the main component named after the component itself in CamelCase. For example, src/components/timeline/timeline\\_controls.tsx contains the TimelineControls component."
+  },
+  {
+    "slug": "technical/architecture#state-management",
+    "title": "Architecture",
+    "heading": "State management",
+    "summary": "The state of the app is managed by Zustand, a small and fast state management library. It is used to store most of the app's data, especially when it needs to be shared between components or persisted across page reloads. The app state is defined in src/state/use\\_store.tsx, where it is exported as a custom hook useStore. Components can access the state by importing and using this hook, effectively subscribing to changes in a specific part of the state."
+  },
+  {
+    "slug": "technical/architecture#styling-guidelines",
+    "title": "Architecture",
+    "heading": "Styling guidelines",
+    "summary": "The app uses Tailwind CSS for styling. ChordSeqAI app components are styled using mostly dvh and dvw units, which are relative to the viewport height and width, respectively. This ensures that the app is responsive and looks good on different screen sizes. Corners are rounded with a radius of 1dvh or md. The color palette is consistent across the app, with primary colors being shades of violet and secondary colors being shades of zinc. Blue 400 is also used occasionally, primarily for links and the playhead. Shadows and borders are used sparingly to maintain a clean and modern look."
+  },
+  {
+    "slug": "technical/architecture#ai-models",
+    "title": "Architecture",
+    "heading": "AI models",
+    "summary": "The app uses AI models to generate chord progressions. The models are loaded using ONNX Runtime. They are stored in the public/models directory and are loaded dynamically when needed. The src/components/suggestions/suggestions.tsx file requests suggestions from src/models/models.tsx, which communicates with a web worker to run the models. Check out models for more information."
+  },
+  {
+    "slug": "technical/architecture#audio-playback",
+    "title": "Architecture",
+    "heading": "Audio playback",
+    "summary": "Audio playback is handled by Tone.js. The app uses the Tone.js library to play the generated chord progressions. The playback controls are located in src/components/timeline/timeline\\_controls.tsx, playback settings have their own settings\\_dropdown.tsx component. The playhead is a separate component that moves along the timeline as the chords are played. The actual audio playback is done by the src/playback/player.tsx script, it communicates with the components to play the chords with the correct settings."
+  },
+  {
+    "slug": "technical/architecture#wiki-rendering",
+    "title": "Architecture",
+    "heading": "Wiki rendering",
+    "summary": "The wiki pages are rendered using MDX, a format that allows embedding JSX components in Markdown files. This enables the use of React components in the wiki pages, such as icons, images, and interactive elements. The wiki pages are located in the src/content/wiki directory, src/components/wiki contains the components used to render the pages. The wiki pages are structured using frontmatter metadata at the beginning of the file. This metadata includes the title and description of the page, which are used for SEO and navigation purposes. The content of the page is written in Markdown format, with JSX components embedded where needed."
+  },
+  {
+    "slug": "technical/architecture#deployment",
+    "title": "Architecture",
+    "heading": "Deployment",
+    "summary": "This app is deployed on GitHub Pages. The deployment process is automated using GitHub Actions. When changes are pushed to the main branch, the app is built and deployed to GitHub Pages. The deployment script is located in .github/workflows/nextjs.yml. Since ChordSeqAI is a static site, it can be hosted on GitHub Pages without the need for a server, which limits some functionality but ensures fast loading times and easy maintenance."
+  },
+  {
+    "slug": "technical/contribute",
+    "title": "Contribute",
+    "heading": "Contribute",
+    "summary": "ChordSeqAI is an open-source project, and we welcome contributions from the community. If you have a technical background and are interested in helping improve the app, you can contribute to the codebase on GitHub. This page provides an overview of what you need to know to get started with contributing to ChordSeqAI."
+  },
+  {
+    "slug": "technical/contribute#getting-started",
+    "title": "Contribute",
+    "heading": "Getting started",
+    "summary": "Before you start contributing to ChordSeqAI, make sure you are familiar with the technologies used in the project, its architecture, and the app itself. Start by forking the ChordSeqAI repository on GitHub and cloning it to your local machine. You can then set up the development environment and run the app locally to get a feel for how it works."
+  },
+  {
+    "slug": "technical/contribute#conventions",
+    "title": "Contribute",
+    "heading": "Conventions",
+    "summary": "We use Prettier and ESLint to enforce code style and formatting conventions in the ChordSeqAI codebase. Make sure to run these tools before submitting a pull request to ensure your changes adhere to the project's coding standards."
+  },
+  {
+    "slug": "technical/contribute#how-to-contribute",
+    "title": "Contribute",
+    "heading": "How to contribute",
+    "summary": "Here are the general steps to follow when contributing to ChordSeqAI: Find an issue or feature request: Before making changes, check the issue tracker and feature requests to see if there is an existing issue or feature request that you can work on. If not, feel free to create a new issue or feature request to discuss your proposed changes. Fork the repository: Before making any changes, fork the ChordSeqAI repository on GitHub. Create a new branch: Create a new branch for your changes. Use a descriptive name that reflects the purpose of the changes. We use the format feature/your-feature-name for feature branches and bug/your-fix-name for bug-fix branches. Make your changes: Modify the codebase. Follow the coding style and conventions used in the project. Make sure to test your changes locally before submitting a pull request. Commit and push your changes: Commit your changes with a descriptive message. Push your changes to your forked repository. Submit a pull request: Once you are ready, submit a pull request to the main ChordSeqAI repository. Provide a detailed description of the changes you made and why they are necessary. Your pull request will be reviewed by the maintainers, and you may be asked to make further changes before it is merged."
+  },
+  {
+    "slug": "technical/installation",
+    "title": "Installation",
+    "heading": "Installation",
+    "summary": "Although the app is available online at chordseqai.com, you can also run it locally. This section describes how to do that."
+  },
+  {
+    "slug": "technical/installation#prerequisites",
+    "title": "Installation",
+    "heading": "Prerequisites",
+    "summary": "Before you begin, ensure you have the following installed: Node.js git"
+  },
+  {
+    "slug": "technical/installation#installation-steps",
+    "title": "Installation",
+    "heading": "Installation steps",
+    "summary": "Navigate to the place where you want the app to be downloaded in Command Prompt. Clone the repository: git clone https://github.com/PetrIvan/chord-seq-ai-app.git Navigate to the project directory: cd chord-seq-ai-app Install NPM packages: npm install"
+  },
+  {
+    "slug": "technical/installation#running-the-app",
+    "title": "Installation",
+    "heading": "Running the app",
+    "summary": "To run the application locally: Start the development server: npm run dev Open your browser and navigate to http://localhost:3000 to view the app."
+  },
+  {
+    "slug": "technical/models",
+    "title": "Models",
+    "heading": "Models",
+    "summary": "ChordSeqAI uses machine learning models to generate chord progressions. This page provides an overview of the models, their architecture, performance, and how they are used in the app."
+  },
+  {
+    "slug": "technical/models#overview",
+    "title": "Models",
+    "heading": "Overview",
+    "summary": "The models used in ChordSeqAI are designed to generate chord progressions based on a given input. The input can be a single chord, a sequence of chords, or a genre and decade. The models learn the patterns and relationships between chords in a dataset of chord progressions and use this knowledge to predict the next chord in a progression. There are several types of models available in ChordSeqAI: Recurrent Network (RNN) - a simple recurrent neural network architecture, fast and lightweight but less accurate. Transformer S, M, and L - a more complex architecture based on transformers, with small, medium, and large sizes for different levels of accuracy and performance. Conditional Transformer S, M, and L - a variant of the transformer architecture that takes genre and decade as additional input to generate genre-specific chord progressions."
+  },
+  {
+    "slug": "technical/models#architecture",
+    "title": "Models",
+    "heading": "Architecture",
+    "summary": "The models used in ChordSeqAI are based on deep learning architectures, specifically recurrent neural networks (RNNs) and transformers. These models are trained on a large dataset of chord progressions to learn the patterns and relationships between chords. The RNN model is a simple GRU-based architecture that takes a sequence of chords as input and predicts the next chord in the progression. The transformer is a more complex architecture that uses self-attention mechanisms to capture long-range dependencies in the chord sequences. The Conditional Transformer models are a variant of the transformer architecture that takes the genre and decade of the chord progression as additional input. This allows the model to generate chord progressions specific to a particular genre or time period. In particular, the current architecture uses head-wise gain adaptive layer normalization to condition the model on the genre and decade. The details of the current architectures are explained in depth on Patreon."
+  },
+  {
+    "slug": "technical/models#performance",
+    "title": "Models",
+    "heading": "Performance",
+    "summary": "The models have been evaluated on a test set of chord progressions. Accuracy measures how well the model predicts the next chord in a progression (in percentage of correct first predictions), while perplexity measures how well the model understands the entire distribution of chords in a progression (lower is better). The number of parameters indicates the size of the model and its complexity. | Name | Accuracy | Perplexity | Parameters | |---------------------------|:--------:|:----------:|:----------:| | Recurrent Network | 60.21% | 4.159 | 377,260 | | Transformer S | 72.80% | 2.496 | 529,803 | | Transformer M | 75.87% | 2.506 | 1,536,075 | | Transformer L | 76.89% | 2.417 | 3,426,059 | | Conditional Transformer S | 74.98% | 2.618 | 536,155 | | Conditional Transformer M | 76.36% | 2.468 | 1,553,859 | | Conditional Transformer L | 76.66% | 2.437 | 3,465,131 |"
+  },
+  {
+    "slug": "technical/models#usage",
+    "title": "Models",
+    "heading": "Usage",
+    "summary": "The models were trained using PyTorch, a popular deep learning framework, but they were exported to the ONNX format for use in the ChordSeqAI app. The models are stored in the public/models directory and are loaded dynamically when needed. The app communicates with a web worker, which employs ONNX Runtime to run the models and suggest the next chord in a progression."
+  },
+  {
+    "slug": "technical/privacy",
+    "title": "Privacy",
+    "heading": "Privacy",
+    "summary": "ChordSeqAI is committed to protecting your privacy and handling your data responsibly. This page outlines how your data is processed by the ChordSeqAI web app."
+  },
+  {
+    "slug": "technical/privacy#data-collection",
+    "title": "Privacy",
+    "heading": "Data collection",
+    "summary": "We use Umami Analytics, focusing on privacy and anonymity. We collect minimal, anonymized data solely to enhance app functionality and user experience. No personal or detailed usage data is tracked. Umami is GDPR-compliant and does not use cookies. If you still want to opt out of analytics, you can disable them by running localStorage.​setItem('umami.​disabled', 1) in the browser console."
+  },
+  {
+    "slug": "technical/privacy#data-storage",
+    "title": "Privacy",
+    "heading": "Data storage",
+    "summary": "ChordSeqAI stores all data, including but not limited to chord progressions, settings, and user preferences, locally in your browser. No data is stored on our servers or shared with third parties. You can clear your data at any time by clearing your browser cache for the ChordSeqAI app."
+  },
+  {
+    "slug": "technical/web-stack",
+    "title": "Web Stack",
+    "heading": "Web Stack",
+    "summary": "ChordSeqAI was built using Next.js 14 with TypeScript (with the new App Router), Tailwind CSS, and various libraries. Zustand is used for state management, ONNX Runtime for inference, and Tone.js for audio playback. Some animations are done with Framer Motion, MidiWriterJS is used for MIDI file generation, React Virtualized serves to optimize the suggestions list, and Umami Analytics is employed for basic usage statistics. It is a progressive web app (PWA) that can be installed on your device. The app is hosted on GitHub Pages and the source code is available on GitHub."
+  }
+]

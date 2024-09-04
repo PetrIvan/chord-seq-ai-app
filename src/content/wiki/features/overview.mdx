@@ -1,0 +1,76 @@
+---
+title: Overview
+description: Describes the layout of the ChordSeqAI app and its main features.
+---
+
+# Overview
+
+Dive deep into the features of the ChordSeqAI app to get the most out of it. This structured description will help you understand the main features of ChordSeqAI and how to use them. Alternatively, you can check out the [usage](/wiki/getting-started/usage) page for a high-level overview without getting into details.
+
+## Shortcuts and autosave
+
+Most interactions in ChordSeqAI support keyboard-only input; to learn the shortcut (hotkey) for some button, hover over it. When describing a feature, the shortcut is usually mentioned in parentheses (e.g., `Ctrl + Z`).
+
+After any modification to the chord progression or settings, the state of the app is saved automatically. It is kept in the browser local storage, it will remain there until you delete the site data. In particular, chords, signature, model and style selection, playback settings, default variants, and some preferences are saved.
+
+## App layout
+
+The ChordSeqAI app is divided into several sections, each with its own purpose. The main sections are:
+
+- [**Timeline**](/wiki/features/timeline): The main area where you compose the chord progression.
+
+<LargeImage
+    src="/wiki/features/timeline.png"
+    alt="Timeline interface showing a chord progression starting with chords C#maj7, A#m7, D#m7, F#m6, ... ending in a placeholder question mark chord. The chords are displayed as violet blocks with the chord symbol. The timeline is divided into bars by tick marks. The playhead is at the beginning of the progression, and the playback controls together with timeline controls are visible at the top of the timeline. The left side of the timeline shows the current time signature as 4/4."
+    width={1920}
+    height={270}
+/>
+
+- [**Suggestions**](/wiki/features/suggestions): Shows the suggested chords based on the preceding chords.
+
+<LargeImage
+    src="/wiki/features/suggestions.png"
+    alt="Suggestions UI showing a grid of suggested chords colored by the probability of occurrence. The chords are displayed as blocks with the chord symbol. The top row shows a search bar with the text 'Search a chord...', an icon for searching by notes, and a decay slider."
+    width={1920}
+    height={530}
+/>
+
+- [**Model and style selection**](/wiki/features/model-and-style): Allows you to select the AI model and music style.
+
+<LargeImage
+    src="/wiki/features/model-and-style-selection.png"
+    alt="Model and style selection split button. The left part shows the model name 'Conditional Transformer M', and the right part shows the style 'Jazz, Electronic; 2020s'. The button is split in the middle with a vertical line."
+    width={1920}
+    height={150}
+/>
+
+- [**Transpose, import, export**](/wiki/features/transpose-import-export): Additional features for transposing, importing, and exporting chord progressions.
+
+<LargeImage
+    src="/wiki/features/transpose-import-export.png"
+    alt="An interface showing the icons to transpose, import, and export the chord progression. The transpose icon is denoted by two eighth notes with an arrow pointing up and down. The import icon is denoted by a file with an arrow pointing inside. The export icon is denoted by a folder file an arrow pointing outside."
+    width={1150}
+    height={300}
+/>
+
+## Other elements
+
+Some components are present in the app but are not part of the main layout. These include:
+
+- [**Chord variants**](/wiki/features/chord-variants): Shows the alternative chord voicings and notations for the selected chord.
+
+<LargeImage
+    src="/wiki/features/chord-variants.png"
+    alt="UI modal displaying chord variants for G#7. The top section shows a piano keyboard with the G#7 chord highlighted in purple across the C4 to C5 range. Below, six chord variant buttons are available: G#7, G#7/C, G#7/D#, G#7/F#, Cdim/G#, and Cmb5/G#. There are two action buttons at the bottom: 'Set as default' and 'Use once.' A close button is visible in the top-right corner."
+    width={1920}
+    height={1080}
+/>
+
+- [**MIDI import**](/wiki/features/transpose-import-export#parsing-midi-files): Allows you to parse a MIDI file and load its chord progression into the app.
+
+<LargeImage
+    src="/wiki/features/midi-import.png"
+    alt="Import MIDI modal in the app. The modal allows setting quantization in beats with a value of 4 and selecting a quantization mode from a dropdown set to 'closest'. An option to import BPM is checked on the right. Below, there is a list of tracks to select for harmony, including Melody (sounds like lead 8), Bass (sounds like electric bass), Piano (sounds like bright acoustic piano), and Overdriven Guitar. The 'Import' button is at the bottom of the modal, and a close button is in the top-right corner."
+    width={1920}
+    height={1080}
+/>

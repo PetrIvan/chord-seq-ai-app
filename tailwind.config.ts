@@ -22,6 +22,9 @@ const config: Config = {
           "sans-serif",
         ],
       },
+      colors: {
+        "zinc-850": "#202023",
+      },
     },
   },
   plugins: [

@@ -1,0 +1,244 @@
+---
+title: Change Log
+description: View the change log for ChordSeqAI to see the latest updates and improvements.
+---
+
+# Change Log
+
+This page lists the changes made to ChordSeqAI, including new features, improvements, and bug fixes. We recommend checking this page regularly to stay up-to-date with the latest updates and enhancements. Dates are according to UTC+0 in the format `YYYY-MM-DD` marking the release date.
+
+## September 2024 updates
+
+### 2024-09-04
+
+Created a new wiki.
+
+- The wiki is now available at [chordseqai.com/wiki](/wiki).
+
+## August 2024 updates
+
+### 2024-08-19
+
+Added support us to the app.
+
+- Added a heart icon <InlineIcon src="/heart.svg" /> in the top right corner of the app.
+- Clicking the heart icon will open a dialog with options to support us.
+- Upon [exporting](/wiki/features/transpose-import-export#export) a progression for the 1st, 10th, and 25th time, the dialog will automatically open.
+- Users can select to never see the dialog again by clicking the checkbox in the dialog.
+
+### 2024-08-18
+
+Added a step-by-step tutorial to the app.
+
+- Added a [guided tour](/wiki/getting-started/guided-tour) that will show the user how to use the app.
+- Shown when the user opens the app for the first time and skips the video tutorial.
+- Can be accessed at any time by clicking the question mark icon <InlineIcon src="/get-help.svg" /> in the top right corner and selecting `guided tour`.
+- Instead of showing only the first video, the entire [ChordSeqAI Essentials](https://www.youtube.com/playlist?list=PLT4SeTqv-OaknHUttzBYHr2gmKemcEXkp) series is available.
+
+### 2024-08-13
+
+Landing page improvements.
+
+- Changed the showcase videos to reflect the latest layout.
+- Fixed a few typos and added video alt text.
+
+### 2024-08-12
+
+Added social media icons to the footer.
+
+- Added icons for [YouTube](https://www.youtube.com/@xenomuse-dev), [GitHub](https://github.com/PetrIvan/chord-seq-ai-app), [Facebook](https://www.facebook.com/xenomuse.dev), [Reddit](https://www.reddit.com/user/XenoMuseDev), [Patreon](https://patreon.com/XenoMuse), and [PayPal](https://paypal.me/XenoMuse).
+
+## July 2024 updates
+
+### 2024-07-23
+
+Moved the inference to a web worker and refactored the [playback](/wiki/features/timeline#playback-controls) code.
+
+- Inference is now done in a web worker to prevent the app from freezing during predicting suggestions.
+- Refactored the playback code to avoid state inconsistencies.
+
+### 2024-07-22
+
+Upgraded the [models](/wiki/technical/models) and user interface surrounding them.
+
+- Added WebGPU support for faster inference.
+- Optimized suggestion rendering for better performance.
+- Added MB downloaded indication for the models.
+- Updated the models to improve suggestion quality without increasing the size.
+- Added info about models to the model selection menu.
+
+### 2024-07-12
+
+Improved [MIDI import](/wiki/features/transpose-import-export#parsing-midi-files) to parse more complex files.
+
+- Added support for multiple tracks.
+- Added quantization and mode selection.
+- Added tempo import.
+- Scrollbars now have a custom design on most browsers.
+
+### 2024-07-09
+
+Technical improvements.
+
+- Updated packages to the latest versions.
+- Created robots.txt file.
+- Added Umami events.
+
+### 2024-07-08
+
+User experience improvements.
+
+- Enhanced responsiveness to support a wider range of devices.
+- Added new [shortcuts](/wiki/features/keyboard-shortcuts) for various actions.
+- Added a new icon <InlineIcon src="/variants.svg" /> for [chord variants](/wiki/features/chord-variants) to open them instead of right-clicking.
+- Added a new icon <InlineIcon src="/trash-all.svg" /> for [deleting all chords](/wiki/features/timeline#timeline-controls) instead of right-clicking on the delete icon.
+- Changed the default model to the Conditional Transformer M.
+- Added an overlay describing new features directly in the app.
+- [GitHub Discussions](/wiki/community-and-support/social-media#github-discussions) are now preferred over GitHub Issues for feature requests and discussions.
+- Fixed a few bugs regarding edge-case scenarios and typos.
+
+## June 2024 updates
+
+### 2024-06-19
+
+Improved [filtering by notes](/wiki/features/suggestions#by-notes) in the suggestions.
+
+- Added exact, at least, and at most note filtering.
+- Added a button to include variants in the suggestions.
+
+## April 2024 updates
+
+### 2024-04-22
+
+Added a tutorial section to the landing page.
+
+- Added a section with tutorial videos to the landing page.
+- Fixed a few graphical issues.
+
+## March 2024 updates
+
+### 2024-03-04
+
+Added [playback looping](/wiki/features/timeline#playback-controls).
+
+- Added the ability to loop the playback to the playback settings.
+
+## February 2024 updates
+
+### 2024-02-26
+
+Improved [search](/wiki/features/suggestions#by-symbol) functionality.
+
+- Included exact and multiple keywords search for chord symbols.
+- Sorted the suggestions for the first chord by the root note.
+- Enabled identical consecutive chords in the progression, although setting it as the last suggestion.
+
+### 2024-02-22
+
+Added a support us button on the landing page.
+
+- Added a button to support us on the landing page.
+- On mobile devices, there is a section with links instead.
+
+### 2024-02-18
+
+Added an option to delete all chords.
+
+- Right-clicking on the delete icon will delete all chords.
+
+### 2024-02-17
+
+SEO improvements.
+
+- Added JSON-LD structured data.
+- Added Open Graph metadata.
+- Changed the title of the landing page.
+
+### 2024-02-15
+
+UI consistency.
+
+- Unified text sizing, colors, and rounding.
+- Changed the logo to an SVG file.
+- Clearer tips when no chords were found in the suggestions.
+
+### 2024-02-08
+
+Added a welcome overlay with a video tutorial.
+
+- Added an overlay that welcomes the users and shows a short video tutorial.
+
+## January 2024 updates
+
+### 2024-01-18
+
+Added [Umami Analytics](/wiki/technical/privacy).
+
+- Added Umami Analytics to track visits.
+
+### 2024-01-17
+
+Bug fixes and improvements.
+
+- The metronome should now be more precise.
+- Fixed a hover text and wrapping issue.
+
+### 2024-01-11
+
+Landing page redesign.
+
+- Redesigned the landing page to be more user-friendly.
+- Added a few sections - core features showcase, models, how to learn more, and contact us.
+
+### 2024-01-10
+
+Unified the font, mobile accessibility.
+
+- Enforced a single font across the app, with a similar fallback.
+- Dynamically shows the launch app button only on desktop devices.
+- Improved app not supported on mobile devices text size.
+
+### 2024-01-08
+
+Added a percentage downloaded indication for the models.
+
+- During model loading, the percentage downloaded is shown.
+- Fixed a bug with models not loading correctly on some browsers.
+
+### 2024-01-07
+
+Deployed the app.
+
+- Initial deployment of ChordSeqAI to the web.
+
+## 2023 updates
+
+### 2023-12-31
+
+Added a README and fixed a few bugs.
+
+- Added a README with the project description.
+- Fixed a few bugs.
+
+### 2023-12-18
+
+Added [chord variants](/wiki/features/chord-variants).
+
+- Added the ability to select different inversions and notations for chords.
+- Added a piano visualization for the selected chord.
+
+### 2023-12-13
+
+MVP release.
+
+### 2023-11-15
+
+Initial commit from Create Next App.
+
+## Development before the web app was started
+
+- 2023-11-15: Finished model development.
+- 2023-10-03: Analyzed the data.
+- 2023-09-24: Collected data.
+- 2023-09-07: Created a project vision and plan until the end of the year.
+- 2023-09-05: Started the project.
