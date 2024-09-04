@@ -72,34 +72,82 @@
     "summary": "This page lists the changes made to ChordSeqAI, including new features, improvements, and bug fixes. We recommend checking this page regularly to stay up-to-date with the latest updates and enhancements. Dates are according to UTC+0 in the format YYYY-MM-DD marking the release date."
   },
   {
+    "slug": "features/change-log#september-2024-updates",
+    "title": "Change Log",
+    "heading": "September 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-09-04",
+    "title": "Change Log",
+    "heading": "2024-09-04",
+    "summary": "Created a new wiki. The wiki is now available at chordseqai.com/wiki."
+  },
+  {
+    "slug": "features/change-log#august-2024-updates",
+    "title": "Change Log",
+    "heading": "August 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-08-19",
+    "title": "Change Log",
+    "heading": "2024-08-19",
+    "summary": "Added support us to the app. Added a heart icon in the top right corner of the app. Clicking the heart icon will open a dialog with options to support us. Upon exporting a progression for the 1st, 10th, and 25th time, the dialog will automatically open. Users can select to never see the dialog again by clicking the checkbox in the dialog."
+  },
+  {
+    "slug": "features/change-log#2024-08-18",
+    "title": "Change Log",
+    "heading": "2024-08-18",
+    "summary": "Added a step-by-step tutorial to the app. Added a guided tour that will show the user how to use the app. Shown when the user opens the app for the first time and skips the video tutorial. Can be accessed at any time by clicking the question mark icon in the top right corner and selecting guided tour. Instead of showing only the first video, the entire ChordSeqAI Essentials series is available."
+  },
+  {
+    "slug": "features/change-log#2024-08-13",
+    "title": "Change Log",
+    "heading": "2024-08-13",
+    "summary": "Landing page improvements. Changed the showcase videos to reflect the latest layout. Fixed a few typos and added video alt text."
+  },
+  {
+    "slug": "features/change-log#2024-08-12",
+    "title": "Change Log",
+    "heading": "2024-08-12",
+    "summary": "Added social media icons to the footer. Added icons for YouTube, GitHub, Facebook, Reddit, Patreon, and PayPal."
+  },
+  {
     "slug": "features/change-log#july-2024-updates",
     "title": "Change Log",
     "heading": "July 2024 updates",
     "summary": ""
   },
   {
-    "slug": "features/change-log#2024-07-19",
+    "slug": "features/change-log#2024-07-23",
     "title": "Change Log",
-    "heading": "2024-07-19",
-    "summary": "Added support us to the app. Added a heart icon in the top right corner of the app. Clicking the heart icon will open a dialog with options to support us. Upon exporting a progression for the 1st, 10th, and 25th time, the dialog will automatically open. Users can select to never see the dialog again by clicking the checkbox in the dialog."
+    "heading": "2024-07-23",
+    "summary": "Moved the inference to a web worker and refactored the playback code. Inference is now done in a web worker to prevent the app from freezing during predicting suggestions. Refactored the playback code to avoid state inconsistencies."
   },
   {
-    "slug": "features/change-log#2024-07-18",
+    "slug": "features/change-log#2024-07-22",
     "title": "Change Log",
-    "heading": "2024-07-18",
-    "summary": "Added a step-by-step tutorial to the app. Added a guided tour that will show the user how to use the app. Shown when the user opens the app for the first time and skips the video tutorial. Can be accessed at any time by clicking the question mark icon in the top right corner and selecting guided tour. Instead of showing only the first video, the entire ChordSeqAI Essentials series is available."
-  },
-  {
-    "slug": "features/change-log#2024-07-13",
-    "title": "Change Log",
-    "heading": "2024-07-13",
-    "summary": "Landing page improvements. Changed the showcase videos to reflect the latest layout. Fixed a few typos and added video alt text."
+    "heading": "2024-07-22",
+    "summary": "Upgraded the models and user interface surrounding them. Added WebGPU support for faster inference. Optimized suggestion rendering for better performance. Added MB downloaded indication for the models. Updated the models to improve suggestion quality without increasing the size. Added info about models to the model selection menu."
   },
   {
     "slug": "features/change-log#2024-07-12",
     "title": "Change Log",
     "heading": "2024-07-12",
-    "summary": "Added social media icons to the footer. Added icons for YouTube, GitHub, Facebook, Reddit, Patreon, and PayPal."
+    "summary": "Improved MIDI import to parse more complex files. Added support for multiple tracks. Added quantization and mode selection. Added tempo import. Scrollbars now have a custom design on most browsers."
+  },
+  {
+    "slug": "features/change-log#2024-07-09",
+    "title": "Change Log",
+    "heading": "2024-07-09",
+    "summary": "Technical improvements. Updated packages to the latest versions. Created robots.txt file. Added Umami events."
+  },
+  {
+    "slug": "features/change-log#2024-07-08",
+    "title": "Change Log",
+    "heading": "2024-07-08",
+    "summary": "User experience improvements. Enhanced responsiveness to support a wider range of devices. Added new shortcuts for various actions. Added a new icon for chord variants to open them instead of right-clicking. Added a new icon for deleting all chords instead of right-clicking on the delete icon. Changed the default model to the Conditional Transformer M. Added an overlay describing new features directly in the app. GitHub Discussions are now preferred over GitHub Issues for feature requests and discussions. Fixed a few bugs regarding edge-case scenarios and typos."
   },
   {
     "slug": "features/change-log#june-2024-updates",
@@ -108,45 +156,9 @@
     "summary": ""
   },
   {
-    "slug": "features/change-log#2024-06-23",
+    "slug": "features/change-log#2024-06-19",
     "title": "Change Log",
-    "heading": "2024-06-23",
-    "summary": "Moved the inference to a web worker and refactored the playback code. Inference is now done in a web worker to prevent the app from freezing during predicting suggestions. Refactored the playback code to avoid state inconsistencies."
-  },
-  {
-    "slug": "features/change-log#2024-06-22",
-    "title": "Change Log",
-    "heading": "2024-06-22",
-    "summary": "Upgraded the models and user interface surrounding them. Added WebGPU support for faster inference. Optimized suggestion rendering for better performance. Added MB downloaded indication for the models. Updated the models to improve suggestion quality without increasing the size. Added info about models to the model selection menu."
-  },
-  {
-    "slug": "features/change-log#2024-06-12",
-    "title": "Change Log",
-    "heading": "2024-06-12",
-    "summary": "Improved MIDI import to parse more complex files. Added support for multiple tracks. Added quantization and mode selection. Added tempo import. Scrollbars now have a custom design on most browsers."
-  },
-  {
-    "slug": "features/change-log#2024-06-09",
-    "title": "Change Log",
-    "heading": "2024-06-09",
-    "summary": "Technical improvements. Updated packages to the latest versions. Created robots.txt file. Added Umami events."
-  },
-  {
-    "slug": "features/change-log#2024-06-08",
-    "title": "Change Log",
-    "heading": "2024-06-08",
-    "summary": "User experience improvements. Enhanced responsiveness to support a wider range of devices. Added new shortcuts for various actions. Added a new icon for chord variants to open them instead of right-clicking. Added a new icon for deleting all chords instead of right-clicking on the delete icon. Changed the default model to the Conditional Transformer M. Added an overlay describing new features directly in the app. GitHub Discussions are now preferred over GitHub Issues for feature requests and discussions. Fixed a few bugs regarding edge-case scenarios and typos."
-  },
-  {
-    "slug": "features/change-log#may-2024-updates",
-    "title": "Change Log",
-    "heading": "May 2024 updates",
-    "summary": ""
-  },
-  {
-    "slug": "features/change-log#2024-05-19",
-    "title": "Change Log",
-    "heading": "2024-05-19",
+    "heading": "2024-06-19",
     "summary": "Improved filtering by notes in the suggestions. Added exact, at least, and at most note filtering. Added a button to include variants in the suggestions."
   },
   {

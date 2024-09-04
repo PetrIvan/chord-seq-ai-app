@@ -103,11 +103,11 @@ export default function WelcomeOverlay() {
         dive deeper, check out the{" "}
         <a
           className="text-blue-400 hover:underline"
-          href="https://github.com/PetrIvan/chord-seq-ai-app/wiki"
+          href="/wiki"
           target="_blank"
           rel="noopener noreferrer"
         >
-          documentation
+          wiki
         </a>
         , or take a{" "}
         <button

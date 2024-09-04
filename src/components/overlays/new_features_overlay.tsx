@@ -32,7 +32,7 @@ export default function NewFeaturesOverlay() {
   }, [showPrev]);
 
   const [showFeatures, setShowFeatures] = useState<number[]>([]);
-  const latestVersion = 3;
+  const latestVersion = 4;
 
   // If it's the first time after the update, show the overlay
   useEffect(() => {
@@ -77,9 +77,6 @@ export default function NewFeaturesOverlay() {
 
   let features: { [key: number]: JSX.Element[] } = {
     1: [
-      <li className="list-none" key={0}>
-        Since Jul 8, 2024:
-      </li>,
       <li key={1}>
         Delete all{" "}
         <img src="/trash-all.svg" className="inline w-[4dvh] h-[4dvh]" /> and
@@ -92,18 +89,24 @@ export default function NewFeaturesOverlay() {
         Improved the layout to be responsive on more screen sizes.
       </li>,
     ],
-    2: [
-      <li className="list-none" key={4}>
-        Since Jul 12, 2024:
-      </li>,
-      <li key={5}>Reworked MIDI import to be more reliable.</li>,
-    ],
+    2: [<li key={5}>Reworked MIDI import to be more reliable.</li>],
     3: [
-      <li className="list-none" key={6}>
-        Since Jul 22, 2024:
-      </li>,
       <li key={7}>
         Improved models to be more accurate and suggest chords faster.
+      </li>,
+    ],
+    4: [
+      <li key={9}>
+        Created a{" "}
+        <a
+          className="text-blue-400 hover:underline"
+          href="/wiki"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          brand-new wiki
+        </a>{" "}
+        integrated into the app.
       </li>,
     ],
   };
@@ -125,11 +128,11 @@ export default function NewFeaturesOverlay() {
         For more information, check the{" "}
         <a
           className="text-blue-400 hover:underline"
-          href="https://github.com/PetrIvan/chord-seq-ai-app/wiki/Features"
+          href="/wiki/features/change-log"
           target="_blank"
           rel="noopener noreferrer"
         >
-          documentation
+          change log
         </a>
         .
       </p>

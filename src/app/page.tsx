@@ -167,7 +167,7 @@ export default function Home() {
                 on the{" "}
                 <a
                   className="text-blue-400 hover:underline"
-                  href="https://github.com/PetrIvan/chord-seq-ai-app/wiki"
+                  href="/wiki"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
