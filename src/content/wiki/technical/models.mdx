@@ -1,0 +1,46 @@
+---
+title: Models
+description: Learn about the machine learning models used in the ChordSeqAI project.
+---
+
+# Models
+
+ChordSeqAI uses machine learning models to generate chord progressions. This page provides an overview of the models, their architecture, performance, and how they are used in the app.
+
+## Overview
+
+The models used in ChordSeqAI are designed to generate chord progressions based on a given input. The input can be a single chord, a sequence of chords, or a genre and decade. The models learn the patterns and relationships between chords in a dataset of chord progressions and use this knowledge to predict the next chord in a progression.
+
+There are several types of models available in ChordSeqAI:
+- Recurrent Network (RNN) - a simple recurrent neural network architecture, fast and lightweight but less accurate.
+- Transformer S, M, and L - a more complex architecture based on transformers, with small, medium, and large sizes for different levels of accuracy and performance. 
+- Conditional Transformer S, M, and L - a variant of the transformer architecture that takes genre and decade as additional input to generate genre-specific chord progressions.
+
+## Architecture
+
+The models used in ChordSeqAI are based on deep learning architectures, specifically recurrent neural networks (RNNs) and transformers. These models are trained on a large dataset of chord progressions to learn the patterns and relationships between chords.
+
+The RNN model is a simple GRU-based architecture that takes a sequence of chords as input and predicts the next chord in the progression. The transformer is a more complex architecture that uses self-attention mechanisms to capture long-range dependencies in the chord sequences.
+
+The Conditional Transformer models are a variant of the transformer architecture that takes the genre and decade of the chord progression as additional input. This allows the model to generate chord progressions specific to a particular genre or time period. In particular, the current architecture uses head-wise gain adaptive layer normalization to condition the model on the genre and decade.
+
+The details of the current architectures are explained in depth on [Patreon](https://www.patreon.com/posts/deep-dive-into-108430667).
+
+## Performance
+
+The models have been evaluated on a test set of chord progressions. Accuracy measures how well the model predicts the next chord in a progression (in percentage of correct first predictions), while perplexity measures how well the model understands the entire distribution of chords in a progression (lower is better). The number of parameters indicates the size of the model and its complexity.
+
+
+| Name                      | Accuracy | Perplexity | Parameters |
+|---------------------------|:--------:|:----------:|:----------:|
+| Recurrent Network         | 60.21%   | 4.159      | 377,260    |
+| Transformer S             | 72.80%   | 2.496      | 529,803    |
+| Transformer M             | 75.87%   | 2.506      | 1,536,075  |
+| Transformer L             | 76.89%   | 2.417      | 3,426,059  |
+| Conditional Transformer S | 74.98%   | 2.618      | 536,155    |
+| Conditional Transformer M | 76.36%   | 2.468      | 1,553,859  |
+| Conditional Transformer L | 76.66%   | 2.437      | 3,465,131  |
+
+## Usage
+
+The models were trained using [PyTorch](https://pytorch.org/), a popular deep learning framework, but they were exported to the ONNX format for use in the ChordSeqAI app. The models are stored in the `public/models` directory and are loaded dynamically when needed. The app communicates with a web worker, which employs [ONNX Runtime](https://onnxruntime.ai/) to run the models and suggest the next chord in a progression.

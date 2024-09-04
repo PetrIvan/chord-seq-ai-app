@@ -1,0 +1,59 @@
+---
+title: Usage
+description: An overview of the core features of ChordSeqAI and how to use them to compose chord progressions with AI.
+---
+
+# Usage
+
+Ideal if you want to dive a bit deeper without getting into every detail. This high-level overview will help you understand the main features of ChordSeqAI and how to use them to compose chord progressions with AI. Alternatively, jump right into [features](/wiki/features/overview) for a more detailed structured description.
+
+## Shortcuts and autosave
+
+Keyboard shortcuts, also sometimes called hotkeys, are available for most of the functions of the app. When you hover over an element of a component, it shows you what happens on click as well as the shortcut for it. The state of the app is automatically saved locally in the browser, so you will not lose progress unless you delete the site data.
+
+## Add and delete chords
+
+The plus icon <InlineIcon src="/plus.svg" size="s" /> (shortcut `A`) at the top of the timeline can be used to add a new chord. It is initialized as an empty chord, denoted by `?`. Clicking on it will select it and suggestions will show, selection can also be handled by the arrow keys.
+
+The selected chord can be deleted by the delete icon <InlineIcon src="/trash.svg" /> (`Del`) located near the plus icon. The entire timeline can be cleared by the delete all icon <InlineIcon src="/trash-all.svg" /> (`Ctrl + Del`). If you accidentally delete something, you can undo and redo the changes by the arrow icons <InlineIcon src="/undo.svg" alt=""/> <InlineIcon src="/redo.svg" /> (`Ctrl + Z`, `Ctrl + Y`).
+
+## Timeline
+
+The timeline is the main area where you compose the chord progression. It shows the chords you have added. The selected chord is highlighted. You can move the view horizontally to see more chords by dragging the scroll wheel and zoom in/out by scrolling up/down.
+
+Chords cannot be shuffled, but you can insert a chord between two existing chords by selecting a chord and adding a new one. You can change the duration of a chord by hovering over the right edge of it and dragging. It will snap to the beats, visualized by the vertical lines (ticks).
+
+## Suggestions
+
+Located below the timeline after selecting any chord. Clicking on any suggested chord will replace the selected chord with it. You can search the chords by their symbol or by the notes. If you cannot find the chord you are looking for, try enabling `Include Variants`.
+
+## Customizing Signature
+
+A 4/4 signature is the most common in Western music, but you may need another variant. Simply clicking on the signature will display a menu to change it to something else.
+
+## Playback
+Clicking on the play icon <InlineIcon src="/play.svg" size="s" /> (`Space`) will start the playback. The blue playhead will start moving and chords playing, clicking on the icon <InlineIcon src="/pause.svg" size="s" /> again will pause it. You can move the playhead by clicking or dragging your mouse on the ticks, but letting the playback finish will automatically move the playhead to the start.
+
+A metronome <InlineIcon src="/metronome.svg" size="s" /> can be turned on (`M`); the tempo (in beats per minute) and looping (`L`) can be specified from the playback settings <InlineIcon src="/settings.svg" size="s" /> (`S`).
+
+## Selecting models and styles
+
+Clicking on the top split button will allow you to change the model and style. Only the models with ✨ allow you to specify the style, the rest will show without a split button.
+
+**Recurrent Network** is the simplest, fastest model, but it may not have enough capacity to suit your needs. We recommend using this model only on slower devices.
+
+**Transformer** models and their S, M, and L variants (standing for small, medium, and large) are a better option. A bigger model may produce better suggestions at the cost of slower inference.
+
+**Conditional Transformer** models are the models that use styling. Multiple genres and decades can be selected and custom weighting can be applied to put a relative emphasis on them.
+
+## Transpose, Import, Export
+
+Transposition (`T`) can be accomplished via the left icon <InlineIcon src="/transpose.svg" /> at the top right menu. Negative semitone values can be entered to transpose down. You can import <InlineIcon src="/import.svg" /> (`I`) and export <InlineIcon src="/export.svg" /> (`E`) the sequence you are composing in the `.chseq` format (recommended for saving), but you can also use MIDI files.
+
+## Chord Variants
+
+Recommended for advanced users. By opening the variant menu in the timeline for the currently selected chord (`V`) or suggestions via its button <InlineIcon src="/variants.svg" />, you can specify which inversion or notation to use. Clicking on any variant will change the visualization on the piano. The changes can be either applied once or to all chords when open from the timeline, otherwise, it can be used once or set as default. You can close this menu from the close icon <InlineIcon src="/close.svg" /> (alternatively `Esc`).
+
+While you might try to use variants to compose chord voicings, this is not recommended. Only use chord variants when you specifically want to use another symbol for that chord.
+
+[Scientific pitch notation](https://en.wikipedia.org/wiki/Scientific_pitch_notation), also known as American standard pitch notation, is used. Sharps are used instead of flats for note names to make the notation easier to read and understand.

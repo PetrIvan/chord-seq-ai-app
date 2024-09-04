@@ -1,0 +1,35 @@
+---
+title: Model and Style
+description: Learn how to select the AI model and music style in ChordSeqAI.
+---
+
+# Model and Style Selection
+
+The AI model and music style are key components of ChordSeqAI that help you compose chord progressions with AI. The model generates chord suggestions based on the preceding chords in the progression, while the style allows you to specify the genre or decade of the music you are composing.
+
+<LargeImage
+    src="/wiki/features/model-and-style-selection.png"
+    alt="Model and style selection split button. The left part shows the model name 'Conditional Transformer M', and the right part shows the style 'Jazz, Electronic; 2020s'. The button is split in the middle with a vertical line."
+    width={1920}
+    height={150}
+/>
+
+## Select the model
+
+ChordSeqAI offers three different kinds of models for generating chord suggestions:
+
+- **Recurrent Network**: A simple, fast model, but the predictions are less accurate compared to the other models. Use this model only if you are working on a slower device that cannot handle the other models.
+
+- **Transformer**: A more advanced model that provides better suggestions than the recurrent network. The Transformer model comes in three variants: small, medium, and large. The larger the model, the better the suggestions, but the inference time will be slower.
+
+- **Conditional Transformer**: A model that uses styling to generate suggestions. You can select multiple genres and decades to specify the style of the music you are composing.
+
+To select a model, click on the top split button with the model name. Only conditional models allow you to specify the style, which splits the button into two parts: one for the model and one for the style. The rest of the models will show just the model name.
+
+We recommend using the (Conditional) Transformer models for the best suggestions, using style if you know what you are going for. The medium variants are a good balance between speed and accuracy, while the large variants provide better suggestions at the cost of slower inference. Check out the [technical details](/wiki/technical/models) to learn more about the models.
+
+## Specify the style
+
+The style selection is only available for the conditional Transformer models. You can select the genre or decade of the music you are composing by selecting the appropriate options from the style menu. Custom weighting can also be specified to put a relative emphasis on certain genres or decades.
+
+You can leave the genre, decade, or both empty, the models were trained to be robust to missing style information. If you want to mix styles, you can select multiple genres and decades, possibly with custom weighting to emphasize one over the other. The weights should be small integer values to be interpretable; the relative difference is what matters, as the weights are later normalized anyway. In other words, setting the genre `Rock` to `1` and `Pop` to `2` is the same as setting `Rock` to `10` and `Pop` to `20`; you won't get ten times more `Rock` and `Pop` in the latter case.

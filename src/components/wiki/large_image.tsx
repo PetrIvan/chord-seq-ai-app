@@ -15,7 +15,7 @@ export default async function LargeImage({
   alt,
   width,
   height,
-  className = "w-full h-full rounded-lg",
+  className = "w-full rounded-lg",
 }: Props) {
   const buffer = await fs.readFile(`./public${src}`);
   const { base64 } = await getPlaiceholder(buffer);

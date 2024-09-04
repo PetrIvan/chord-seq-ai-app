@@ -2,11 +2,11 @@ import Image from "next/image";
 
 interface Props {
   src: string;
-  alt: string;
+  alt?: string;
   size?: "s" | "m" | "l";
 }
 
-export default function InlineIcon({ src, alt, size = "m" }: Props) {
+export default function InlineIcon({ src, alt = "", size = "m" }: Props) {
   return (
     <Image
       className={`inline-block pb-1 ${

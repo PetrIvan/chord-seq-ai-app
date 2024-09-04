@@ -1,0 +1,34 @@
+---
+title: Troubleshooting
+description: Overcome common ChordSeqAI issues with practical troubleshooting steps.
+---
+
+# Troubleshooting
+
+This page provides solutions to common issues you may encounter while using ChordSeqAI. If you are experiencing a problem that is not listed here or the solutions provided do not resolve the issue, please [contact us](/wiki/community-and-support/bug-report) for further assistance.
+
+Before proceeding with the troubleshooting steps, ensure that you are connected to the internet. Refresh the page and check if the issue persists. If the problem continues, follow the steps below to resolve it.
+
+<QuestionAnswer
+    question="The AI model is not generating suggestions"
+>
+Some browsers may not support ONNX Runtime, which are used by ChordSeqAI to generate chord suggestions. If you are experiencing issues with the AI model, try using a different browser that supports ONNX Runtime or updating your current browser to the latest version. We recommend using modern browsers, such as Google Chrome or Mozilla Firefox.
+</QuestionAnswer>
+
+<QuestionAnswer
+    question="Maximum number of chords reached"
+>
+ChordSeqAI has a limit of 255 chords per progression. If you have reached the maximum number of chords, you will not be able to add more chords to the progression. To resolve this issue, you can either delete some chords to make room for new ones or start a new progression by [exporting](/wiki/features/transpose-import-export#export) the current one and [deleting all chords](/wiki/features/timeline#timeline-controls) to create a new progression.
+</QuestionAnswer>
+
+<QuestionAnswer
+    question="Playback is lagging or stuttering"
+>
+If you are experiencing lag or stuttering during playback, it may be due to high CPU usage or insufficient system resources. Try closing other applications or browser tabs that are running in the background to free up system resources. ChordSeqAI uses [Tone.js](https://tonejs.github.io/) for audio playback, which requires a modern browser and a stable internet connection for optimal performance.
+</QuestionAnswer>
+
+<QuestionAnswer
+    question="The app shows a blank screen or an error message even after refreshing"
+>
+It may be possible that you've imported a corrupted or invalid file that is causing the app to crash. Try deleting the site data for ChordSeqAI in your browser settings to reset the app, however, be aware that this will also delete your progress. After refreshing, the app should load correctly.
+</QuestionAnswer>

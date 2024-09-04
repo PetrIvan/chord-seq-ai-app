@@ -1,0 +1,25 @@
+---
+title: Chord Variants
+description: Explore chord variants in ChordSeqAI to experiment with different voicings and notations.
+---
+
+# Chord Variants
+
+Chord variants allow you to specify different voicings and notations for chords. Its interface also provides a way to visualize the chord on the piano.
+
+<LargeImage
+    src="/wiki/features/chord-variants.png"
+    alt="UI modal displaying chord variants for G#7. The top section shows a piano keyboard with the G#7 chord highlighted in purple across the C4 to C5 range. Below, six chord variant buttons are available: G#7, G#7/C, G#7/D#, G#7/F#, Cdim/G#, and Cmb5/G#. There are two action buttons at the bottom: 'Set as default' and 'Use once.' A close button is visible in the top-right corner."
+    width={1920}
+    height={1080}
+/>
+
+## Select a chord variant
+
+Chord variants are available for the currently selected chord in the [timeline controls](/wiki/features/timeline#timeline-controls) under the chord variant icon <InlineIcon src="/variants.svg" /> (`V`), and upon hovering over a [suggestion](/wiki/features/suggestions#chord-suggestion) denoted by the same icon. When open from the timeline, you can replace the selected chord with a different variant or replace all the identical chords in your progression with this variant. Variants included in suggestions instead enable using them for the selected chord or setting them as default.
+
+The variant overlay visualizes the current variant by highlighting notes on the piano. Below the piano, you can see all the available variants of the chord. Clicking on any of them will change the visualization. Closing <InlineIcon src="/close.svg" /> (`Esc`) the overlay will cancel the changes.
+
+## Best practices
+
+While you might try to use variants to compose chord voicings, this is not recommended, as there isn't currently a way to enter your custom voicings. Additionally, you may make the chord progression less readable by using less common symbols. Only use chord variants when you specifically want to use another symbol for that chord, such as to differentiate between `Am7` and `C6`.

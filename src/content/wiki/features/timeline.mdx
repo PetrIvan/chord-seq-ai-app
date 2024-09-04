@@ -1,0 +1,89 @@
+---
+title: Timeline
+description: Use the timeline element in ChordSeqAI to create chord progressions efficiently.
+---
+
+# Timeline
+
+The timeline is the main area where you compose the chord progression. It consists of a series of chords, playback controls, timeline controls, and a time signature selector.
+
+<LargeImage
+    src="/wiki/features/timeline.png"
+    alt="Timeline interface showing a chord progression starting with chords C#maj7, A#m7, D#m7, F#m6, ... ending in a placeholder question mark chord. The chords are displayed as violet blocks with the chord symbol. The timeline is divided into bars by tick marks. The playhead is at the beginning of the progression, and the playback controls together with timeline controls are visible at the top of the timeline. The left side of the timeline shows the current time signature as 4/4."
+    width={1920}
+    height={270}
+/>
+
+## View
+
+The timeline displays the chords in a horizontal layout. Each chord is represented by a colored block with the chord symbol, its length represents the duration. The chords are arranged in a sequence from left to right, representing the progression of the song.
+
+To move the view, click and drag the scroll wheel across the timeline. You can also zoom in and out by scrolling up and down.
+
+### Chord
+
+Each chord can be selected by clicking on it, which will highlight the chord. The selection is used for various operations like adding a chord after it, deleting it, or changing its variant. Selecting a chord also shows [suggestions](/wiki/features/suggestions) via the AI model.
+
+To deselect a chord, click on it again or use `Esc`. You can also change the selection by using the arrow keys (`Left Arrow`/`Right Arrow`) to move to the previous or next chord. Reaching the end of the timeline in either direction will deselect the current chord; using the arrow keys with no chord selected will select the first or last chord (`Right Arrow`/`Left Arrow`, respectively).
+
+You can change the duration of the chord by dragging its right edge. It will snap to the nearest beat, which is determined by the time signature.
+
+### Playhead
+
+The playhead is a blue vertical line that moves across the timeline to indicate the current position during playback. You can click or drag anywhere on the ticks (lines indicating the beats) to move the playhead to a specific position. This works both during playback and when stopped.
+
+## Timeline controls
+
+The timeline controls are located at the top of the timeline to the right of the playback controls. They include the following elements:
+
+- **Undo <InlineIcon src="/undo.svg" />** (`Ctrl + Z`) **/ Redo <InlineIcon src="/redo.svg" />** (`Ctrl + Y`): Allows you to undo or redo the last action. 
+
+- **Chord variants <InlineIcon src="/variants.svg" />** (`V`): Opens the [chord variants](/wiki/features/chord-variants) panel to select a different voicing or notation for the selected chord.
+
+- **Delete <InlineIcon src="/trash.svg" />** (`Del`): Deletes the selected chord from the timeline.
+
+- **Delete all <InlineIcon src="/trash-all.svg" />** (`Ctrl + Del`): Deletes all chords from the timeline.
+
+- **Add chord <InlineIcon src="/plus.svg" size="s" />** (`A`): Append a new chord after the selected chord or at the end.
+
+<LargeImage
+    src="/wiki/features/timeline-controls.png"
+    alt="Timeline controls with undo, redo, chord variants, delete, delete all, and add chord buttons."
+    width={1950}
+    height={330}
+/>
+
+Modifications to the chord progression, chord selection, and time signature changes can be undone or redone up to 64 steps back. The undo/redo history is lost when the page is reloaded.
+
+## Playback controls
+
+The playback controls are located at the top of the timeline to the left of the timeline controls. They include the following elements:
+
+- **Metronome <InlineIcon src="/metronome.svg" size="s" />** (`M`): Toggles the metronome on or off.
+
+- **Play <InlineIcon src="/play.svg" size="s" /> / Pause <InlineIcon src="/pause.svg" size="s" />** (`Space`): Starts or pauses the playback.
+
+- **Playback settings <InlineIcon src="/settings.svg" size="s" />** (`S`): Opens the playback settings to adjust the tempo and looping.
+
+After opening the playback settings, you can adjust the tempo in the BPM field (`Up Arrow`/`Down Arrow`). Looping can be enabled/disabled anytime by `L`. Pressing `Esc` or `S` again will close the playback settings.
+
+<LargeImage
+    src="/wiki/features/playback-controls.png"
+    alt="Playback controls with metronome, play/pause, and playback settings buttons."
+    width={1040}
+    height={240}
+/>
+
+### Playback
+
+During playback, the playhead moves across the timeline, and the chords are played in sequence. The playhead will automatically go back to the start when it reaches the end of the timeline, terminating the playback or starting again if looping is enabled.
+
+Any modifications of the chord progression during playback will stop it to avoid inconsistencies. This also includes changing the tempo.
+
+## Time signature
+
+It is located at the left part of the timeline. The upper number (nominator) determines the number of beats in a measure, and the lower number (denominator) determines the note value that represents one beat.
+
+Changing the time signature will adjust the ticks and the default chord duration. The time signature can be changed by clicking on it and modifying the values in the dropdown. The default time signature is 4/4, the numerator can be integers up to 16, and the denominator can be powers of 2 from 1 to 32 (corresponding to a whole note up to a 32nd note).
+
+Since chords snap to the nearest beat, the denominator will determine the smallest note value that can be used in the timeline. For example, with 4/4, the smallest note value is a quarter note, and with 6/8, it is an eighth note. When changing the time signature, the chords will retain their original durations (i.e., a quarter note will remain a quarter note even if the signature changes).
