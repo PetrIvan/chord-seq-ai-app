@@ -43,7 +43,7 @@ export default function VariantOverlay() {
       state.replaceChord,
       state.customScrollbarEnabled,
     ],
-    shallow
+    shallow,
   );
 
   /* Apply functions */
@@ -79,7 +79,7 @@ export default function VariantOverlay() {
       setIsOverlayOpen={setVariantsOpen}
       enabledOverflow={false}
     >
-      <div className="flex flex-col items-center justify-center space-y-[2dvh] mb-[5dvh]">
+      <div className="mb-[5dvh] flex flex-col items-center justify-center space-y-[2dvh]">
         <p className="text-[5dvh] font-semibold">
           {tokenToChord[Math.max(token, 0)][variant]}
         </p>
@@ -89,15 +89,15 @@ export default function VariantOverlay() {
           numKeys={29}
         />
       </div>
-      <div className="flex flex-col items-center justify-center h-fit w-full space-y-[2dvh] min-h-0">
+      <div className="flex h-fit min-h-0 w-full flex-col items-center justify-center space-y-[2dvh]">
         <p className="text-[2.5dvh]">All variants:</p>
-        <div className="bg-zinc-900 w-full max-h-screen min-h-0">
+        <div className="max-h-screen min-h-0 w-full bg-zinc-900">
           <div
             className={
-              `grid gap-[2dvh] p-[1dvh] w-full h-full overflow-y-auto ` +
+              `grid h-full w-full gap-[2dvh] overflow-y-auto p-[1dvh] ` +
               `${
                 customScrollbarEnabled
-                  ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+                  ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-thumb-zinc-700 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500"
                   : ""
               }`
             }
@@ -108,7 +108,7 @@ export default function VariantOverlay() {
           >
             {tokenToChord[Math.max(token, 0)].map((_, i) => (
               <button
-                className="h-[10dvh] min-h-[8dvh] flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] w-full overflow-hidden outline-none filter active:brightness-90 hover:filter hover:brightness-110 bg-violet-700"
+                className="flex h-[10dvh] min-h-[8dvh] w-full flex-row items-center justify-center space-x-[0.4dvh] overflow-hidden rounded-[1dvh] bg-violet-700 p-[2dvh] outline-none filter hover:brightness-110 hover:filter active:brightness-90"
                 onClick={() => {
                   playChord(tokenToChord[Math.max(token, 0)][i]);
                   setVariant(i);
@@ -123,9 +123,9 @@ export default function VariantOverlay() {
             ))}
           </div>
         </div>
-        <div className="flex flex-row w-full justify-evenly">
+        <div className="flex w-full flex-row justify-evenly">
           <button
-            className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+            className="flex max-h-[10dvh] flex-row items-center justify-center space-x-[0.4dvh] rounded-[1dvh] bg-zinc-800 p-[2dvh] filter hover:brightness-110 hover:filter active:brightness-90"
             onClick={() => {
               setEnabledShortcuts(true);
               variantsFromSuggestions ? setAsDefault() : applyToAll();
@@ -134,7 +134,7 @@ export default function VariantOverlay() {
             {variantsFromSuggestions ? "Set as default" : "Apply to all"}
           </button>
           <button
-            className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+            className="flex max-h-[10dvh] flex-row items-center justify-center space-x-[0.4dvh] rounded-[1dvh] bg-zinc-800 p-[2dvh] filter hover:brightness-110 hover:filter active:brightness-90"
             onClick={() => {
               setEnabledShortcuts(true);
               variantsFromSuggestions ? variantUseOnce() : applyOnce();

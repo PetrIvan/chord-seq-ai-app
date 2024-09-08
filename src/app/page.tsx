@@ -9,7 +9,7 @@ export default function Home() {
   return (
     <div>
       <SupportUsOverlay />
-      <div className="relative flex flex-col bg-[url('/background.jpg')] bg-scroll bg-center bg-cover">
+      <div className="relative flex flex-col bg-[url('/background.jpg')] bg-cover bg-scroll bg-center">
         <Header
           isTop={true}
           sticky={false}
@@ -19,35 +19,35 @@ export default function Home() {
           sidenavEnabled={false}
           borderEnabled={false}
         />
-        <div className="flex-grow flex flex-col items-center justify-center text-center p-4 space-y-5 backdrop-blur-[0.1dvw] py-20 pb-36 z-20">
-          <h2 className="text-3xl md:text-5xl text-white font-semibold mb-5 max-w-xl">
+        <div className="z-20 flex flex-grow flex-col items-center justify-center space-y-5 p-4 py-20 pb-36 text-center backdrop-blur-[0.1dvw]">
+          <h2 className="mb-5 max-w-xl text-3xl font-semibold text-white md:text-5xl">
             Your AI-powered chord progression copilot
           </h2>
-          <p className="text-lg md:text-xl text-zinc-300 max-w-2xl pb-5">
+          <p className="max-w-2xl pb-5 text-lg text-zinc-300 md:text-xl">
             Compose beautiful chord progressions in your browser, with the help
             of AI, for free. Open-source project, code available on GitHub.
           </p>
           <QuickButtons />
         </div>
-        <div className="absolute bottom-0 z-10 w-full h-[15dvh] bg-gradient-to-b from-transparent to-zinc-950" />
+        <div className="absolute bottom-0 z-10 h-[15dvh] w-full bg-gradient-to-b from-transparent to-zinc-950" />
       </div>
       <div className="flex flex-col bg-zinc-950">
-        <div className="flex-grow flex flex-col items-center justify-center text-center space-y-5 md:space-y-10 backdrop-blur-[0.1dvw] p-5 md:p-20">
-          <div className="flex flex-col lg:flex-row items-center justify-center rounded-lg bg-zinc-900 shadow-lg w-full min-h-fit">
-            <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-5">
-              <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+        <div className="flex flex-grow flex-col items-center justify-center space-y-5 p-5 text-center backdrop-blur-[0.1dvw] md:space-y-10 md:p-20">
+          <div className="flex min-h-fit w-full flex-col items-center justify-center rounded-lg bg-zinc-900 shadow-lg lg:flex-row">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center p-5">
+              <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
                 Add a chord and get the next one suggested
               </h3>
-              <p className="text-lg md:text-xl text-zinc-300 pb-5">
+              <p className="pb-5 text-lg text-zinc-300 md:text-xl">
                 ChordSeqAI uses neural networks to predict the next chord in a
                 progression. It was trained on a large dataset of chord
                 sequences from popular music.
               </p>
             </div>
-            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center overflow-hidden">
               <video
                 src="/showcase-add.mp4"
-                className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-bl-none lg:rounded-r-lg"
+                className="h-full w-full rounded-b-lg object-cover object-center lg:rounded-r-lg lg:rounded-bl-none"
                 autoPlay
                 muted
                 loop
@@ -58,20 +58,20 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row-reverse items-center justify-center rounded-lg bg-zinc-900 shadow-lg w-full min-h-fit">
-            <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-5">
-              <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+          <div className="flex min-h-fit w-full flex-col items-center justify-center rounded-lg bg-zinc-900 shadow-lg lg:flex-row-reverse">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center p-5">
+              <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
                 Specify the style of your chord progression
               </h3>
-              <p className="text-lg md:text-xl text-zinc-300 pb-5">
+              <p className="pb-5 text-lg text-zinc-300 md:text-xl">
                 You can specify the genre and the musical period with
                 conditional models.
               </p>
             </div>
-            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center overflow-hidden">
               <video
                 src="/showcase-style.mp4"
-                className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-br-none lg:rounded-l-lg"
+                className="h-full w-full rounded-b-lg object-cover object-center lg:rounded-l-lg lg:rounded-br-none"
                 autoPlay
                 muted
                 loop
@@ -82,20 +82,20 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="flex flex-col lg:flex-row items-center justify-center rounded-lg bg-zinc-900 shadow-lg w-full min-h-fit">
-            <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-5">
-              <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+          <div className="flex min-h-fit w-full flex-col items-center justify-center rounded-lg bg-zinc-900 shadow-lg lg:flex-row">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center p-5">
+              <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
                 Integrate with your favorite DAW
               </h3>
-              <p className="text-lg md:text-xl text-zinc-300 pb-5">
+              <p className="pb-5 text-lg text-zinc-300 md:text-xl">
                 You can export your chord progressions as MIDI files and import
                 them into FL Studio, Ableton Live, Logic Pro, or any other DAW.
               </p>
             </div>
-            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center overflow-hidden">
               <video
                 src="/showcase-export.mp4"
-                className="h-full w-full object-cover object-center rounded-b-lg lg:rounded-bl-none lg:rounded-r-lg"
+                className="h-full w-full rounded-b-lg object-cover object-center lg:rounded-r-lg lg:rounded-bl-none"
                 autoPlay
                 muted
                 loop
@@ -106,22 +106,22 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-full h-[2dvh]" />
+          <div className="h-[2dvh] w-full" />
 
-          <div className="flex flex-col lg:flex-row items-center justify-center rounded-lg bg-zinc-950 drop-shadow-[0_0px_15px_rgba(24,24,27,1)] w-full min-h-fit">
-            <div className="flex-1 flex flex-col items-center justify-center w-full h-full p-5">
-              <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+          <div className="flex min-h-fit w-full flex-col items-center justify-center rounded-lg bg-zinc-950 drop-shadow-[0_0px_15px_rgba(24,24,27,1)] lg:flex-row">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center p-5">
+              <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
                 Start your learning journey
               </h3>
-              <p className="text-lg md:text-xl text-zinc-300 pb-5 px-5 text-justify">
+              <p className="px-5 pb-5 text-justify text-lg text-zinc-300 md:text-xl">
                 Check out our YouTube playlist covering the essentials of
                 ChordSeqAI. Starting from the basics and eventually covering
                 advanced topics, it will help you get the most out of the app.
               </p>
             </div>
-            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden h-full w-full">
+            <div className="flex h-full w-full flex-1 flex-col items-center justify-center overflow-hidden">
               <iframe
-                className="h-full w-full aspect-video object-cover object-center rounded-b-lg lg:rounded-bl-none lg:rounded-r-lg"
+                className="aspect-video h-full w-full rounded-b-lg object-cover object-center lg:rounded-r-lg lg:rounded-bl-none"
                 src="https://www.youtube.com/embed/videoseries?si=t-XM9ujWyvSJyIbj&amp;list=PLT4SeTqv-OaknHUttzBYHr2gmKemcEXkp"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
@@ -129,15 +129,15 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-full h-[1dvh]" />
+          <div className="h-[1dvh] w-full" />
 
-          <div className="w-full h-[3dvh] bg-gradient-to-b from-transparent to-zinc-900" />
+          <div className="h-[3dvh] w-full bg-gradient-to-b from-transparent to-zinc-900" />
 
-          <div className="flex flex-col items-center justify-center shadow-lg max-w-3xl p-5 space-y-2">
-            <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+          <div className="flex max-w-3xl flex-col items-center justify-center space-y-2 p-5 shadow-lg">
+            <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
               Model overview
             </h3>
-            <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-zinc-300 pb-5">
+            <ul className="flex flex-col items-start space-y-2 pb-5 text-justify text-lg text-zinc-300 md:text-xl">
               <li>
                 <b>Recurrent Network.</b> A simple network for low-end devices.
               </li>
@@ -155,13 +155,13 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="w-full h-[3dvh] bg-gradient-to-b from-zinc-900 to-transparent" />
+          <div className="h-[3dvh] w-full bg-gradient-to-b from-zinc-900 to-transparent" />
 
-          <div className="flex flex-col items-center justify-center shadow-lg max-w-3xl p-5 space-y-2">
-            <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+          <div className="flex max-w-3xl flex-col items-center justify-center space-y-2 p-5 shadow-lg">
+            <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
               Learn more
             </h3>
-            <ul className="flex flex-col items-start space-y-2 text-justify text-lg md:text-xl text-zinc-300 pb-5">
+            <ul className="flex flex-col items-start space-y-2 pb-5 text-justify text-lg text-zinc-300 md:text-xl">
               <li>
                 <b>Documentation.</b> You can view all of the available features
                 on the{" "}
@@ -194,16 +194,16 @@ export default function Home() {
             </ul>
           </div>
 
-          <div className="w-full h-[2px] flex flex-row items-center justify-center">
-            <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-r from-transparent to-zinc-800 border-0" />
-            <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-l from-transparent to-zinc-800 border-0" />
+          <div className="flex h-[2px] w-full flex-row items-center justify-center">
+            <hr className="my-8 h-[2px] w-1/2 border-0 bg-gradient-to-r from-transparent to-zinc-800" />
+            <hr className="my-8 h-[2px] w-1/2 border-0 bg-gradient-to-l from-transparent to-zinc-800" />
           </div>
 
-          <div className="flex flex-col items-center justify-center shadow-lg max-w-2xl p-5 space-y-2">
-            <h3 className="text-2xl md:text-3xl text-white font-semibold mb-5">
+          <div className="flex max-w-2xl flex-col items-center justify-center space-y-2 p-5 shadow-lg">
+            <h3 className="mb-5 text-2xl font-semibold text-white md:text-3xl">
               Contact us
             </h3>
-            <p className="text-lg md:text-xl text-zinc-300 pb-5">
+            <p className="pb-5 text-lg text-zinc-300 md:text-xl">
               To report bugs, use either{" "}
               <a
                 className="text-blue-400 hover:underline"
@@ -234,7 +234,7 @@ export default function Home() {
               .
             </p>
 
-            <p className="text-lg md:text-xl text-zinc-300 pb-5">
+            <p className="pb-5 text-lg text-zinc-300 md:text-xl">
               If you want to support the development of this app, you can do so
               on{" "}
               <TrackedLink
@@ -257,7 +257,7 @@ export default function Home() {
           </div>
 
           {/* Social icons*/}
-          <div className="flex flex-row items-center justify-center space-x-[6%] max-h-20 px-5 pb-5 md:pb-0 max-w-96">
+          <div className="flex max-h-20 max-w-96 flex-row items-center justify-center space-x-[6%] px-5 pb-5 md:pb-0">
             <a
               href="https://www.youtube.com/@xenomuse-dev"
               target="_blank"
@@ -281,7 +281,7 @@ export default function Home() {
               <Image
                 src="/github-logo.svg"
                 alt="GitHub repository"
-                className="h-full w-full p-[10%] filter brightness-0 invert"
+                className="h-full w-full p-[10%] brightness-0 invert filter"
                 width={98}
                 height={96}
               />
@@ -309,7 +309,7 @@ export default function Home() {
               <Image
                 src="/reddit-logo.svg"
                 alt="Reddit profile"
-                className="h-full w-full filter brightness-0 invert"
+                className="h-full w-full brightness-0 invert filter"
                 width={100}
                 height={100}
               />

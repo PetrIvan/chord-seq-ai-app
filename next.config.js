@@ -2,8 +2,8 @@
 const withPWA = require("next-pwa");
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
-const withMDX = require('@next/mdx')({
-  extension: /\.mdx?$/
+const withMDX = require("@next/mdx")({
+  extension: /\.mdx?$/,
 });
 
 const nextConfig = {
@@ -11,8 +11,8 @@ const nextConfig = {
     dest: "public",
     register: true,
     skipWaiting: true,
-  })
-}
+  }),
+};
 
 module.exports = withMDX({
   ...nextConfig,
@@ -21,8 +21,7 @@ module.exports = withMDX({
   images: {
     unoptimized: true,
   },
-  webpack: (config, {  }) => {
-
+  webpack: (config, {}) => {
     config.resolve.extensions.push(".ts", ".tsx");
     config.resolve.fallback = { fs: false };
 
@@ -68,5 +67,5 @@ module.exports = withMDX({
 
     return config;
   },
-  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 });

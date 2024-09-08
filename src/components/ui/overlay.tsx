@@ -22,7 +22,7 @@ export default function Overlay({
 }: Props) {
   const [customScrollbarEnabled, setEnabledShortcuts] = useStore(
     (state) => [state.customScrollbarEnabled, state.setEnabledShortcuts],
-    shallow
+    shallow,
   );
 
   // Disable shortcuts when the overlay is open
@@ -57,20 +57,20 @@ export default function Overlay({
 
   return (
     isOverlayOpen && (
-      <div className="fixed inset-0 z-30 bg-zinc-950 bg-opacity-50 flex flex-col items-center justify-center">
+      <div className="fixed inset-0 z-30 flex flex-col items-center justify-center bg-zinc-950 bg-opacity-50">
         <div
           className={
-            `relative bg-zinc-900 h-[80dvh] w-[70dvw] rounded-[0.5dvw] p-[2dvh] ` +
-            `${enabledOverflow ? "overflow-y-auto " : ""}` +
+            `relative h-[80dvh] w-[70dvw] rounded-[0.5dvw] bg-zinc-900 p-[2dvh] ` +
+            `${enabledOverflow ? "overflow-y-auto" : ""}` +
             `${
               customScrollbarEnabled
-                ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+                ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-thumb-zinc-700 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500"
                 : ""
             }`
           }
         >
           <img
-            className="absolute top-[1dvh] right-[1dvh] w-[5dvh] h-[5dvh] cursor-pointer filter active:brightness-90"
+            className="absolute right-[1dvh] top-[1dvh] h-[5dvh] w-[5dvh] cursor-pointer filter active:brightness-90"
             src="/close.svg"
             title="Close (Esc)"
             onClick={() => {
@@ -81,7 +81,7 @@ export default function Overlay({
           />
           <div
             className={
-              `w-full flex flex-col items-center justify-center space-y-[2dvh] px-[6dvh] ` +
+              `flex w-full flex-col items-center justify-center space-y-[2dvh] px-[6dvh] ` +
               `${enabledOverflow ? "h-fit min-h-full" : "h-full"}`
             }
           >

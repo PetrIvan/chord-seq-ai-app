@@ -31,11 +31,11 @@ export default function MidiImportOverlay() {
       state.setEnabledShortcuts,
       state.setSelectedChord,
     ],
-    shallow
+    shallow,
   );
 
   const [tracks, setTracks] = useState(
-    midiFile.tracks.filter((track) => track.notes.length > 0)
+    midiFile.tracks.filter((track) => track.notes.length > 0),
   );
 
   const tracksRef = useRef(tracks);
@@ -44,7 +44,7 @@ export default function MidiImportOverlay() {
   }, [tracks]);
 
   const [includedTracks, setIncludedTracks] = useState<Array<boolean>>(
-    new Array(tracks.length).fill(true)
+    new Array(tracks.length).fill(true),
   );
 
   const [quantization, setQuantization] = useState<number>(1);
@@ -80,7 +80,7 @@ export default function MidiImportOverlay() {
     includedTracks: boolean[],
     quantization: number,
     importBpm: boolean,
-    quantizationMode: string
+    quantizationMode: string,
   ) => {
     if (tracksRef.current.length > 0) {
       if (includedTracks.every((t) => !t))
@@ -96,7 +96,7 @@ export default function MidiImportOverlay() {
             name: note.name,
             duration: note.durationTicks / midiFile.header.ppq,
             time: note.ticks / midiFile.header.ppq,
-          }))
+          })),
         );
 
       const chords = getChordsFromNotes(notes, quantization, quantizationMode);
@@ -139,10 +139,10 @@ export default function MidiImportOverlay() {
       enabledOverflow={false}
       otherShortcuts={otherShortcuts}
     >
-      <p className="w-full text-center px-[1dvh] text-[5dvh] font-semibold">
+      <p className="w-full px-[1dvh] text-center text-[5dvh] font-semibold">
         Import MIDI
       </p>
-      <div className="w-full flex flex-wrap flex-row items-center justify-between">
+      <div className="flex w-full flex-row flex-wrap items-center justify-between">
         <div className="flex flex-row items-center justify-start space-x-[2dvh] p-[1dvw]">
           <label className="whitespace-nowrap" htmlFor="quantization">
             Quantization (beats):
@@ -151,7 +151,7 @@ export default function MidiImportOverlay() {
             id="quantization"
             type="number"
             title="Beats"
-            className="text-[2.5dvh] border-[0.2dvh] p-[1dvh] w-[10dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh] mr-[1dvw]"
+            className="mr-[1dvw] h-[6dvh] w-[10dvh] rounded-[1dvh] border-[0.2dvh] bg-zinc-800 p-[1dvh] text-[2.5dvh]"
             min={1}
             max={8}
             step={1}
@@ -178,7 +178,7 @@ export default function MidiImportOverlay() {
           <input
             id="tempo"
             type="checkbox"
-            className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+            className="h-[2.4dvh] w-[2.4dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 focus:outline-none"
             checked={importBpm}
             onChange={() => {
               setImportBpm(!importBpm);
@@ -187,26 +187,26 @@ export default function MidiImportOverlay() {
         </div>
       </div>
 
-      <p className="w-full text-center px-[1dvh] font-semibold">
+      <p className="w-full px-[1dvh] text-center font-semibold">
         Select harmony tracks:
       </p>
       <ul
         className={
-          `left-0 w-full rounded-[0.5dvw] overflow-y-auto max-h-[40%] ` +
+          `left-0 max-h-[40%] w-full overflow-y-auto rounded-[0.5dvw] ` +
           `${
             customScrollbarEnabled
-              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-thumb-zinc-700 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500"
               : ""
           }`
         }
       >
         {tracks.map((track, i) => (
           <li
-            className="flex-1 w-full flex justify-between items-center p-[2dvh] min-w-0 whitespace-nowrap hover:bg-zinc-800 rounded-[0.5dvw]"
+            className="flex w-full min-w-0 flex-1 items-center justify-between whitespace-nowrap rounded-[0.5dvw] p-[2dvh] hover:bg-zinc-800"
             title={`Include ${track.name}`}
             onClick={() => {
               setIncludedTracks(
-                includedTracks.map((t, j) => (i === j ? !t : t))
+                includedTracks.map((t, j) => (i === j ? !t : t)),
               );
             }}
             key={i}
@@ -218,11 +218,11 @@ export default function MidiImportOverlay() {
               <input
                 id={`track-${i}`}
                 type="checkbox"
-                className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+                className="h-[2.4dvh] w-[2.4dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 focus:outline-none"
                 checked={includedTracks[i]}
                 onChange={() => {
                   setIncludedTracks(
-                    includedTracks.map((t, j) => (i === j ? !t : t))
+                    includedTracks.map((t, j) => (i === j ? !t : t)),
                   );
                 }}
               />
@@ -231,9 +231,9 @@ export default function MidiImportOverlay() {
         ))}
       </ul>
 
-      <div className="flex flex-row w-full justify-evenly">
+      <div className="flex w-full flex-row justify-evenly">
         <button
-          className="flex flex-row justify-center items-center space-x-[0.4dvh] p-[2dvh] rounded-[1dvh] filter active:brightness-90 hover:filter hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+          className="flex max-h-[10dvh] flex-row items-center justify-center space-x-[0.4dvh] rounded-[1dvh] bg-zinc-800 p-[2dvh] filter hover:brightness-110 hover:filter active:brightness-90"
           title="Import (Enter)"
           onClick={() => {
             try {
@@ -241,7 +241,7 @@ export default function MidiImportOverlay() {
                 includedTracks,
                 quantization,
                 importBpm,
-                quantizationMode
+                quantizationMode,
               );
             } catch (e: any) {
               alert(e.message);

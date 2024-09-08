@@ -23,11 +23,11 @@ export default function TransposeDropdown({ dropdownRef, transpose }: Props) {
 
   return (
     <div
-      className="absolute z-[15] text-[2.5dvh] top-full mt-[0.5dvw] bg-zinc-950 rounded-[0.5dvw] flex flex-row items-center justify-between p-[1dvw] shadow-lg shadow-zinc-950"
+      className="absolute top-full z-[15] mt-[0.5dvw] flex flex-row items-center justify-between rounded-[0.5dvw] bg-zinc-950 p-[1dvw] text-[2.5dvh] shadow-lg shadow-zinc-950"
       ref={dropdownRef}
     >
       <label
-        className="select-none mr-[2dvh] whitespace-nowrap"
+        className="mr-[2dvh] select-none whitespace-nowrap"
         htmlFor="transpose-amount"
       >
         Transpose by:
@@ -36,12 +36,12 @@ export default function TransposeDropdown({ dropdownRef, transpose }: Props) {
         id="transpose-amount"
         type="number"
         title="Semitones (Up/Down arrow keys)"
-        className="text-[2.5dvh] border-[0.2dvh] p-[1dvh] w-[10dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh] mr-[1dvw]"
+        className="mr-[1dvw] h-[6dvh] w-[10dvh] rounded-[1dvh] border-[0.2dvh] bg-zinc-800 p-[1dvh] text-[2.5dvh]"
         value={transposeBy}
         onChange={handleNumeratorChange}
       />
       <button
-        className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
+        className="rounded-[0.5dvw] bg-zinc-800 p-[0.5dvw] hover:bg-zinc-900"
         title="Confirm transposition (Enter)"
         onClick={() => transpose(parseInt(transposeBy, 10))}
       >

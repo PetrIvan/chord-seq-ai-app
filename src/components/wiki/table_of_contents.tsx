@@ -18,11 +18,11 @@ export default function TableOfContents({
   className,
 }: Props) {
   return (
-    <ul className={"flex-col space-y-1 h-full lg:overflow-y-auto " + className}>
+    <ul className={"h-full flex-col space-y-1 lg:overflow-y-auto " + className}>
       {headings.map((heading) => (
         <li key={heading.id}>
           <Link
-            className={`inline-block truncate w-full hover:text-zinc-50 transition-all duration-200 hover:pl-1 ${
+            className={`inline-block w-full truncate transition-all duration-200 hover:pl-1 hover:text-zinc-50 ${
               activeId === heading.id ? "font-semibold text-zinc-50" : ""
             }`}
             href={`#${heading.id}`}

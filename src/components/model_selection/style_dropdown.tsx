@@ -26,14 +26,14 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
       state.isStepByStepTutorialOpen,
       state.tutorialStep,
     ],
-    shallow
+    shallow,
   );
 
   // Turn on/off style
   function switchSelected(
     i: number,
     selectedList: number[],
-    setList: (list: number[]) => void
+    setList: (list: number[]) => void,
   ) {
     let newList = [...selectedList];
     newList[i] = newList[i] === 0 ? 1 : 0;
@@ -45,7 +45,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
     i: number,
     newValue: number,
     selectedList: number[],
-    setList: (list: number[]) => void
+    setList: (list: number[]) => void,
   ) {
     let newList = [...selectedList];
     newList[i] = newValue;
@@ -66,10 +66,10 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
     return (
       <div
         className={
-          `absolute z-20 bg-zinc-900 left-0 w-full rounded-[0.5dvw] top-[100%] shadow-lg shadow-zinc-950 overflow-auto max-h-[50dvh] ` +
+          `absolute left-0 top-[100%] z-20 max-h-[50dvh] w-full overflow-auto rounded-[0.5dvw] bg-zinc-900 shadow-lg shadow-zinc-950 ` +
           `${
             customScrollbarEnabled
-              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full"
+              ? "scrollbar-thin scrollbar-track-zinc-800 scrollbar-thumb-zinc-700 scrollbar-track-rounded-full scrollbar-thumb-rounded-full hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500"
               : ""
           }`
         }
@@ -78,7 +78,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
           <ul key={i} className="">
             <li>
               <div
-                className="flex-1 grow-[2] w-full flex justify-between items-center p-[1dvw] min-w-0 whitespace-nowrap hover:bg-zinc-800 rounded-[0.5dvw]"
+                className="flex w-full min-w-0 flex-1 grow-[2] items-center justify-between whitespace-nowrap rounded-[0.5dvw] p-[1dvw] hover:bg-zinc-800"
                 title={`Change ${selectedTab}`}
                 onClick={() => switchSelected(i, selectedList, setSelected)}
               >
@@ -89,7 +89,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
                   <input
                     id={`style-param-${item}`}
                     type="checkbox"
-                    className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+                    className="h-[2.4dvh] w-[2.4dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 focus:outline-none"
                     checked={selectedList[i] !== 0}
                     onChange={() =>
                       switchSelected(i, selectedList, setSelected)
@@ -101,7 +101,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
                   <input
                     id={`weight-${item}`}
                     type="number"
-                    className="w-[12dvh] h-[6dvh] border-[0.2dvh] p-[1dvh] bg-zinc-800 text-white text-[2.5dvh] rounded-[0.5dvh]"
+                    className="h-[6dvh] w-[12dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 p-[1dvh] text-[2.5dvh] text-white"
                     value={selectedList[i] || ""}
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => {
@@ -109,7 +109,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
                         i,
                         Math.max(parseFloat(e.target.value), 0),
                         selectedList,
-                        setSelected
+                        setSelected,
                       );
                     }}
                   />
@@ -124,7 +124,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
 
   return (
     <div
-      className="absolute z-20 left-0 w-full rounded-[0.5dvw] top-[100%] shadow-lg bg-zinc-900 flex flex-row items-stretch justify-center text-center"
+      className="absolute left-0 top-[100%] z-20 flex w-full flex-row items-stretch justify-center rounded-[0.5dvw] bg-zinc-900 text-center shadow-lg"
       style={{
         zIndex: isStepByStepTutorialOpen && tutorialStep === 7 ? "150" : "",
       }}
@@ -132,7 +132,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
     >
       {/* Tab selection */}
       <button
-        className={`flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 rounded-l-[0.5dvw] ${
+        className={`flex min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-l-[0.5dvw] p-[1dvw] active:bg-zinc-800 ${
           selectedTab === "genres" ? "" : "bg-zinc-950"
         }`}
         onClick={() => setSelectedTab("genres")}
@@ -140,7 +140,7 @@ export default function StyleDropdown({ styleDropdownRef }: Props) {
         Genres
       </button>
       <button
-        className={`flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 rounded-r-[0.5dvw] ${
+        className={`flex min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-r-[0.5dvw] p-[1dvw] active:bg-zinc-800 ${
           selectedTab === "decades" ? "" : "bg-zinc-950"
         }`}
         onClick={() => setSelectedTab("decades")}

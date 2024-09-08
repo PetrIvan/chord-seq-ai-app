@@ -25,11 +25,11 @@ export default function Piano({
   const whiteRange = Array.from({ length: numKeys }, (value, key) => key);
   const blackRange = Array.from(
     { length: Math.floor((numKeys * 5) / 7) },
-    (value, key) => key
+    (value, key) => key,
   );
   const octaveRange = Array.from(
     { length: Math.ceil(numKeys / 7) },
-    (value, key) => key
+    (value, key) => key,
   );
 
   // The black keys alterate between 2 and 3 keys separated by a space for one key
@@ -51,11 +51,11 @@ export default function Piano({
   return (
     <div className="relative">
       {/*White keys*/}
-      <div className="flex flex-row justify-center h-[8dvh]">
+      <div className="flex h-[8dvh] flex-row justify-center">
         {whiteRange.map((i) => (
           <button
             key={i}
-            className={`border-x-[0.1dvw] border-zinc-950 w-[1dvw] h-full ${
+            className={`h-full w-[1dvw] border-x-[0.1dvw] border-zinc-950 ${
               notes.includes(keyToNoteNumber(i, "white") + octaveOffset * 12)
                 ? "bg-violet-700 active:bg-violet-600 disabled:bg-violet-700"
                 : "bg-zinc-100 active:bg-white disabled:bg-zinc-100"
@@ -63,21 +63,20 @@ export default function Piano({
             disabled={changeNotes === undefined}
             onClick={() =>
               replaceNoteOnPiano(
-                keyToNoteNumber(i, "white") + octaveOffset * 12
+                keyToNoteNumber(i, "white") + octaveOffset * 12,
               )
             }
           />
         ))}
       </div>
       {/*Black keys*/}
-      <div className="absolute flex flex-row h-[5dvh] top-0 justify-center left-[0.7dvw]">
+      <div className="absolute left-[0.7dvw] top-0 flex h-[5dvh] flex-row justify-center">
         {blackRange.map((i) => (
           <button
             key={i}
-            className={`w-[0.8dvw] h-full ${
-              blackSpaces[i % 5] ? "mr-[1.2dvw] " : "mr-[0.2dvw] "
-            }
-            ${
+            className={`h-full w-[0.8dvw] ${
+              blackSpaces[i % 5] ? "mr-[1.2dvw]" : "mr-[0.2dvw]"
+            } ${
               notes.includes(keyToNoteNumber(i, "black") + octaveOffset * 12)
                 ? "bg-violet-800 active:bg-violet-700 disabled:bg-violet-800"
                 : "bg-zinc-950 active:bg-zinc-800 disabled:bg-zinc-950"
@@ -85,20 +84,20 @@ export default function Piano({
             disabled={changeNotes === undefined}
             onClick={() =>
               replaceNoteOnPiano(
-                keyToNoteNumber(i, "black") + octaveOffset * 12
+                keyToNoteNumber(i, "black") + octaveOffset * 12,
               )
             }
           />
         ))}
       </div>
       {/* Note names (only for C) */}
-      <div className="flex flex-row top-[100%] justify-start text-zinc-500 px-[0.6dvw]">
+      <div className="top-[100%] flex flex-row justify-start px-[0.6dvw] text-zinc-500">
         {octaveRange.map((i) => (
           <div
             className={`relative ${i < octaveRange.length - 1 && "mr-[7dvw]"}`}
             key={i}
           >
-            <p className="absolute transform -translate-x-1/2">
+            <p className="absolute -translate-x-1/2 transform">
               C{i + octaveOffset}
             </p>
           </div>

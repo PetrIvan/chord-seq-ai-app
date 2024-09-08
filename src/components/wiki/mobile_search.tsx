@@ -33,15 +33,15 @@ export default function MobileSearch({
   return (
     isSearchOpen && (
       <div
-        className="lg:hidden fixed top-0 h-screen w-screen z-50 bg-zinc-950/50"
+        className="fixed top-0 z-50 h-screen w-screen bg-zinc-950/50 lg:hidden"
         onClick={() => setIsSearchOpen(false)}
       >
         {/* Background blur */}
-        <div className="w-full h-full backdrop-blur-sm" />
+        <div className="h-full w-full backdrop-blur-sm" />
 
         <div className="fixed inset-0 flex items-start justify-center p-5">
           <Search
-            className="bg-zinc-900 border border-zinc-800 rounded-xl max-h-[80dvh]"
+            className="max-h-[80dvh] rounded-xl border border-zinc-800 bg-zinc-900"
             customScrollbarEnabled={customScrollbarEnabled}
             isOverlay={true}
             setIsSearchOpen={(value) => {

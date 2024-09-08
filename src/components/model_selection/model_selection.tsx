@@ -25,7 +25,7 @@ export default function ModelSelection() {
       state.customScrollbarEnabled,
       state.setModelSize,
     ],
-    shallow
+    shallow,
   );
 
   // Model selection handling
@@ -42,8 +42,8 @@ export default function ModelSelection() {
   const [selectedModel, setSelectedModel] = useState(
     Math.max(
       models.findIndex((model) => model[1] === modelPath),
-      0
-    )
+      0,
+    ),
   );
 
   useEffect(() => {
@@ -94,7 +94,7 @@ export default function ModelSelection() {
       items: number[],
       labels: string[],
       multipleText: string,
-      noItemsText: string
+      noItemsText: string,
     ) {
       const selectedItems = items
         .map((item, index) => (item > 0 ? labels[index] : null))
@@ -109,19 +109,19 @@ export default function ModelSelection() {
       selectedGenres,
       genres,
       "Multiple genres",
-      "No genres"
+      "No genres",
     );
     const decadeText = generateText(
       selectedDecades,
       decades.map((decade) => `${decade}s`),
       "Multiple decades",
-      "No decades"
+      "No decades",
     );
 
     return (
       <>
         <button
-          className="flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 hover:bg-zinc-800 rounded-r-lg"
+          className="flex min-w-0 flex-1 items-center justify-center whitespace-nowrap rounded-r-lg p-[1dvw] hover:bg-zinc-800 active:bg-zinc-800"
           title="Change style"
           ref={openStyleDropdownButtonRef}
           onClick={() => setShowStyleDropdown(!showStyleDropdown)}
@@ -139,9 +139,9 @@ export default function ModelSelection() {
   }
 
   return (
-    <section className="relative min-w-0 bg-zinc-900 rounded-[0.5dvw] flex flex-row items-stretch justify-center text-center">
+    <section className="relative flex min-w-0 flex-row items-stretch justify-center rounded-[0.5dvw] bg-zinc-900 text-center">
       <button
-        className={`flex-1 flex justify-center items-center p-[1dvw] min-w-0 whitespace-nowrap active:bg-zinc-800 hover:bg-zinc-800 rounded${
+        className={`flex min-w-0 flex-1 items-center justify-center whitespace-nowrap p-[1dvw] hover:bg-zinc-800 active:bg-zinc-800 rounded${
           models[selectedModel][0].includes("Conditional") ? "-l" : ""
         }-[0.5dvw]`}
         title="Change model"
@@ -152,7 +152,7 @@ export default function ModelSelection() {
       </button>
       {models[selectedModel][0].includes("Conditional") && (
         <>
-          <div className="border-r-[0.2dvw] border-white self-stretch" />
+          <div className="self-stretch border-r-[0.2dvw] border-white" />
           {style()}
         </>
       )}

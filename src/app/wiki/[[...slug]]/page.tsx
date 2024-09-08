@@ -49,7 +49,7 @@ export default async function WikiPage({ params }: WikiPageProps) {
 
 export async function generateMetadata(
   { params }: WikiPageProps,
-  parent: ResolvingMetadata
+  parent: ResolvingMetadata,
 ): Promise<Metadata> {
   const mdx = await getMDX(params.slug, {});
 
@@ -103,7 +103,7 @@ type MDXData = {
 
 async function getMDX(
   slug: string[] | undefined,
-  components: any
+  components: any,
 ): Promise<MDXData | null> {
   let pagePath = `/${(slug || []).join("/")}`;
 
@@ -119,7 +119,7 @@ async function getMDX(
   try {
     source = fs.readFileSync(
       path.join(process.cwd(), "src/content/wiki" + `${pagePath}.mdx`),
-      "utf8"
+      "utf8",
     );
   } catch (error) {
     console.error(error);

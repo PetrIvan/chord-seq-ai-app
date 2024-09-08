@@ -42,7 +42,7 @@ export function useSearch(query: string) {
             title: result.item.title,
             heading: result.item.heading,
             summary: result.item.summary,
-          }))
+          })),
         );
       }
     };

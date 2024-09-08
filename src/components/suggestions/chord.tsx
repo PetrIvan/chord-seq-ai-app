@@ -23,7 +23,7 @@ interface Props {
   setSelectedVariant: (variant: number) => void;
   setVariantsOpen: (open: boolean) => void;
   setIsVariantsOpenFromSuggestions: (
-    isVariantsOpenFromSuggestions: boolean
+    isVariantsOpenFromSuggestions: boolean,
   ) => void;
 }
 
@@ -56,12 +56,12 @@ export default function Chord({
   const textRef = useRef<HTMLSpanElement>(null);
 
   const [alignDirection, setAlignDirection] = useState<"center" | "end">(
-    "center"
+    "center",
   );
 
   return (
     <div
-      className="relative group flex flex-row justify-center items-center space-x-[0.2dvw] p-[1dvw] rounded-[0.5dvw] w-full h-full overflow-hidden outline-none"
+      className="group relative flex h-full w-full flex-row items-center justify-center space-x-[0.2dvw] overflow-hidden rounded-[0.5dvw] p-[1dvw] outline-none"
       onMouseEnter={() => {
         if (!textRef.current) return;
 
@@ -74,11 +74,11 @@ export default function Chord({
       onMouseLeave={() => setAlignDirection("center")}
     >
       <button
-        className="absolute right-0 top-0 w-full h-full filter active:brightness-90 hover:filter hover:brightness-110 rounded-[0.5dvh] select-none outline-none"
+        className="absolute right-0 top-0 h-full w-full select-none rounded-[0.5dvh] outline-none filter hover:brightness-110 hover:filter active:brightness-90"
         style={{
           // Interpolate between violet and black logarithmically
           backgroundColor: color(
-            1 - (Math.log(prob + Number.EPSILON) + decayFactor) / decayFactor
+            1 - (Math.log(prob + Number.EPSILON) + decayFactor) / decayFactor,
           ),
         }}
         title={`Replace selected with ${tokenToChord[token][variant]} (${(
@@ -94,9 +94,9 @@ export default function Chord({
         }}
       >
         {/* Chord name - styling to handle overflow with the icon */}
-        <div className="w-full h-full px-[6.5dvh]">
+        <div className="h-full w-full px-[6.5dvh]">
           <span
-            className={`w-full h-full whitespace-nowrap flex flex-row items-center justify-${alignDirection}`}
+            className={`flex h-full w-full flex-row items-center whitespace-nowrap justify-${alignDirection}`}
             ref={textRef}
           >
             {tokenToChord[token][variant]}
@@ -105,7 +105,7 @@ export default function Chord({
       </button>
 
       <button
-        className="z-10 absolute right-[2dvh] invisible group-hover:visible w-[4dvh] h-[4dvh] select-none filter active:brightness-90 flex flex-col justify-center items-center"
+        className="invisible absolute right-[2dvh] z-10 flex h-[4dvh] w-[4dvh] select-none flex-col items-center justify-center filter group-hover:visible active:brightness-90"
         title="Open chord variants"
         onClick={() => {
           setSelectedToken(tokenRef.current);

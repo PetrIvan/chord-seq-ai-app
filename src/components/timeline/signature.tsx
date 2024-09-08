@@ -43,12 +43,12 @@ export default function Signature() {
     <div className="relative flex h-full">
       <button
         title="Change signature"
-        className="bg-zinc-950 w-full flex flex-col justify-evenly items-center rounded-l-[0.5dvw] active:bg-zinc-800 p-[2dvh] text-[4dvh]"
+        className="flex w-full flex-col items-center justify-evenly rounded-l-[0.5dvw] bg-zinc-950 p-[2dvh] text-[4dvh] active:bg-zinc-800"
         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
         ref={openDropdownButtonRef}
       >
-        <p className="text-center select-none">{numerator}</p>
-        <p className="text-center select-none">{denominator}</p>
+        <p className="select-none text-center">{numerator}</p>
+        <p className="select-none text-center">{denominator}</p>
       </button>
       {isDropdownOpen && <SignatureDropdown dropdownRef={dropdownRef} />}
     </div>

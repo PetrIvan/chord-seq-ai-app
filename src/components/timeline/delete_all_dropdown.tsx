@@ -11,14 +11,14 @@ export default function DeleteAllDropdown({ dropdownRef, setIsOpen }: Props) {
 
   return (
     <div
-      className="absolute z-[15] top-full mt-[0.5dvw] bg-zinc-950 rounded-[0.5dvw] flex flex-row items-center justify-between p-[1dvw] shadow-lg shadow-zinc-950"
+      className="absolute top-full z-[15] mt-[0.5dvw] flex flex-row items-center justify-between rounded-[0.5dvw] bg-zinc-950 p-[1dvw] shadow-lg shadow-zinc-950"
       ref={dropdownRef}
     >
-      <p className="w-full select-none text-[2.5dvh] mr-[1dvw]">
+      <p className="mr-[1dvw] w-full select-none text-[2.5dvh]">
         Delete all chords?
       </p>
       <button
-        className="bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw] hover:bg-zinc-900"
+        className="rounded-[0.5dvw] bg-zinc-800 p-[0.5dvw] hover:bg-zinc-900"
         title="Confirm deletion (Enter)"
         onClick={() => {
           clearChords();

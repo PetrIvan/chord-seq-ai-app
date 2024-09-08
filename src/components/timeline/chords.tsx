@@ -14,7 +14,7 @@ export default function Chords() {
         state.isStepByStepTutorialOpen,
         state.tutorialStep,
       ],
-      shallow
+      shallow,
     );
 
   const chordList = chords.map((chord) => {
@@ -31,7 +31,7 @@ export default function Chords() {
 
   return (
     <div
-      className="h-full flex flex-row max-w-full mt-[1dvw] items-center"
+      className="mt-[1dvw] flex h-full max-w-full flex-row items-center"
       // Apply the transform only when the tutorial is not in progress (to avoid a bug with fixed position,
       // see https://stackoverflow.com/questions/2637058/position-fixed-doesnt-work-when-using-webkit-transform)
       style={{

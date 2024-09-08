@@ -12,7 +12,7 @@ interface Props {
 export default function Ticks({ top, availableSpace, timelineStart }: Props) {
   const [signature, zoom, timelinePosition] = useStore(
     (state) => [state.signature, state.zoom, state.timelinePosition],
-    shallow
+    shallow,
   );
 
   const [tickIds, setTickIds] = useState<number[]>([]);
@@ -23,7 +23,7 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
     let tickSpace = (zoom * 10) / signatureNumerator;
     let numTicks =
       Math.ceil(
-        (availableSpace - timelinePosition + timelineStart) / tickSpace
+        (availableSpace - timelinePosition + timelineStart) / tickSpace,
       ) + 1;
 
     const ids: number[] = [];
@@ -55,8 +55,8 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
 
   return (
     <div
-      className={`flex flex-row max-w-full justify-start ${
-        top ? "items-start" : "items-end mt-[2dvh]"
+      className={`flex max-w-full flex-row justify-start ${
+        top ? "items-start" : "mt-[2dvh] items-end"
       }`}
       style={{ transform: `translateX(${timelinePosition}dvw)` }}
     >

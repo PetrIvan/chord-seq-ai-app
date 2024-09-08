@@ -38,7 +38,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       state.setResizingChord,
       state.isStepByStepTutorialOpen,
     ],
-    shallow
+    shallow,
   );
 
   const chordElementRef = useRef<HTMLButtonElement>(null);
@@ -145,7 +145,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       const stepSize = 4 / denominator;
       newDuration = Math.max(
         Math.round(newDuration / stepSize) * stepSize,
-        stepSize
+        stepSize,
       );
 
       const newChords = [...chordsRef.current];
@@ -238,11 +238,11 @@ export default function Chord({ index, token, duration, variant }: Props) {
                 ? "bg-zinc-700 text-white"
                 : "bg-zinc-800 text-zinc-100"
               : selectedChord === index
-              ? "bg-violet-500 text-white"
-              : "bg-violet-700 text-zinc-100"
+                ? "bg-violet-500 text-white"
+                : "bg-violet-700 text-zinc-100"
           } ${
-            resizingAnyChord ? "" : "hover:filter hover:brightness-110"
-          } flex justify-center items-center py-[2dvh] rounded-[1dvh] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
+            resizingAnyChord ? "" : "hover:brightness-110 hover:filter"
+          } flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-[1dvh] py-[2dvh] outline-none`}
           style={{ width: `${width}dvw` }}
           onClick={
             resizingThisChordRef.current

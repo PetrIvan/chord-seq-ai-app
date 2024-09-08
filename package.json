@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "node ./src/wiki/build_index.mjs && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
   },
   "overrides": {
     "react-scripts": {
@@ -56,6 +57,8 @@
     "eslint-config-next": "14.2.4",
     "node-polyfill-webpack-plugin": "^4.0.0",
     "postcss": "^8",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.6",
     "react-virtualized": "^9.22.5",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.4",

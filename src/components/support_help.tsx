@@ -24,7 +24,7 @@ export default function SupportHelp() {
       state.setIsSupportUsAfterExport,
       state.dontShowSupportUsOverlay,
     ],
-    shallow
+    shallow,
   );
 
   // Show the support us overlay after exporting 1, 10, or 25 times
@@ -58,10 +58,10 @@ export default function SupportHelp() {
   const helpButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <section className="bg-zinc-900 min-w-0 h-[9dvh] p-[2dvh] rounded-[0.5dvw] flex flex-row items-stretch justify-evenly text-[2.5dvh]">
+    <section className="flex h-[9dvh] min-w-0 flex-row items-stretch justify-evenly rounded-[0.5dvw] bg-zinc-900 p-[2dvh] text-[2.5dvh]">
       {/* Support us button */}
       <button
-        className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
+        className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90"
         title="Support us"
         onClick={() => {
           setIsSupportUsAfterExport(false);
@@ -79,7 +79,7 @@ export default function SupportHelp() {
       </button>
       {/* Get help button */}
       <button
-        className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
+        className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90"
         title="Get help"
         onClick={() => {
           setIsStepByStepTutorialOpen(false);

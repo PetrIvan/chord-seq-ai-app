@@ -26,11 +26,11 @@ export default function NotFound() {
   }, []);
 
   return (
-    <div className="text-zinc-300 h-[100dvh] w-full">
+    <div className="h-[100dvh] w-full text-zinc-300">
       {/* Background */}
       <div className="fixed inset-0 -z-20">
         <Image
-          className="filter bg-zinc-950 object-cover"
+          className="bg-zinc-950 object-cover filter"
           src="/background-blurred.png"
           alt=""
           fill
@@ -48,11 +48,11 @@ export default function NotFound() {
         searchEnabled={false}
         sidenavEnabled={false}
       />
-      <div className="h-[calc(100%-65px)] flex flex-col items-center justify-center lg:overflow-y-auto custom-scrollbar p-5 overflow-y-auto">
+      <div className="custom-scrollbar flex h-[calc(100%-65px)] flex-col items-center justify-center overflow-y-auto p-5 lg:overflow-y-auto">
         {/* Background effect */}
-        <div className="absolute z-20 pointer-events-none top-0 inset-x-0 max-h-screen select-none flex items-center justify-center overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20 flex max-h-screen select-none items-center justify-center overflow-hidden">
           <Image
-            className="filter opacity-65"
+            className="opacity-65 filter"
             src="/background-effect.png"
             alt=""
             width={1500}
@@ -61,11 +61,11 @@ export default function NotFound() {
           />
         </div>
 
-        <div className="flex-auto h-full w-full text-center flex flex-col md:flex-row items-center justify-center">
-          <h1 className="text-4xl font-extrabold text-zinc-50 md:pr-6 md:mr-6 md:border-r md:border-r-zinc-300/50">
+        <div className="flex h-full w-full flex-auto flex-col items-center justify-center text-center md:flex-row">
+          <h1 className="text-4xl font-extrabold text-zinc-50 md:mr-6 md:border-r md:border-r-zinc-300/50 md:pr-6">
             404
           </h1>
-          <p className="text-lg mt-2 md:mt-0">This page could not be found.</p>
+          <p className="mt-2 text-lg md:mt-0">This page could not be found.</p>
         </div>
       </div>
     </div>

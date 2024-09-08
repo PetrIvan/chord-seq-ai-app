@@ -34,7 +34,7 @@ export default function TimelineEditor() {
       state.initializeStateWindow,
       state.isStepByStepTutorialOpen,
     ],
-    shallow
+    shallow,
   );
 
   /* Units */
@@ -181,7 +181,7 @@ export default function TimelineEditor() {
     const positionChange = zoomChange * relativePosition;
 
     setTimelinePosition(
-      Math.min(0, timelinePositionRef.current - positionChange)
+      Math.min(0, timelinePositionRef.current - positionChange),
     );
   };
 
@@ -209,7 +209,7 @@ export default function TimelineEditor() {
 
         setWidthInPx(timelineRef.current.offsetWidth);
         setWidthWithoutPadding(
-          timelineRef.current.offsetWidth - leftPadding + rightPadding
+          timelineRef.current.offsetWidth - leftPadding + rightPadding,
         );
       }
     }
@@ -272,7 +272,7 @@ export default function TimelineEditor() {
     const x = event.clientX - rect.left;
     let newPlayheadPosition = Math.max(
       0,
-      xToPosition(x - dvwToPx(timelinePositionRef.current))
+      xToPosition(x - dvwToPx(timelinePositionRef.current)),
     );
     newPlayheadPosition = pxToDvw(newPlayheadPosition);
 
@@ -294,8 +294,8 @@ export default function TimelineEditor() {
       let newPlayheadPosition = Math.max(
         0,
         xToPosition(
-          event.clientX - rect.left - dvwToPx(timelinePositionRef.current)
-        )
+          event.clientX - rect.left - dvwToPx(timelinePositionRef.current),
+        ),
       );
       newPlayheadPosition = pxToDvw(newPlayheadPosition);
 
@@ -344,7 +344,7 @@ export default function TimelineEditor() {
   return (
     <section
       ref={gridRef}
-      className="grid grid-cols-[8dvh_1fr] grid-rows-[auto_1fr] w-full h-full min-h-0"
+      className="grid h-full min-h-0 w-full grid-cols-[8dvh_1fr] grid-rows-[auto_1fr]"
       style={{ gridTemplateRows: `${firstRowHeight} 1fr` }}
     >
       <div /> {/* The upper left corner is empty */}
@@ -357,7 +357,7 @@ export default function TimelineEditor() {
       <Signature />
       <div
         ref={timelineRef}
-        className={`relative flex-1 bg-zinc-900 px-[1dvw] rounded-br-[1dvh] h-full ${
+        className={`relative h-full flex-1 rounded-br-[1dvh] bg-zinc-900 px-[1dvw] ${
           widthInPx > 500 && "rounded-tr-[1dvh]"
         } flex flex-col overflow-hidden ${
           middleMouseDragging && "cursor-grabbing"

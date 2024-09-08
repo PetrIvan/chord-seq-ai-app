@@ -85,7 +85,7 @@ export default function TimelineControls({
       state.setSelectedChordVariants,
       state.setIsVariantsOpenFromSuggestions,
     ],
-    shallow
+    shallow,
   );
 
   // Initialize the playback when the storage is hydrated
@@ -145,14 +145,14 @@ export default function TimelineControls({
       // Increase the BPM by 1
       if (isPlaybackSettingsOpenRef.current) {
         const input = playbackSettingsRef.current?.querySelector(
-          "input[type=number]"
+          "input[type=number]",
         ) as HTMLInputElement;
         if (!input) return;
         input.value = Math.min(400, parseInt(input.value) + 1).toString();
 
         const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
           window.HTMLInputElement.prototype,
-          "value"
+          "value",
         )?.set;
         nativeInputValueSetter?.call(input, input.value);
 
@@ -163,14 +163,14 @@ export default function TimelineControls({
       // Decrease the BPM by 1
       if (isPlaybackSettingsOpenRef.current) {
         const input = playbackSettingsRef.current?.querySelector(
-          "input[type=number]"
+          "input[type=number]",
         ) as HTMLInputElement;
         if (!input) return;
         input.value = Math.max(10, parseInt(input.value) - 1).toString();
 
         const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
           window.HTMLInputElement.prototype,
-          "value"
+          "value",
         )?.set;
         nativeInputValueSetter?.call(input, input.value);
 
@@ -230,7 +230,7 @@ export default function TimelineControls({
 
     scrollToChord(
       newChords,
-      selectedChord === -1 ? newChords.length - 1 : selectedChord + 1
+      selectedChord === -1 ? newChords.length - 1 : selectedChord + 1,
     );
   }
 
@@ -273,7 +273,7 @@ export default function TimelineControls({
       duration: number;
       variant: number;
     }[],
-    id: number
+    id: number,
   ) {
     // Calculate the total duration of all chords before the selected chord
     let totalChordsDuration = 0;
@@ -319,7 +319,7 @@ export default function TimelineControls({
         playheadPositionRef.current,
         setPlayheadPosition,
         setPlaying,
-        muteMetronome
+        muteMetronome,
       );
     }
     setPlaying(!playing);
@@ -404,19 +404,19 @@ export default function TimelineControls({
   const addButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div className="grid grid-cols-[7fr_13fr] justify-stretch h-[8dvh] min-w-[50%] max-w-[70dvh] space-x-[2dvh]">
-      <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
+    <div className="grid h-[8dvh] min-w-[50%] max-w-[70dvh] grid-cols-[7fr_13fr] justify-stretch space-x-[2dvh]">
+      <div className="relative flex h-[8dvh] w-full flex-row justify-evenly rounded-t-[0.5dvw] bg-zinc-950 p-[2dvh]">
         <button
-          className={`w-full h-full select-none ${
-            muteMetronome && "filter brightness-75"
-          } flex flex-col justify-center items-center`}
+          className={`h-full w-full select-none ${
+            muteMetronome && "brightness-75 filter"
+          } flex flex-col items-center justify-center`}
           title="Metronome (M)"
           onClick={() => changeMetronome()}
         >
           <img src="/metronome.svg" alt="Settings" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90"
           title={`${playing ? "Pause" : "Play"} (Space)`}
           onClick={() => changePlaying()}
         >
@@ -427,7 +427,7 @@ export default function TimelineControls({
           />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90"
           title="Playback settings (S)"
           onClick={() => setIsPlaybackSettingsOpen(!isPlaybackSettingsOpen)}
           ref={openPlaybackSettingsButtonRef}
@@ -444,9 +444,9 @@ export default function TimelineControls({
           />
         )}
       </div>
-      <div className="w-full h-[8dvh] relative bg-zinc-950 rounded-t-[0.5dvw] flex flex-row justify-evenly p-[2dvh]">
+      <div className="relative flex h-[8dvh] w-full flex-row justify-evenly rounded-t-[0.5dvw] bg-zinc-950 p-[2dvh]">
         <button
-          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90 disabled:brightness-75"
           disabled={stateWindowIndex <= 0}
           title="Undo (Ctrl+Z)"
           onClick={() => undo()}
@@ -454,7 +454,7 @@ export default function TimelineControls({
           <img src="/undo.svg" alt="Undo" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90 disabled:brightness-75"
           disabled={stateWindowIndex === stateWindowLength - 1}
           title="Redo (Ctrl+Y)"
           onClick={() => redo()}
@@ -462,7 +462,7 @@ export default function TimelineControls({
           <img src="/redo.svg" alt="Redo" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90 disabled:brightness-75"
           disabled={selectedChord === -1 || chords[selectedChord].token === -1}
           title="Open chord variants (V)"
           onClick={() => {
@@ -476,7 +476,7 @@ export default function TimelineControls({
           <img src="/variants.svg" alt="Variants" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90 disabled:brightness-75"
           disabled={selectedChord === -1}
           title="Delete chord (Del)"
           onClick={() => deleteChord()}
@@ -484,7 +484,7 @@ export default function TimelineControls({
           <img src="/trash.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 disabled:brightness-75 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90 disabled:brightness-75"
           title="Delete all chords (Ctrl+Del)"
           onClick={() => setIsDeleteAllOpen(!isDeleteAllOpen)}
           ref={openDeleteAllButtonRef}
@@ -492,7 +492,7 @@ export default function TimelineControls({
           <img src="/trash-all.svg" alt="Delete" className="h-full w-full" />
         </button>
         <button
-          className="w-full h-full select-none filter active:brightness-90 flex flex-col justify-center items-center"
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90"
           title="Add chord (A)"
           onClick={() => addChordAndScroll()}
           ref={addButtonRef}
