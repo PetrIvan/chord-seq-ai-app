@@ -14,6 +14,7 @@ let lastStartPlaying: number;
 
 // Initialize Tone.js
 Tone.loaded().then(() => {
+  if (typeof window === "undefined") return;
   if (Tone.getDestination().volume) Tone.getDestination().volume.value = -8;
 
   synth = new Tone.Sampler({
