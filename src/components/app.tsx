@@ -80,14 +80,14 @@ export default function App() {
   return (
     <div
       className="relative flex max-h-screen flex-col bg-cover bg-scroll bg-center text-[2.5dvh]"
-      style={{ backgroundImage: `url('/background.jpg')` }}
+      style={{ backgroundImage: `url('/background-blurred.png')` }}
     >
       <MidiImportOverlay />
       <VariantOverlay />
       <WelcomeOverlay />
       <NewFeaturesOverlay />
       <SupportUsOverlay />
-      <div className="grid min-h-screen min-w-full grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] gap-[1dvw] p-[1dvw] backdrop-blur-[max(2dvw,4dvh)]">
+      <div className="grid min-h-screen min-w-full grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] gap-[1dvw] p-[1dvw]">
         <div className="grid w-full min-w-0 grid-cols-[25fr_7fr_5fr] gap-[1dvw]">
           <ModelSelection />
           <TransposeImportExport />
