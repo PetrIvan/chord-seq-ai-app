@@ -6,10 +6,10 @@ import { shallow } from "zustand/shallow";
 
 import { onPlayheadPositionChange } from "@/playback/player";
 
-import Ticks from "../ticks";
+import Ticks from "./ticks";
 import Signature from "./signature";
 import TimelineControls from "./timeline_controls";
-import Playhead from "../playhead";
+import Playhead from "./playhead";
 import Chords from "./chords";
 
 export default function TimelineEditor() {
