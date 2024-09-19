@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useStore } from "@/state/use_store";
 
 interface Props {
   dropdownRef: React.RefObject<HTMLDivElement>;

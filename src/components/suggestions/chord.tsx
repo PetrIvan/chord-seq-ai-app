@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { tokenToChord } from "@/data/token_to_chord";
+import Image from "next/image";
 
 // Interpolate between violet and black
 const color = (t: number) => {
@@ -114,7 +115,13 @@ export default function Chord({
           setVariantsOpen(true);
         }}
       >
-        <img src="/variants.svg" alt="Variants" className="h-full w-full" />
+        <Image
+          src="/variants.svg"
+          alt="Variants"
+          width={100}
+          height={100}
+          className="h-full w-full"
+        />
       </button>
     </div>
   );

@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
+import { useInit } from "@/state/use_init";
 
 import { stopPlayback } from "@/playback/player";
 
@@ -45,13 +46,13 @@ export default function WelcomeOverlay() {
   const [showNext, setShowNext] = useState(true);
 
   // If it's the first time, open the welcome overlay
-  useEffect(() => {
+  useInit(() => {
     if (welcomeFirstTime) {
       setShowNext(false);
       setIsWelcomeOverlayOpen(true);
       setWelcomeFirstTime(false);
     }
-  }, []);
+  });
 
   const otherShortcuts = (e: KeyboardEvent) => {
     if (e.key === "ArrowRight") {

@@ -2,6 +2,7 @@
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 
 import StepByStepTutorial from "./overlays/step_by_step_tutorial";
 
@@ -75,7 +76,13 @@ export default function SupportHelp() {
           }
         }}
       >
-        <img src="/heart.svg" alt="❤️" className="h-full w-full" />
+        <Image
+          src="/heart.svg"
+          alt="Support us"
+          width={100}
+          height={100}
+          className="h-full w-full"
+        />
       </button>
       {/* Get help button */}
       <button
@@ -87,7 +94,13 @@ export default function SupportHelp() {
         }}
         ref={helpButtonRef}
       >
-        <img src="/get-help.svg" alt="?" className="h-full w-full" />
+        <Image
+          src="/get-help.svg"
+          alt="Get help"
+          width={100}
+          height={100}
+          className="h-full w-full"
+        />
       </button>
       <StepByStepTutorial
         step={8}

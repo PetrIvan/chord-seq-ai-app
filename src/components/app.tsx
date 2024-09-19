@@ -34,7 +34,7 @@ export default function App() {
 
     // Disable custom scrollbar for Firefox
     if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
-  }, []);
+  }, [setCustomScrollbar]);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
 

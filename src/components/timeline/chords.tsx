@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 

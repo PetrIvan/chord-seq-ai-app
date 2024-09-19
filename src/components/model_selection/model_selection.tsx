@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 import { genres, decades } from "@/data/conditions";
@@ -29,15 +29,18 @@ export default function ModelSelection() {
   );
 
   // Model selection handling
-  const models: [string, string, number][] = [
-    ["Recurrent Network", "/models/recurrent_net.onnx", 1.44],
-    ["Transformer S", "/models/transformer_small.onnx", 4.47],
-    ["Transformer M", "/models/transformer_medium.onnx", 9.42],
-    ["Transformer L", "/models/transformer_large.onnx", 17.7],
-    ["Conditional Transformer S", "/models/conditional_small.onnx", 4.58],
-    ["Conditional Transformer M", "/models/conditional_medium.onnx", 9.6],
-    ["Conditional Transformer L", "/models/conditional_large.onnx", 18.0],
-  ];
+  const models: [string, string, number][] = useMemo(
+    () => [
+      ["Recurrent Network", "/models/recurrent_net.onnx", 1.44],
+      ["Transformer S", "/models/transformer_small.onnx", 4.47],
+      ["Transformer M", "/models/transformer_medium.onnx", 9.42],
+      ["Transformer L", "/models/transformer_large.onnx", 17.7],
+      ["Conditional Transformer S", "/models/conditional_small.onnx", 4.58],
+      ["Conditional Transformer M", "/models/conditional_medium.onnx", 9.6],
+      ["Conditional Transformer L", "/models/conditional_large.onnx", 18.0],
+    ],
+    [],
+  );
 
   const [selectedModel, setSelectedModel] = useState(
     Math.max(
@@ -49,7 +52,7 @@ export default function ModelSelection() {
   useEffect(() => {
     setModelPath(models[selectedModel][1]);
     setModelSize(models[selectedModel][2]);
-  }, [selectedModel]);
+  }, [models, selectedModel, setModelPath, setModelSize]);
 
   // Dropdowns
   const [showModelDropdown, setShowModelDropdown] = useState(false);

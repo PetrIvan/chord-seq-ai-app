@@ -306,7 +306,11 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }, [chords, selectedChord, modelPath, selectedGenres, selectedDecades]);
 
   // Actually predict the next chord when the prediction is requested (by chordProbsLoading)
+  const prevChordProbsLoading = useRef(chordProbsLoading);
   useEffect(() => {
+    // Only predict if the prediction is requested
+    if (prevChordProbsLoading.current === chordProbsLoading) return;
+    prevChordProbsLoading.current = chordProbsLoading;
     if (!chordProbsLoading) return;
 
     // Get the style if the model is conditional
@@ -346,7 +350,14 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         setChordProbsLoading(false);
         setErrorOccured(true);
       });
-  }, [chordProbsLoading]);
+  }, [
+    chordProbsLoading,
+    chords,
+    modelPath,
+    selectedChord,
+    selectedDecades,
+    selectedGenres,
+  ]);
 
   /* Keyboard shortcuts */
   const enabledShortcutsRef = useRef(enabledShortcuts);
@@ -361,31 +372,34 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     defaultVariantsRef.current = defaultVariants;
   }, [defaultVariants]);
 
-  function handleKeyDown(event: KeyboardEvent) {
-    if ("Digit" === event.code.substring(0, 5) && enabledShortcutsRef.current) {
-      event.preventDefault();
-      let number = parseInt(event.code.substring(5, 6));
-      if (number === 0) number = 10;
-
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
       if (
-        number - 1 < chordProbsRef.current.length &&
-        !chordProbsLoadingRef.current
+        "Digit" === event.code.substring(0, 5) &&
+        enabledShortcutsRef.current
       ) {
-        let token = chordProbsRef.current[number - 1].token;
-        let variant = defaultVariantsRef.current[token];
-        replaceChord(token, variant);
-        playChord(tokenToChord[token][variant]);
+        event.preventDefault();
+        let number = parseInt(event.code.substring(5, 6));
+        if (number === 0) number = 10;
+
+        if (
+          number - 1 < chordProbsRef.current.length &&
+          !chordProbsLoadingRef.current
+        ) {
+          let token = chordProbsRef.current[number - 1].token;
+          let variant = defaultVariantsRef.current[token];
+          replaceChord(token, variant);
+          playChord(tokenToChord[token][variant]);
+        }
       }
     }
-  }
 
-  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [replaceChord]);
 
   /* Rendering */
   // Render the suggestions
@@ -524,10 +538,10 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }
 
   // Units
-  let oneDvhInPx = window.innerHeight / 100;
+  const [oneDvhInPx, setOneDvhInPx] = useState(window.innerHeight / 100);
   useEffect(() => {
     const handleResize = () => {
-      oneDvhInPx = window.innerHeight / 100;
+      setOneDvhInPx(window.innerHeight / 100);
     };
 
     window.addEventListener("resize", handleResize);

@@ -1,5 +1,6 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useInit } from "@/state/use_init";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -38,12 +39,12 @@ export default function TimelineEditor() {
   );
 
   /* Units */
-  let oneDvwInPx = window.innerWidth / 100;
+  const [oneDvwInPx, setOneDvwInPx] = useState(window.innerWidth / 100);
 
   // Update on window resize
   useEffect(() => {
     const handleResize = () => {
-      oneDvwInPx = window.innerWidth / 100;
+      setOneDvwInPx(window.innerWidth / 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -53,19 +54,25 @@ export default function TimelineEditor() {
     };
   }, []);
 
-  function dvwToPx(dvw: number) {
-    return dvw * oneDvwInPx;
-  }
+  const dvwToPx = useCallback(
+    (dvw: number) => {
+      return dvw * oneDvwInPx;
+    },
+    [oneDvwInPx],
+  );
 
-  function pxToDvw(px: number) {
-    return px / oneDvwInPx;
-  }
+  const pxToDvw = useCallback(
+    (px: number) => {
+      return px / oneDvwInPx;
+    },
+    [oneDvwInPx],
+  );
 
   /* State window logic */
-  useEffect(() => {
+  useInit(() => {
     // Once the app starts, initialize the state window
     initializeStateWindow();
-  }, []);
+  });
 
   /* Timeline position logic */
   const timelinePositionRef = useRef(timelinePosition);
@@ -104,46 +111,55 @@ export default function TimelineEditor() {
     return fromTop > ticksBoundary && fromBottom > ticksBoundary;
   };
 
-  const handleTimelineDrag = (event: MouseEvent) => {
-    if (isStepByStepTutorialOpenRef.current) return;
+  const handleTimelineDrag = useCallback(
+    (event: MouseEvent) => {
+      if (isStepByStepTutorialOpenRef.current) return;
 
-    if (timelineRef.current && middleMouseDraggingRef.current) {
-      const dx = pxToDvw(event.clientX) - lastPositionRef.current;
+      if (timelineRef.current && middleMouseDraggingRef.current) {
+        const dx = pxToDvw(event.clientX) - lastPositionRef.current;
+
+        setLastPosition(pxToDvw(event.clientX));
+        setTimelinePosition(Math.min(0, timelinePositionRef.current + dx));
+      }
+    },
+    [pxToDvw, setTimelinePosition],
+  );
+
+  const handleDragStart = useCallback(
+    (event: MouseEvent) => {
+      if (isStepByStepTutorialOpenRef.current) return;
 
       setLastPosition(pxToDvw(event.clientX));
-      setTimelinePosition(Math.min(0, timelinePositionRef.current + dx));
-    }
-  };
-
-  const handleDragStart = (event: MouseEvent) => {
-    if (isStepByStepTutorialOpenRef.current) return;
-
-    setLastPosition(pxToDvw(event.clientX));
-    if (
-      timelineRef.current &&
-      event.button === 1 &&
-      isOnTimeline(event.clientY, timelineRef.current.getBoundingClientRect())
-    ) {
-      setMiddleMouseDragging(true);
-      event.preventDefault();
-    }
-  };
+      if (
+        timelineRef.current &&
+        event.button === 1 &&
+        isOnTimeline(event.clientY, timelineRef.current.getBoundingClientRect())
+      ) {
+        setMiddleMouseDragging(true);
+        event.preventDefault();
+      }
+    },
+    [pxToDvw],
+  );
 
   const handleDragStop = () => {
     setMiddleMouseDragging(false);
   };
 
   useEffect(() => {
-    timelineRef?.current?.addEventListener("mousedown", handleDragStart);
+    const timelineEl = timelineRef.current;
+    if (!timelineEl) return;
+
+    timelineEl.addEventListener("mousedown", handleDragStart);
     window.addEventListener("mousemove", handleTimelineDrag);
     window.addEventListener("mouseup", handleDragStop);
 
     return () => {
-      timelineRef?.current?.removeEventListener("mousedown", handleDragStart);
+      timelineEl.removeEventListener("mousedown", handleDragStart);
       window.removeEventListener("mousemove", handleTimelineDrag);
       window.removeEventListener("mouseup", handleDragStop);
     };
-  }, []);
+  }, [handleDragStart, handleTimelineDrag]);
 
   /* Timeline start position */
   // Set the timeline start to the left padding in dvw + offset to account for the border
@@ -156,44 +172,50 @@ export default function TimelineEditor() {
     zoomRef.current = zoom;
   }, [zoom]);
 
-  const handleZoom = (event: WheelEvent) => {
-    if (isStepByStepTutorialOpenRef.current) return;
+  const handleZoom = useCallback(
+    (event: WheelEvent) => {
+      if (isStepByStepTutorialOpenRef.current) return;
 
-    event.preventDefault();
+      event.preventDefault();
 
-    const newZoom = zoom + event.deltaY * -0.00075;
-    const clampedZoom = Math.min(Math.max(newZoom, 0.25), 5);
+      const newZoom = zoom + event.deltaY * -0.00075;
+      const clampedZoom = Math.min(Math.max(newZoom, 0.25), 5);
 
-    setZoom(clampedZoom);
+      setZoom(clampedZoom);
 
-    // Zoom in on the mouse position
-    if (!timelineRef.current) return;
+      // Zoom in on the mouse position
+      if (!timelineRef.current) return;
 
-    const rect = timelineRef.current.getBoundingClientRect();
+      const rect = timelineRef.current.getBoundingClientRect();
 
-    // Mouse position from the left start of the timeline
-    const x = pxToDvw(event.clientX - rect.left) - timelineStart;
+      // Mouse position from the left start of the timeline
+      const x = pxToDvw(event.clientX - rect.left) - timelineStart;
 
-    // Calculate the position change required to correctly zoom on the cursor
-    const zoomChange = clampedZoom - zoomRef.current;
-    const relativePosition =
-      (x - timelinePositionRef.current) / zoomRef.current;
-    const positionChange = zoomChange * relativePosition;
+      // Calculate the position change required to correctly zoom on the cursor
+      const zoomChange = clampedZoom - zoomRef.current;
+      const relativePosition =
+        (x - timelinePositionRef.current) / zoomRef.current;
+      const positionChange = zoomChange * relativePosition;
 
-    setTimelinePosition(
-      Math.min(0, timelinePositionRef.current - positionChange),
-    );
-  };
+      setTimelinePosition(
+        Math.min(0, timelinePositionRef.current - positionChange),
+      );
+    },
+    [pxToDvw, setTimelinePosition, setZoom, timelineStart, zoom],
+  );
 
   useEffect(() => {
-    timelineRef?.current?.addEventListener("wheel", handleZoom, {
+    const timelineEl = timelineRef.current;
+    if (!timelineEl) return;
+
+    timelineEl.addEventListener("wheel", handleZoom, {
       passive: false,
     });
 
     return () => {
-      timelineRef?.current?.removeEventListener("wheel", handleZoom);
+      timelineEl.removeEventListener("wheel", handleZoom);
     };
-  }, [zoom, timelinePosition]);
+  }, [zoom, timelinePosition, handleZoom]);
 
   /* Window resize logic */
   // The width referenced is that of the timeline
@@ -238,16 +260,19 @@ export default function TimelineEditor() {
   }, [signature]);
 
   // Convert from screen position to timeline position
-  const xToPosition = (x: number) => {
-    return (
-      ((x - dvwToPx(timelineStart)) /
-        10 /
-        zoomRef.current /
-        signatureRef.current[1]) *
-      signatureRef.current[0] *
-      4
-    );
-  };
+  const xToPosition = useCallback(
+    (x: number) => {
+      return (
+        ((x - dvwToPx(timelineStart)) /
+          10 /
+          zoomRef.current /
+          signatureRef.current[1]) *
+        signatureRef.current[0] *
+        4
+      );
+    },
+    [dvwToPx, timelineStart],
+  );
 
   const isOnTicks = (clientY: number, rect: DOMRect) => {
     const fromTop = clientY - rect.top;
@@ -263,64 +288,74 @@ export default function TimelineEditor() {
   };
 
   // Set the playhead position based on current cursor position
-  const handlePlayheadUpdate = (event: MouseEvent) => {
-    if (isStepByStepTutorialOpenRef.current) return;
+  const handlePlayheadUpdate = useCallback(
+    (event: MouseEvent) => {
+      if (isStepByStepTutorialOpenRef.current) return;
 
-    if (!timelineRef.current || !holdingMouseRef.current) return;
+      if (!timelineRef.current || !holdingMouseRef.current) return;
 
-    const rect = timelineRef.current.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    let newPlayheadPosition = Math.max(
-      0,
-      xToPosition(x - dvwToPx(timelinePositionRef.current)),
-    );
-    newPlayheadPosition = pxToDvw(newPlayheadPosition);
-
-    onPlayheadPositionChange(newPlayheadPosition); // Reference to playback
-
-    setPlayheadPosition(newPlayheadPosition);
-  };
-
-  const handleMouseDown = (event: MouseEvent) => {
-    if (isStepByStepTutorialOpenRef.current) return;
-
-    const rect = timelineRef?.current?.getBoundingClientRect();
-
-    if (!rect || !isOnTicks(event.clientY, rect) || event.button !== 0) return;
-
-    // Playhead should update both on mouse move and click
-    setHoldingMouse(true);
-    if (timelineRef.current) {
+      const rect = timelineRef.current.getBoundingClientRect();
+      const x = event.clientX - rect.left;
       let newPlayheadPosition = Math.max(
         0,
-        xToPosition(
-          event.clientX - rect.left - dvwToPx(timelinePositionRef.current),
-        ),
+        xToPosition(x - dvwToPx(timelinePositionRef.current)),
       );
       newPlayheadPosition = pxToDvw(newPlayheadPosition);
 
       onPlayheadPositionChange(newPlayheadPosition); // Reference to playback
 
       setPlayheadPosition(newPlayheadPosition);
-    }
+    },
+    [dvwToPx, pxToDvw, setPlayheadPosition, xToPosition],
+  );
 
-    window.addEventListener("mousemove", handlePlayheadUpdate);
-  };
+  const handleMouseDown = useCallback(
+    (event: MouseEvent) => {
+      if (isStepByStepTutorialOpenRef.current) return;
 
-  const handleMouseUp = () => {
+      const rect = timelineRef?.current?.getBoundingClientRect();
+
+      if (!rect || !isOnTicks(event.clientY, rect) || event.button !== 0)
+        return;
+
+      // Playhead should update both on mouse move and click
+      setHoldingMouse(true);
+      if (timelineRef.current) {
+        let newPlayheadPosition = Math.max(
+          0,
+          xToPosition(
+            event.clientX - rect.left - dvwToPx(timelinePositionRef.current),
+          ),
+        );
+        newPlayheadPosition = pxToDvw(newPlayheadPosition);
+
+        onPlayheadPositionChange(newPlayheadPosition); // Reference to playback
+
+        setPlayheadPosition(newPlayheadPosition);
+      }
+
+      window.addEventListener("mousemove", handlePlayheadUpdate);
+    },
+    [dvwToPx, handlePlayheadUpdate, pxToDvw, setPlayheadPosition, xToPosition],
+  );
+
+  const handleMouseUp = useCallback(() => {
     setHoldingMouse(false);
     window.removeEventListener("mousemove", handlePlayheadUpdate);
-  };
+  }, [handlePlayheadUpdate]);
 
   useEffect(() => {
-    timelineRef?.current?.addEventListener("mousedown", handleMouseDown);
+    const timelineEl = timelineRef.current;
+    if (!timelineEl) return;
+
+    timelineEl.addEventListener("mousedown", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
 
     return () => {
-      timelineRef?.current?.removeEventListener("mousedown", handleMouseDown);
+      timelineEl.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [handleMouseDown, handleMouseUp]);
 
   /* Grid layout sizing logic */
   // To make the signature and the timeline controls match

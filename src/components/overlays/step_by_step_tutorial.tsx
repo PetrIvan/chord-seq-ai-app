@@ -1,6 +1,7 @@
 "use client";
 import { useStore } from "@/state/use_store";
 import { useRef, useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 
 interface Props {
   step: number; // Indexed from 0
@@ -308,10 +309,13 @@ export default function StepByStepTutorial({
           )}
 
           <div className="flex w-full flex-row items-center justify-between">
-            <img
+            <Image
               className="h-[5dvh] w-[5dvh] cursor-pointer filter active:brightness-90"
               src="/restart.svg"
               title="Restart tutorial (R)"
+              alt="Restart tutorial"
+              width={100}
+              height={100}
               onClick={() => {
                 if (tutorialStep === 0) return;
 
@@ -322,10 +326,13 @@ export default function StepByStepTutorial({
             <p className="text-[2.5dvh] font-semibold">
               Step {tutorialStep + 1}/{numSteps}
             </p>
-            <img
+            <Image
               className="h-[5dvh] w-[5dvh] cursor-pointer filter active:brightness-90"
               src="/close.svg"
               title="Close (Esc)"
+              alt="Close"
+              width={100}
+              height={100}
               onClick={() => {
                 setEnabledShortcuts(true);
                 setIsStepByStepTutorialOpen(false);

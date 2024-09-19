@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
@@ -74,7 +75,13 @@ export default function SearchBar() {
       <div className="flex h-[8dvh] flex-row items-center justify-start rounded-[2dvh] bg-zinc-800 p-[0.5dvw]">
         {/* Search by name */}
         <div className="flex h-full flex-row items-center justify-end">
-          <img className="h-[70%] w-[70%]" src="/search.svg" alt="Search" />
+          <Image
+            className="h-[70%] w-[70%]"
+            src="/search.svg"
+            alt="Search"
+            width={100}
+            height={100}
+          />
         </div>
         {/* Not actually visible, for accessibility */}
         <label htmlFor="search" className="visually-hidden">
@@ -197,10 +204,12 @@ export default function SearchBar() {
             setMatchAnyVariant(true);
           }}
         >
-          <img
+          <Image
             className="h-[80%] w-[80%]"
             src="/close.svg"
             alt="Clear search"
+            width={100}
+            height={100}
           />
         </button>
       )}

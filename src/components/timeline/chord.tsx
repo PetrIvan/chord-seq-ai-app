@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -44,12 +44,12 @@ export default function Chord({ index, token, duration, variant }: Props) {
   const chordElementRef = useRef<HTMLButtonElement>(null);
 
   /* Units */
-  let oneDvwInPx = window.innerWidth / 100;
+  const [oneDvwInPx, setOneDvhInPx] = useState(window.innerWidth / 100);
 
   // Update on window resize
   useEffect(() => {
     const handleResize = () => {
-      oneDvwInPx = window.innerWidth / 100;
+      setOneDvhInPx(window.innerWidth / 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -59,9 +59,12 @@ export default function Chord({ index, token, duration, variant }: Props) {
     };
   }, []);
 
-  function pxToDvw(px: number) {
-    return px / oneDvwInPx;
-  }
+  const pxToDvw = useCallback(
+    (px: number): number => {
+      return px / oneDvwInPx;
+    },
+    [oneDvwInPx],
+  );
 
   /* Resizing state */
   // Keep track of which chord is being resized
@@ -171,7 +174,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [index, pxToDvw, setChords]);
 
   useEffect(() => {
     const element = chordElementRef.current;
@@ -206,7 +209,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       element.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [setChords, setResizingChord]);
 
   // Render the chord properly (a whole note (duration 4) on zoom set to 1 and signature 4/4 spans 10dvw)
   let [numerator, denominator] = signature;

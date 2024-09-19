@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -31,7 +31,7 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
       ids.push(i);
     }
     setTickIds(ids);
-  }, [availableSpace, signature, zoom, timelinePosition]);
+  }, [availableSpace, signature, zoom, timelinePosition, timelineStart]);
 
   // Render a tick
   const tick = (id: number) => {

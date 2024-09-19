@@ -1,7 +1,10 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
+import { useInit } from "@/state/use_init";
+
+import Image from "next/image";
 
 import Overlay from "../ui/overlay";
 
@@ -35,7 +38,7 @@ export default function NewFeaturesOverlay() {
   const latestVersion = 4;
 
   // If it's the first time after the update, show the overlay
-  useEffect(() => {
+  useInit(() => {
     if (version < latestVersion) {
       // Show all features since the previous version
       let features = [];
@@ -53,7 +56,7 @@ export default function NewFeaturesOverlay() {
     }
 
     setShowPrev(true);
-  }, []);
+  });
 
   // If it is open from the help menu, show all features
   useEffect(() => {
@@ -79,10 +82,22 @@ export default function NewFeaturesOverlay() {
     1: [
       <li key={1}>
         Delete all{" "}
-        <img src="/trash-all.svg" className="inline h-[4dvh] w-[4dvh]" /> and
-        chord variants{" "}
-        <img src="/variants.svg" className="inline h-[4dvh] w-[4dvh]" /> now
-        have their own buttons.
+        <Image
+          src="/trash-all.svg"
+          alt=""
+          className="inline h-[4dvh] w-[4dvh]"
+          width={100}
+          height={100}
+        />{" "}
+        and chord variants{" "}
+        <Image
+          src="/variants.svg"
+          alt=""
+          className="inline h-[4dvh] w-[4dvh]"
+          width={100}
+          height={100}
+        />{" "}
+        now have their own buttons.
       </li>,
       <li key={2}>Added new shortcuts to make your workflow faster.</li>,
       <li key={3}>
