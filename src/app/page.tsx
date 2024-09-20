@@ -1,6 +1,5 @@
 import QuickButtons from "@/components/landing_page/quick_buttons";
 import TrackedLink from "@/components/landing_page/tracked_link";
-import SupportUsOverlay from "@/components/overlays/support_us_overlay";
 import Header from "@/components/header";
 
 import Image from "next/image";
@@ -8,7 +7,6 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div>
-      <SupportUsOverlay />
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-cover bg-scroll bg-center">
         <Header
           isTop={true}

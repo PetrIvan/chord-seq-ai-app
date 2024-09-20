@@ -161,8 +161,6 @@ interface StoreState {
   setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) => void;
   isSupportUsAfterExport: boolean;
   setIsSupportUsAfterExport: (isSupportUsAfterExport: boolean) => void;
-  isSupportUsLandingPage: boolean;
-  setIsSupportUsLandingPage: (isSupportUsLandingPage: boolean) => void;
   timesExported: number;
   incrementTimesExported: () => void;
   dontShowSupportUsOverlay: boolean;
@@ -471,9 +469,6 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isSupportUsAfterExport: false,
       setIsSupportUsAfterExport: (isSupportUsAfterExport: boolean) =>
         set({ isSupportUsAfterExport }),
-      isSupportUsLandingPage: false,
-      setIsSupportUsLandingPage: (isSupportUsLandingPage: boolean) =>
-        set({ isSupportUsLandingPage }),
       timesExported: 0,
       incrementTimesExported: () =>
         set({ timesExported: get().timesExported + 1 }),

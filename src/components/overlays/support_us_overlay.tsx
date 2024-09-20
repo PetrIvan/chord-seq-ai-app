@@ -9,14 +9,12 @@ export default function SupportUsOverlay() {
     isSupportUsOverlayOpen,
     setIsSupportUsOverlayOpen,
     isSupportUsAfterExport,
-    isSupportUsLandingPage,
     setDontShowSupportUsOverlay,
   ] = useStore(
     (state) => [
       state.isSupportUsOverlayOpen,
       state.setIsSupportUsOverlayOpen,
       state.isSupportUsAfterExport,
-      state.isSupportUsLandingPage,
       state.setDontShowSupportUsOverlay,
     ],
     shallow,
@@ -37,16 +35,11 @@ export default function SupportUsOverlay() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Close if the aspect ratio is not supported
-  if ((aspectRatio <= 0.7 || aspectRatio >= 4) && isSupportUsOverlayOpen) {
-    setIsSupportUsOverlayOpen(false);
-  }
-
   return (
     <Overlay
       isOverlayOpen={isSupportUsOverlayOpen}
       setIsOverlayOpen={setIsSupportUsOverlayOpen}
-      enabledOverflow={isSupportUsLandingPage}
+      enabledOverflow={false}
     >
       <p className="text-center text-[5dvh] font-semibold">
         Support ChordSeqAI
