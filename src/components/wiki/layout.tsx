@@ -149,6 +149,27 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
     };
   }, []);
 
+  // Handle copy events for invisible characters
+  useEffect(() => {
+    const handleCopy = (event: ClipboardEvent) => {
+      const selection = window.getSelection();
+      const selectedText = selection?.toString();
+
+      // Strip invisible characters
+      if (selectedText) {
+        const modifiedText = selectedText.replace(/\u200B/g, "");
+        event.preventDefault();
+        event.clipboardData?.setData("text/plain", modifiedText);
+      }
+    };
+
+    document.addEventListener("copy", handleCopy);
+
+    return () => {
+      document.removeEventListener("copy", handleCopy);
+    };
+  }, []);
+
   return (
     <div className="text-zinc-300">
       {/* Background */}
