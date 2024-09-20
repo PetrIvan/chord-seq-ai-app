@@ -1,14 +1,12 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import { remark } from 'remark';
-import strip from 'strip-markdown';
-import { readFile } from 'fs/promises';
+import { remark } from "remark";
+import strip from "strip-markdown";
+import { readFile } from "fs/promises";
 
 const wikiTree = JSON.parse(
-  await readFile(
-    new URL('../data/wiki_tree.json', import.meta.url)
-  )
+  await readFile(new URL("../data/wiki_tree.json", import.meta.url)),
 );
 
 const wikiDirectory = path.join(process.cwd(), "src/content/wiki");
@@ -33,12 +31,10 @@ function getAllMdxFiles(dirPath, arrayOfFiles = []) {
 
 async function extractPlainTextFromMDX(mdxContent) {
   // Process the MDX content with remark and strip-markdown
-  const processedContent = await remark()
-    .use(strip)
-    .process(mdxContent);
+  const processedContent = await remark().use(strip).process(mdxContent);
 
   return processedContent.toString();
-};
+}
 
 async function buildSearchIndex() {
   const mdxFiles = getAllMdxFiles(wikiDirectory);
@@ -52,9 +48,7 @@ async function buildSearchIndex() {
 
     // Remove MDX-specific characters from the content
     // CONTINUE HERE, add something
-    const cleanContent = mdxContent
-      .replace(/\r/g, " ")
-      .trim();
+    const cleanContent = mdxContent.replace(/\r/g, " ").trim();
 
     // Split the MDX content into an array of headings and paragraphs
     const sections = cleanContent
@@ -72,7 +66,9 @@ async function buildSearchIndex() {
     // Build the search index entries
     for (const section of sections) {
       const heading = section.match(/^#+ (.+)/)?.[1].trim() || title;
-      let summary = await extractPlainTextFromMDX(section.replace(/^#+ .+/, ""));
+      let summary = await extractPlainTextFromMDX(
+        section.replace(/^#+ .+/, ""),
+      );
       summary = summary.replace(/\s+/g, " ").replace(/\n/g, " ").trim();
 
       // Create a slug from the file path and heading
@@ -105,18 +101,14 @@ async function buildSearchIndex() {
   }
 
   // Ensure the predefined tree matches the generated tree
-  function compareTrees(
-    predefinedNode,
-    generatedNode,
-    path = ""
-  ) {
+  function compareTrees(predefinedNode, generatedNode, path = "") {
     for (const key in generatedNode) {
       const predefinedChild = predefinedNode[key];
 
       // Ensure the predefined tree has the same node
       if (!predefinedChild) {
         throw new Error(
-          `Missing node in predefined tree at path: ${path}/${key}`
+          `Missing node in predefined tree at path: ${path}/${key}`,
         );
       }
     }
@@ -135,7 +127,7 @@ async function buildSearchIndex() {
         compareTrees(
           predefinedChild.children,
           generatedChild.children,
-          `${path}/${key}`
+          `${path}/${key}`,
         );
       }
     }

@@ -18,7 +18,7 @@ export default function SignatureDropdown({
   const [denominator, setDenominator] = useState(signature[1]);
 
   const handleNumeratorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     // Limit the numerator to 1-16
     const newValue = parseInt(event.target.value, 10);
@@ -33,7 +33,7 @@ export default function SignatureDropdown({
   };
 
   const handleDenominatorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     // Only powers of 2 are usually used as denominators in music
     let newValue = parseInt(event.target.value, 10);
@@ -57,19 +57,19 @@ export default function SignatureDropdown({
 
   return (
     <div
-      className="absolute z-10 top-full mt-[0.5dvw] bg-zinc-950 rounded-[0.5dvw] flex flex-row items-center p-[1dvw] shadow-lg shadow-zinc-950"
+      className="absolute top-full z-10 mt-[0.5dvw] flex flex-row items-center rounded-[0.5dvw] bg-zinc-950 p-[1dvw] shadow-lg shadow-zinc-950"
       ref={shownDropdownRef}
     >
       <input
         type="number"
-        className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[10dvh] h-[6dvh] bg-zinc-800 text-white rounded-[1dvh]"
+        className="h-[6dvh] w-[10dvh] rounded-[1dvh] border-[0.2dvh] bg-zinc-800 p-[2dvh] text-[2.5dvh] text-white"
         value={numerator}
         onChange={handleNumeratorChange}
       />
-      <span className="text-white mx-[0.5dvw]">/</span>
+      <span className="mx-[0.5dvw] text-white">/</span>
       <input
         type="number"
-        className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[10dvh] h-[6dvh] bg-zinc-800 text-white rounded-[1dvh]"
+        className="h-[6dvh] w-[10dvh] rounded-[1dvh] border-[0.2dvh] bg-zinc-800 p-[2dvh] text-[2.5dvh] text-white"
         value={denominator}
         onChange={handleDenominatorChange}
       />

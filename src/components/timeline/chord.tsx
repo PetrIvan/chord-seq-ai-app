@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -38,18 +38,18 @@ export default function Chord({ index, token, duration, variant }: Props) {
       state.setResizingChord,
       state.isStepByStepTutorialOpen,
     ],
-    shallow
+    shallow,
   );
 
   const chordElementRef = useRef<HTMLButtonElement>(null);
 
   /* Units */
-  let oneDvwInPx = window.innerWidth / 100;
+  const [oneDvwInPx, setOneDvhInPx] = useState(window.innerWidth / 100);
 
   // Update on window resize
   useEffect(() => {
     const handleResize = () => {
-      oneDvwInPx = window.innerWidth / 100;
+      setOneDvhInPx(window.innerWidth / 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -59,9 +59,12 @@ export default function Chord({ index, token, duration, variant }: Props) {
     };
   }, []);
 
-  function pxToDvw(px: number) {
-    return px / oneDvwInPx;
-  }
+  const pxToDvw = useCallback(
+    (px: number): number => {
+      return px / oneDvwInPx;
+    },
+    [oneDvwInPx],
+  );
 
   /* Resizing state */
   // Keep track of which chord is being resized
@@ -145,7 +148,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       const stepSize = 4 / denominator;
       newDuration = Math.max(
         Math.round(newDuration / stepSize) * stepSize,
-        stepSize
+        stepSize,
       );
 
       const newChords = [...chordsRef.current];
@@ -171,7 +174,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [index, pxToDvw, setChords]);
 
   useEffect(() => {
     const element = chordElementRef.current;
@@ -206,7 +209,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       element.removeEventListener("mousedown", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [setChords, setResizingChord]);
 
   // Render the chord properly (a whole note (duration 4) on zoom set to 1 and signature 4/4 spans 10dvw)
   let [numerator, denominator] = signature;
@@ -238,11 +241,11 @@ export default function Chord({ index, token, duration, variant }: Props) {
                 ? "bg-zinc-700 text-white"
                 : "bg-zinc-800 text-zinc-100"
               : selectedChord === index
-              ? "bg-violet-500 text-white"
-              : "bg-violet-700 text-zinc-100"
+                ? "bg-violet-500 text-white"
+                : "bg-violet-700 text-zinc-100"
           } ${
-            resizingAnyChord ? "" : "hover:filter hover:brightness-110"
-          } flex justify-center items-center py-[2dvh] rounded-[1dvh] overflow-hidden outline-none h-full min-h-0 min-w-0 whitespace-nowrap`}
+            resizingAnyChord ? "" : "hover:brightness-110 hover:filter"
+          } flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-[1dvh] py-[2dvh] outline-none`}
           style={{ width: `${width}dvw` }}
           onClick={
             resizingThisChordRef.current

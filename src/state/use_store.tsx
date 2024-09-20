@@ -38,7 +38,7 @@ interface StoreState {
       duration: number;
       variant: number;
     }[],
-    ignoreStateWindow?: boolean
+    ignoreStateWindow?: boolean,
   ) => void;
   selectedChord: number; // Index of the selected chord
   setSelectedChord: (state: number, ignoreStateWindow?: boolean) => void;
@@ -124,7 +124,7 @@ interface StoreState {
   setVariantsOpen: (variantsOpen: boolean) => void;
   isVariantsOpenFromSuggestions: boolean;
   setIsVariantsOpenFromSuggestions: (
-    isVariantsOpenFromSuggestions: boolean
+    isVariantsOpenFromSuggestions: boolean,
   ) => void;
   selectedVariant: number;
   setSelectedVariant: (variant: number) => void;
@@ -161,8 +161,6 @@ interface StoreState {
   setIsSupportUsOverlayOpen: (isSupportUsOverlayOpen: boolean) => void;
   isSupportUsAfterExport: boolean;
   setIsSupportUsAfterExport: (isSupportUsAfterExport: boolean) => void;
-  isSupportUsLandingPage: boolean;
-  setIsSupportUsLandingPage: (isSupportUsLandingPage: boolean) => void;
   timesExported: number;
   incrementTimesExported: () => void;
   dontShowSupportUsOverlay: boolean;
@@ -197,7 +195,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
           duration: number;
           variant: number;
         }[],
-        ignoreStateWindow?: boolean
+        ignoreStateWindow?: boolean,
       ) => {
         set((state) => deepCompareUpdate({ chords }, state));
         if (!ignoreStateWindow) get().saveStateWindow();
@@ -205,7 +203,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       selectedChord: -1,
       setSelectedChord: (
         selectedChord: number,
-        ignoreStateWindow?: boolean
+        ignoreStateWindow?: boolean,
       ) => {
         set({ selectedChord });
         if (!ignoreStateWindow) get().saveStateWindow();
@@ -276,7 +274,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       signature: [4, 4],
       setSignature: (
         signature: [number, number],
-        ignoreStateWindow?: boolean
+        ignoreStateWindow?: boolean,
       ) => {
         set({ signature });
         if (!ignoreStateWindow) get().saveStateWindow();
@@ -418,7 +416,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
       setVariantsOpen: (variantsOpen: boolean) => set({ variantsOpen }),
       isVariantsOpenFromSuggestions: false,
       setIsVariantsOpenFromSuggestions: (
-        isVariantsOpenFromSuggestions: boolean
+        isVariantsOpenFromSuggestions: boolean,
       ) => set({ isVariantsOpenFromSuggestions }),
       selectedVariant: 0,
       setSelectedVariant: (selectedVariant: number) => set({ selectedVariant }),
@@ -429,7 +427,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         set({ selectedChordVariants }),
       defaultVariants: Array.from(
         { length: Object.keys(tokenToChord).length },
-        (value, key) => 0
+        (value, key) => 0,
       ),
       setDefaultVariants: (defaultVariants: number[]) =>
         set({ defaultVariants }),
@@ -471,9 +469,6 @@ export const useStore = createWithEqualityFn<StoreState>()(
       isSupportUsAfterExport: false,
       setIsSupportUsAfterExport: (isSupportUsAfterExport: boolean) =>
         set({ isSupportUsAfterExport }),
-      isSupportUsLandingPage: false,
-      setIsSupportUsLandingPage: (isSupportUsLandingPage: boolean) =>
-        set({ isSupportUsLandingPage }),
       timesExported: 0,
       incrementTimesExported: () =>
         set({ timesExported: get().timesExported + 1 }),
@@ -519,6 +514,6 @@ export const useStore = createWithEqualityFn<StoreState>()(
         dontShowSupportUsOverlay: state.dontShowSupportUsOverlay,
         version: state.version,
       }),
-    }
-  )
+    },
+  ),
 );

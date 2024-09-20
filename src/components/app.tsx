@@ -19,7 +19,7 @@ import { shallow } from "zustand/shallow";
 export default function App() {
   const [setCustomScrollbar] = useStore(
     (state) => [state.setCustomScrollbarEnabled],
-    shallow
+    shallow,
   );
 
   // Next.js 13+ implementation, the default isMobile from react-device-detect
@@ -34,7 +34,7 @@ export default function App() {
 
     // Disable custom scrollbar for Firefox
     if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
-  }, []);
+  }, [setCustomScrollbar]);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
 
@@ -68,8 +68,8 @@ export default function App() {
 
   if (info) {
     return (
-      <div className="w-full min-h-screen flex flex-col justify-center items-center bg-zinc-950 p-[4dvh]">
-        <p className="text-[4dvh] font-bold text-zinc-500 text-center">
+      <div className="flex min-h-screen w-full flex-col items-center justify-center bg-zinc-950 p-[4dvh]">
+        <p className="text-center text-[4dvh] font-bold text-zinc-500">
           {info}
         </p>
       </div>
@@ -79,16 +79,16 @@ export default function App() {
   // Main app
   return (
     <div
-      className="relative max-h-screen flex flex-col bg-scroll bg-center bg-cover text-[2.5dvh]"
-      style={{ backgroundImage: `url('/background.jpg')` }}
+      className="relative flex max-h-screen flex-col bg-cover bg-scroll bg-center text-[2.5dvh]"
+      style={{ backgroundImage: `url('/background-blurred.png')` }}
     >
       <MidiImportOverlay />
       <VariantOverlay />
       <WelcomeOverlay />
       <NewFeaturesOverlay />
       <SupportUsOverlay />
-      <div className="min-h-screen min-w-full grid grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] backdrop-blur-[max(2dvw,4dvh)] gap-[1dvw] p-[1dvw]">
-        <div className="grid grid-cols-[25fr_7fr_5fr] gap-[1dvw] w-full min-w-0">
+      <div className="grid min-h-screen min-w-full grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] gap-[1dvw] p-[1dvw]">
+        <div className="grid w-full min-w-0 grid-cols-[25fr_7fr_5fr] gap-[1dvw]">
           <ModelSelection />
           <TransposeImportExport />
           <SupportHelp />

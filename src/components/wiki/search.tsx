@@ -146,26 +146,26 @@ export default function Search({
   return (
     <div
       className={
-        "relative flex flex-col items-center justify-center flex-1 max-w-[30rem] mx-2 min-w-0 flex-shrink-1 " +
+        "flex-shrink-1 relative mx-2 flex min-w-0 max-w-[30rem] flex-1 flex-col items-center justify-center " +
         className
       }
       ref={dropdownRef}
       {...props}
     >
       <div
-        className={`relative flex items-center justify-center w-full p-2 px-3 bg-zinc-900 box-border border-zinc-800 rounded-full min-w-0 ${
+        className={`relative box-border flex w-full min-w-0 items-center justify-center rounded-full border-zinc-800 bg-zinc-900 p-2 px-3 ${
           isOverlay ? "" : "border"
         }`}
       >
         <Image
-          className="w-5 h-5 mr-2"
+          className="mr-2 h-5 w-5"
           src="/search.svg"
           alt="Search icon"
           width={100}
           height={100}
         />
         <input
-          className="flex-1 w-full h-5 p-0 bg-zinc-900 text-white placeholder-zinc-500 placeholder-opacity-50 border-transparent focus:border-transparent focus:ring-0"
+          className="h-5 w-full flex-1 border-transparent bg-zinc-900 p-0 text-white placeholder-zinc-500 placeholder-opacity-50 focus:border-transparent focus:ring-0"
           type="text"
           placeholder="Search..."
           id={`search${isOverlay ? "-overlay" : ""}`}
@@ -182,7 +182,7 @@ export default function Search({
           ref={inputRef}
         />
         {!isOverlay && query.trim() === "" && (
-          <p className="text-zinc-500 px-2">Ctrl + K</p>
+          <p className="px-2 text-zinc-500">Ctrl + K</p>
         )}
         {query.trim() !== "" && (
           <Image
@@ -191,7 +191,7 @@ export default function Search({
             title="Clear search"
             width={100}
             height={100}
-            className="w-5 h-5 cursor-pointer contrast-[66%] hover:contrast-100"
+            className="h-5 w-5 cursor-pointer contrast-[66%] hover:contrast-100"
             onClick={() => {
               setIsDropdownOpen(false);
               setQuery("");
@@ -202,14 +202,14 @@ export default function Search({
       </div>
       {results.length > 0 && isDropdownOpen && (
         <>
-          {isOverlay && <div className="w-full h-[1px] bg-zinc-800" />}
+          {isOverlay && <div className="h-[1px] w-full bg-zinc-800" />}
           <div
-            className={`max-h-fit overflow-y-auto top-[100%] w-full ${
-              isOverlay ? "" : "pt-2 absolute"
+            className={`top-[100%] max-h-fit w-full overflow-y-auto ${
+              isOverlay ? "" : "absolute pt-2"
             } ${customScrollbarEnabled ? "custom-scrollbar" : ""}`}
           >
             <ul
-              className={`w-full flex flex-col items-center justify-center bg-zinc-900 border-zinc-800 rounded-xl ${
+              className={`flex w-full flex-col items-center justify-center rounded-xl border-zinc-800 bg-zinc-900 ${
                 isOverlay ? "" : "border"
               }`}
             >
@@ -230,15 +230,15 @@ export default function Search({
                   }}
                 >
                   <Link
-                    className="w-full whitespace-nowrap line-clamp-1 p-2 px-4"
+                    className="line-clamp-1 w-full whitespace-nowrap p-2 px-4"
                     href={`/wiki/${result.slug}`}
                     onClick={() => {
                       closeDropdown();
                     }}
                   >
-                    <p className="truncate min-w-0 overflow-hidden text-zinc-500">
+                    <p className="min-w-0 overflow-hidden truncate text-zinc-500">
                       <span className="text-zinc-300">
-                        <span className="font-semibold inline-block capitalize">
+                        <span className="inline-block font-semibold capitalize">
                           {result.slug.split("/").length > 1
                             ? result.slug
                                 .replace(/-/g, " ")

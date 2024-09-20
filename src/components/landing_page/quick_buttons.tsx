@@ -17,12 +17,12 @@ export default function QuickButtons() {
 
   return (
     <div
-      className={`flex flex-col md:flex-row items-center space-x-0 md:space-x-20 space-y-4 md:space-y-0 ${
+      className={`flex flex-col items-center space-x-0 space-y-4 md:flex-row md:space-x-20 md:space-y-0 ${
         isMobile && "mt-0"
       }`}
     >
       {isMobile && (
-        <p className="text-lg md:text-xl text-zinc-300 px-5">
+        <p className="px-5 text-lg text-zinc-300 md:text-xl">
           Currently available only on desktop devices.
         </p>
       )}
@@ -31,7 +31,7 @@ export default function QuickButtons() {
         href="https://github.com/PetrIvan/chord-seq-ai-app"
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center bg-white text-black py-7 px-6 rounded-full shadow-md border-2 border-zinc-900 text-xl md:text-2xl font-medium transition duration-300 ease-in-out hover:brightness-90 w-48 h-12"
+        className="flex h-12 w-48 items-center justify-center rounded-full border-2 border-zinc-900 bg-white px-6 py-7 text-xl font-medium text-black shadow-md transition duration-300 ease-in-out hover:brightness-90 md:text-2xl"
       >
         <Image
           src="/github-logo.svg"
@@ -45,7 +45,7 @@ export default function QuickButtons() {
 
       {!isMobile && (
         <Link
-          className="flex items-center justify-center py-7 px-6 rounded-full shadow-md border-2 text-xl md:text-2xl font-medium w-48 h-12 border-white text-white bg-gradient-to-bl from-[#8C205C] to-[#5C51A6] transition duration-300 ease-in-out hover:brightness-90"
+          className="flex h-12 w-48 items-center justify-center rounded-full border-2 border-white bg-gradient-to-bl from-[#8C205C] to-[#5C51A6] px-6 py-7 text-xl font-medium text-white shadow-md transition duration-300 ease-in-out hover:brightness-90 md:text-2xl"
           href="/app"
         >
           Launch App

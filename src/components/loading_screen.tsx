@@ -1,7 +1,7 @@
 export default function LoadingScreen() {
   return (
-    <div className="w-full min-h-screen flex flex-col justify-center items-center bg-zinc-950">
-      <p className="text-[2dvw] font-bold text-zinc-500 animate-pulse">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-zinc-950">
+      <p className="animate-pulse text-[2dvw] font-bold text-zinc-500">
         Loading ChordSeqAI App...
       </p>
     </div>

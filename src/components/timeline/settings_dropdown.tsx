@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useStore } from "@/state/use_store";
 
 interface Props {
   dropdownRef: React.RefObject<HTMLDivElement>;
@@ -33,23 +32,23 @@ export default function SettingsDropdown({
 
   return (
     <div
-      className="absolute z-[15] top-full mt-[0.5dvw] bg-zinc-950 rounded-[0.5dvw] p-[1dvw] shadow-lg shadow-zinc-95 flex flex-col items-center justify-center space-y-[1dvw]"
+      className="shadow-zinc-95 absolute top-full z-[15] mt-[0.5dvw] flex flex-col items-center justify-center space-y-[1dvw] rounded-[0.5dvw] bg-zinc-950 p-[1dvw] shadow-lg"
       ref={dropdownRef}
     >
-      <div className="w-full flex flex-row items-center justify-between">
-        <label className="select-none text-[2.5dvh] mr-[1dvw]">Loop:</label>
+      <div className="flex w-full flex-row items-center justify-between">
+        <label className="mr-[1dvw] select-none text-[2.5dvh]">Loop:</label>
         <input
           type="checkbox"
-          className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+          className="h-[2.4dvh] w-[2.4dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 focus:outline-none"
           checked={loop}
           onChange={() => setLoop(!loop)}
         />
       </div>
-      <div className="w-full flex flex-row items-center justify-between">
-        <label className="select-none text-[2.5dvh] mr-[1dvw]">BPM:</label>
+      <div className="flex w-full flex-row items-center justify-between">
+        <label className="mr-[1dvw] select-none text-[2.5dvh]">BPM:</label>
         <input
           type="number"
-          className="text-[2.5dvh] border-[0.2dvh] p-[2dvh] w-[12dvh] h-[6dvh] bg-zinc-800 rounded-[1dvh]"
+          className="h-[6dvh] w-[12dvh] rounded-[1dvh] border-[0.2dvh] bg-zinc-800 p-[2dvh] text-[2.5dvh]"
           title="Change BPM (Up/Down arrow keys)"
           value={localBpm}
           onInput={handleBMPChange}

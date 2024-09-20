@@ -1,5 +1,4 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -15,7 +14,7 @@ export default function Playhead({ timelineStart }: Props) {
       state.timelinePosition,
       state.playheadPosition,
     ],
-    shallow
+    shallow,
   );
 
   let [numerator, denominator] = signature;
@@ -25,17 +24,17 @@ export default function Playhead({ timelineStart }: Props) {
 
   return (
     <div
-      className={`absolute top-0 bottom-0 z-10 flex flex-col h-full items-center justify-between cursor-ew-resize`}
+      className={`absolute bottom-0 top-0 z-10 flex h-full cursor-ew-resize flex-col items-center justify-between`}
       style={{
         left: `${actualPosition}dvw`,
         transform: `translateX(-50%) translateX(${timelinePosition}dvw)`,
       }}
     >
-      <svg viewBox="0 0 27 24" className="fill-blue-400 h-[1dvw] w-[1dvw]">
+      <svg viewBox="0 0 27 24" className="h-[1dvw] w-[1dvw] fill-blue-400">
         <path d="M13.5 24L0.0 0L27.0 0L13.5 24Z" />
       </svg>
-      <div className="border-r-[0.2dvw] border-blue-400 h-full" />
-      <svg viewBox="0 0 27 24" className="fill-blue-400 h-[1dvw] w-[1dvw]">
+      <div className="h-full border-r-[0.2dvw] border-blue-400" />
+      <svg viewBox="0 0 27 24" className="h-[1dvw] w-[1dvw] fill-blue-400">
         <path d="M13.5 0L27.0 24H0.0L13.5 0Z" />
       </svg>
     </div>

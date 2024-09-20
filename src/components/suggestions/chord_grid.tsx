@@ -2,7 +2,7 @@ import { AutoSizer, Grid, GridCellProps } from "react-virtualized";
 
 export default function ChordGrid(
   chordList: JSX.Element[],
-  columnCount: number
+  columnCount: number,
 ) {
   // Units for responsive design
   let oneDvhInPx = window.innerHeight / 100;
@@ -26,14 +26,14 @@ export default function ChordGrid(
     if (index >= chordList.length) return null;
 
     return (
-      <div className="w-full h-full" style={{ ...style }} key={key}>
-        <div className="w-full h-full p-[1dvh]">{chordList[index]}</div>
+      <div className="h-full w-full" style={{ ...style }} key={key}>
+        <div className="h-full w-full p-[1dvh]">{chordList[index]}</div>
       </div>
     );
   };
 
   return (
-    <div className="w-full h-full">
+    <div className="h-full w-full">
       <AutoSizer>
         {({ width, height }: { height: number; width: number }) => {
           // Manual responsive design
@@ -42,7 +42,7 @@ export default function ChordGrid(
           width = pxToDvh(width - sliderWidth);
           let columnWidth = Math.max(
             prefferedColumnWidth,
-            width / Math.floor(width / prefferedColumnWidth)
+            width / Math.floor(width / prefferedColumnWidth),
           );
           const columnCount = Math.floor(width / columnWidth);
           const rowCount = Math.ceil(chordList.length / columnCount);

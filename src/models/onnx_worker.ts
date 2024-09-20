@@ -76,7 +76,7 @@ self.onmessage = async (event) => {
         "onnx::Gemm_1": new ort.Tensor(
           "float32",
           new Float32Array(style),
-          [1, 28]
+          [1, 28],
         ),
       });
     } else {

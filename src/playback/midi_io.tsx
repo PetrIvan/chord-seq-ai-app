@@ -13,7 +13,7 @@ export function getMidiBlob(
     variant: number;
   }[],
   bpm: number,
-  signature: [number, number]
+  signature: [number, number],
 ): Blob {
   const track = new MidiWriter.Track();
 
@@ -37,7 +37,7 @@ export function getMidiBlob(
         pitch: notes,
         duration: `T${duration}`,
         wait: `T${restDuration}`,
-      })
+      }),
     );
 
     restDuration = 0;
@@ -82,7 +82,7 @@ function getPitchClassRep(notes: number[]): string {
   let normalizedChord = notes.map((note) => note % 12).sort((a, b) => a - b);
   // Remove duplicates
   normalizedChord = normalizedChord.filter(
-    (note, i) => normalizedChord.indexOf(note) === i
+    (note, i) => normalizedChord.indexOf(note) === i,
   );
   return normalizedChord.join(",");
 }
@@ -97,7 +97,7 @@ function getVariantRep(notes: number[]): string {
     .sort((a, b) => a - b);
   // Remove duplicates
   normalizedChord = normalizedChord.filter(
-    (note, i) => normalizedChord.indexOf(note) === i
+    (note, i) => normalizedChord.indexOf(note) === i,
   );
   return normalizedChord.join(",");
 }
@@ -106,16 +106,16 @@ function getVariantRep(notes: number[]): string {
 export function getChordsFromNotes(
   notes: { name: string; duration: number; time: number }[],
   quantization: number, // In beats
-  quantizationMode: string
+  quantizationMode: string,
 ): { index: number; token: number; duration: number; variant: number }[] {
   // Quantize the chords
   let lastNote = notes.sort(
-    (a, b) => a.time + a.duration - b.time - b.duration
+    (a, b) => a.time + a.duration - b.time - b.duration,
   )[notes.length - 1];
   let lastTime = Math.ceil(lastNote.time + lastNote.duration);
 
   let quantizedNotes: { notes: number[] }[] = new Array<{ notes: number[] }>(
-    Math.ceil(lastTime / quantization)
+    Math.ceil(lastTime / quantization),
   );
   for (let i = 0; i < quantizedNotes.length; i++) {
     quantizedNotes[i] = { notes: [] };

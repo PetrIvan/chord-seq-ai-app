@@ -49,18 +49,18 @@ export default function Header({
     <header
       className={`top-0 ${
         sticky ? "sticky" : ""
-      } z-40 flex flex-col justify-center w-full backdrop-blur transition-colors duration-500 ${
+      } z-40 flex w-full flex-col justify-center backdrop-blur transition-colors duration-500 ${
         isTop ? "bg-transparent" : "bg-zinc-950/50"
       } ${borderEnabled ? "border-b border-b-zinc-800" : ""} cursor-default`}
     >
-      <div className="flex flex-row justify-between items-center p-2">
+      <div className="flex flex-row items-center justify-between p-2">
         <Link href="/" className="flex items-center">
           {h1Logo ? (
             <h1>
               <Image
                 src="/logo.svg"
                 alt="Compose with ChordSeqAI: Your AI Chord Progression Suggester"
-                className="h-12 w-full hidden md:block"
+                className="hidden h-12 w-full md:block"
                 width={161}
                 height={38}
               />
@@ -77,7 +77,7 @@ export default function Header({
               <Image
                 src="/logo.svg"
                 alt="ChordSeqAI"
-                className="h-12 w-full hidden md:block"
+                className="hidden h-12 w-full md:block"
                 width={161}
                 height={38}
               />
@@ -97,10 +97,10 @@ export default function Header({
             customScrollbarEnabled={customScrollbarEnabled}
           />
         )}
-        <div className="text-lg flex flex-row items-center justify-around space-x-4 lg:space-x-8 pr-4 text-white *:filter *:contrast-[66%] hover:*:contrast-100">
+        <div className="flex flex-row items-center justify-around space-x-4 pr-4 text-lg text-white *:contrast-[66%] *:filter hover:*:contrast-100 lg:space-x-8">
           {searchEnabled && (
             <Image
-              className="w-5 h-5 lg:hidden cursor-pointer"
+              className="h-5 w-5 cursor-pointer lg:hidden"
               src="/search.svg"
               alt="Search icon"
               title="Search (Ctrl+K)"
@@ -120,7 +120,7 @@ export default function Header({
             target="_blank"
           >
             <Image
-              className="h-6 w-fit filter brightness-0 invert"
+              className="h-6 w-fit brightness-0 invert filter"
               src="/github-logo.svg"
               alt="GitHub Repository"
               width={98}
@@ -131,7 +131,7 @@ export default function Header({
       </div>
 
       {sidenavEnabled && (
-        <div className="lg:hidden flex flex-row items-center justify-start text-sm space-x-3 border-t border-t-zinc-800 p-3">
+        <div className="flex flex-row items-center justify-start space-x-3 border-t border-t-zinc-800 p-3 text-sm lg:hidden">
           <Image
             src="/menu.svg"
             alt="Menu"
@@ -142,7 +142,7 @@ export default function Header({
               if (setIsSidenavOpen) setIsSidenavOpen(true);
             }}
           />
-          <div className="flex flex-row items-center justify-center space-x-2 cursor-text">
+          <div className="flex cursor-text flex-row items-center justify-center space-x-2">
             {parts.map((part, index) => {
               return (
                 <React.Fragment key={index}>
@@ -157,7 +157,7 @@ export default function Header({
                   </p>
                   {index < parts.length - 1 && (
                     <svg
-                      className="w-[0.6rem] h-[0.6rem] inline-block"
+                      className="inline-block h-[0.6rem] w-[0.6rem]"
                       aria-hidden="true"
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

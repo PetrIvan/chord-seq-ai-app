@@ -1,7 +1,8 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useState, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
+import { useInit } from "@/state/use_init";
 
 import { stopPlayback } from "@/playback/player";
 
@@ -39,19 +40,19 @@ export default function WelcomeOverlay() {
       state.setTimelinePosition,
       state.setPlayheadPosition,
     ],
-    shallow
+    shallow,
   );
 
   const [showNext, setShowNext] = useState(true);
 
   // If it's the first time, open the welcome overlay
-  useEffect(() => {
+  useInit(() => {
     if (welcomeFirstTime) {
       setShowNext(false);
       setIsWelcomeOverlayOpen(true);
       setWelcomeFirstTime(false);
     }
-  }, []);
+  });
 
   const otherShortcuts = (e: KeyboardEvent) => {
     if (e.key === "ArrowRight") {
@@ -94,10 +95,10 @@ export default function WelcomeOverlay() {
       }}
       otherShortcuts={otherShortcuts}
     >
-      <p className="w-full text-center px-[1dvh] text-[5dvh] font-semibold">
+      <p className="w-full px-[1dvh] text-center text-[5dvh] font-semibold">
         Welcome to ChordSeqAI!
       </p>
-      <p className="text-[2.5dvh] max-w-[85%] text-justify">
+      <p className="max-w-[85%] text-justify text-[2.5dvh]">
         Get started quickly by watching our tutorial playlist below, which
         covers the main features of the app and how to use them. If you want to
         dive deeper, check out the{" "}
@@ -119,7 +120,7 @@ export default function WelcomeOverlay() {
         of the app.
       </p>
       <ClickableIframe
-        className="max-w-[85%] h-[min(50dvh,_30dvw)] aspect-video"
+        className="aspect-video h-[min(50dvh,_30dvw)] max-w-[85%]"
         src="https://www.youtube.com/embed/videoseries?si=t-XM9ujWyvSJyIbj&amp;list=PLT4SeTqv-OaknHUttzBYHr2gmKemcEXkp"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowFullScreen
@@ -133,7 +134,7 @@ export default function WelcomeOverlay() {
 
       {showNext && (
         <button
-          className="absolute bottom-[50%] right-[1dvh] w-[5dvh] h-[5dvh] filter active:brightness-90"
+          className="absolute bottom-[50%] right-[1dvh] h-[5dvh] w-[5dvh] filter active:brightness-90"
           title="Show recent changes (Right arrow key)"
           onClick={() => {
             setIsNewFeaturesOverlayOpen(true);
@@ -141,7 +142,7 @@ export default function WelcomeOverlay() {
           }}
         >
           <svg
-            className="w-full h-full inline-block"
+            className="inline-block h-full w-full"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

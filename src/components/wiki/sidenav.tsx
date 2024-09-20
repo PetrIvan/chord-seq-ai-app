@@ -13,7 +13,7 @@ function PageLink(
   title: string,
   currentPath: string,
   // Links with children should not be clickable (only expandable)
-  disableInteraction = false
+  disableInteraction = false,
 ) {
   const wrapperClass =
     currentPath === fullPath
@@ -44,7 +44,7 @@ function Details(
   key: string,
   value: WikiTreeNode,
   fullPath: string,
-  currentPath: string
+  currentPath: string,
 ) {
   const [wikiSidenavOpen, setWikiSidenavOpen] = useStore((state) => [
     state.wikiSidenavOpen,
@@ -65,18 +65,18 @@ function Details(
   return (
     <div className={`${isOpen ? "[&>div>svg]:-rotate-90" : ""}`}>
       <div
-        className="pb-2 flex items-center justify-between cursor-pointer"
+        className="flex cursor-pointer items-center justify-between pb-2"
         onClick={handleToggle}
       >
         {PageLink(
           fullPath,
           findPageNameInTree(fullPath) || key,
           currentPath,
-          true
+          true,
         )}
         {/* Arrow SVG */}
         <svg
-          className="text-zinc-400 w-4 h-4 inline-block transform rotate-90 transition-transform duration-200"
+          className="inline-block h-4 w-4 rotate-90 transform text-zinc-400 transition-transform duration-200"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -112,7 +112,7 @@ function SidenavLayer(tree: WikiTreeNode, path: string, currentPath: string) {
     const fullPath = `${path}/${key}`;
     return (
       <li
-        className={`pl-2 relative select-none ${
+        className={`relative select-none pl-2 ${
           value.children ? "pt-2" : "py-2"
         }`}
         key={key}
@@ -122,7 +122,7 @@ function SidenavLayer(tree: WikiTreeNode, path: string, currentPath: string) {
           : PageLink(
               fullPath,
               findPageNameInTree(fullPath) || key,
-              currentPath
+              currentPath,
             )}
       </li>
     );
@@ -175,7 +175,7 @@ export default function Sidenav({
       exit={{ x: animate ? "-16rem" : 0 }}
       transition={{ x: { duration: 0.4, ease: "easeInOut" } }}
       className={
-        "fixed top-0 inset-0 w-64 shrink-0 p-4 overflow-y-auto border-r border-zinc-800 " +
+        "fixed inset-0 top-0 w-64 shrink-0 overflow-y-auto border-r border-zinc-800 p-4 " +
         className +
         (customScrollbarEnabled ? " custom-scrollbar" : "")
       }

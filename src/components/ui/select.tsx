@@ -39,7 +39,7 @@ export default function Select({
   return (
     <div
       className={
-        `bg-zinc-800 rounded-[1dvh] p-[0.5dvw] mr-[2dvh] cursor-pointer whitespace-nowrap ` +
+        `mr-[2dvh] cursor-pointer whitespace-nowrap rounded-[1dvh] bg-zinc-800 p-[0.5dvw] ` +
         `${onDark ? "hover:bg-zinc-900" : ""}`
       }
       style={{ width }}
@@ -52,7 +52,7 @@ export default function Select({
       <div className="flex flex-row items-center justify-between pl-[1dvh]">
         {state}
         <svg
-          className="w-[1.6dvh] h-[1.6dvh] mr-[1dvh] inline-block"
+          className="mr-[1dvh] inline-block h-[1.6dvh] w-[1.6dvh]"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -68,18 +68,17 @@ export default function Select({
         </svg>
       </div>
 
-      <div className="relative w-full h-full filter-none">
+      <div className="relative h-full w-full filter-none">
         {isDropdownOpen && (
-          <ul className="absolute z-[15] top-full mt-[0.5dvw] bg-zinc-800 rounded-[0.5dvw] w-full text-[2.5dvh]">
+          <ul className="absolute top-full z-[15] mt-[0.5dvw] w-full rounded-[0.5dvw] bg-zinc-800 text-[2.5dvh]">
             {allStates.map((state, i) => (
               <li key={i}>
                 <button
-                  className={`w-full bg-zinc-800 rounded-[0.5dvw] p-[0.5dvw]
-                      ${
-                        onDark
-                          ? "hover:bg-zinc-900"
-                          : "filter hover:brightness-110 active:brightness-90"
-                      }`}
+                  className={`w-full rounded-[0.5dvw] bg-zinc-800 p-[0.5dvw] ${
+                    onDark
+                      ? "hover:bg-zinc-900"
+                      : "filter hover:brightness-110 active:brightness-90"
+                  }`}
                   onClick={() => {
                     setState(state);
                     setIsDropdownOpen(false);

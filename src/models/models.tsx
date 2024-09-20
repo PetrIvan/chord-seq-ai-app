@@ -22,7 +22,7 @@ function process_chords(
     token: number;
     duration: number;
     variant: number;
-  }[]
+  }[],
 ) {
   const data: BigInt64Array = new BigInt64Array(256).fill(BigInt(0));
 
@@ -74,7 +74,7 @@ export async function predict(
     variant: number;
   }[],
   modelPath: string,
-  style?: number[]
+  style?: number[],
 ) {
   // Process data
   if (chords.length === 0) {
@@ -118,7 +118,7 @@ export async function predict(
           /* Process the output */
           const column = getColumnSlice(
             output as ort.Tensor,
-            (numChords as number) - 1
+            (numChords as number) - 1,
           ); // Only a single column is needed
 
           // Zero out the start and end tokens, as well as the previous chord
@@ -157,7 +157,7 @@ export async function predict(
       worker.onerror = (error) => {
         reject(error);
       };
-    }
+    },
   );
 
   // Load the model or predict
@@ -173,7 +173,7 @@ export async function predict(
 
 // Tokens that are transpositions of one another should have the same probability, so we average them and sort
 function processFirstPreds(
-  chordProbs: { token: number; prob: number }[]
+  chordProbs: { token: number; prob: number }[],
 ): { token: number; prob: number }[] {
   const newChordProbs: { token: number; prob: number }[] = [];
   for (let i = 0; i < chordProbs.length; i++) {

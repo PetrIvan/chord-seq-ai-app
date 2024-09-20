@@ -58,7 +58,7 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" className={`${openSans.variable}`}>
-        <body className="font-sans text-white custom-scrollbar">
+        <body className="custom-scrollbar font-sans text-white">
           <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
           {children}
         </body>

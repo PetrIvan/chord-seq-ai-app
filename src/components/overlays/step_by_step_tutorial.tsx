@@ -1,6 +1,7 @@
 "use client";
 import { useStore } from "@/state/use_store";
 import { useRef, useEffect, useState, useCallback } from "react";
+import Image from "next/image";
 
 interface Props {
   step: number; // Indexed from 0
@@ -156,7 +157,7 @@ export default function StepByStepTutorial({
   // Automatically proceed to the next step if conditions allow
   const [continued, setContinued] = useState(
     // Prevent auto-continuing when there are chords (steps 0 and 4 only)
-    [0, 4].includes(step) && chords.length !== 0
+    [0, 4].includes(step) && chords.length !== 0,
   );
 
   const prevStepRef = useRef(tutorialStep);
@@ -274,14 +275,14 @@ export default function StepByStepTutorial({
         {
           // Background, hidden when the variants overlay is open to prevent double background
           !variantsOpen && (
-            <div className="fixed z-30 top-0 left-0 h-full w-full bg-zinc-950 opacity-50" />
+            <div className="fixed left-0 top-0 z-30 h-full w-full bg-zinc-950 opacity-50" />
           )
         }
 
         <div
           className={`transition-opacity duration-700 ease-in-out ${
             initialized ? "opacity-100" : "opacity-0"
-          } fixed z-30 top-0 left-0 bg-zinc-900 w-[40dvw] rounded-[0.5dvw] p-[2dvh] flex flex-col items-center justify-between`}
+          } fixed left-0 top-0 z-30 flex w-[40dvw] flex-col items-center justify-between rounded-[0.5dvw] bg-zinc-900 p-[2dvh]`}
           style={{
             transform: `translate(${moveDialog.x}px, ${moveDialog.y}px)`,
           }}
@@ -289,29 +290,32 @@ export default function StepByStepTutorial({
         >
           {/* Arrow icon */}
           {position == "below" && (
-            <div className="absolute w-0 h-0 border-b-zinc-900 bottom-[100%] left-[50%] transform -translate-x-1/2 translate-y-[1px] border-l-[2dvh] border-l-transparent border-b-[3dvh] border-r-[2dvh] border-r-transparent" />
+            <div className="absolute bottom-[100%] left-[50%] h-0 w-0 -translate-x-1/2 translate-y-[1px] transform border-b-[3dvh] border-l-[2dvh] border-r-[2dvh] border-b-zinc-900 border-l-transparent border-r-transparent" />
           )}
           {position == "above" && (
-            <div className="absolute w-0 h-0 border-t-zinc-900 top-[100%] left-[50%] transform -translate-x-1/2 -translate-y-[1px] border-l-[2dvh] border-l-transparent border-t-[3dvh] border-r-[2dvh] border-r-transparent" />
+            <div className="absolute left-[50%] top-[100%] h-0 w-0 -translate-x-1/2 -translate-y-[1px] transform border-l-[2dvh] border-r-[2dvh] border-t-[3dvh] border-l-transparent border-r-transparent border-t-zinc-900" />
           )}
           {position == "left" && (
-            <div className="absolute w-0 h-0 border-l-zinc-900 top-[50%] left-[100%] transform -translate-y-1/2 -translate-x-[1px] border-t-[2dvh] border-t-transparent border-l-[3dvh] border-b-[2dvh] border-b-transparent" />
+            <div className="absolute left-[100%] top-[50%] h-0 w-0 -translate-x-[1px] -translate-y-1/2 transform border-b-[2dvh] border-l-[3dvh] border-t-[2dvh] border-b-transparent border-l-zinc-900 border-t-transparent" />
           )}
           {position == "right" && (
-            <div className="absolute w-0 h-0 border-r-zinc-900 top-[50%] right-[100%] transform -translate-y-1/2 translate-x-[1px] border-t-[2dvh] border-t-transparent border-r-[3dvh] border-b-[2dvh] border-b-transparent" />
+            <div className="absolute right-[100%] top-[50%] h-0 w-0 -translate-y-1/2 translate-x-[1px] transform border-b-[2dvh] border-r-[3dvh] border-t-[2dvh] border-b-transparent border-r-zinc-900 border-t-transparent" />
           )}
           {position == "below-left" && (
             <div
-              className="absolute w-0 h-0 border-b-zinc-900 bottom-[100%] border-l-[2dvh] transform translate-x-1/2 translate-y-[1px] border-l-transparent border-b-[3dvh] border-r-[2dvh] border-r-transparent"
+              className="absolute bottom-[100%] h-0 w-0 translate-x-1/2 translate-y-[1px] transform border-b-[3dvh] border-l-[2dvh] border-r-[2dvh] border-b-zinc-900 border-l-transparent border-r-transparent"
               style={{ right: `calc(${windowBox.width / 2}px)` }}
             />
           )}
 
-          <div className="w-full flex flex-row items-center justify-between">
-            <img
+          <div className="flex w-full flex-row items-center justify-between">
+            <Image
               className="h-[5dvh] w-[5dvh] cursor-pointer filter active:brightness-90"
               src="/restart.svg"
               title="Restart tutorial (R)"
+              alt="Restart tutorial"
+              width={100}
+              height={100}
               onClick={() => {
                 if (tutorialStep === 0) return;
 
@@ -322,10 +326,13 @@ export default function StepByStepTutorial({
             <p className="text-[2.5dvh] font-semibold">
               Step {tutorialStep + 1}/{numSteps}
             </p>
-            <img
+            <Image
               className="h-[5dvh] w-[5dvh] cursor-pointer filter active:brightness-90"
               src="/close.svg"
               title="Close (Esc)"
+              alt="Close"
+              width={100}
+              height={100}
               onClick={() => {
                 setEnabledShortcuts(true);
                 setIsStepByStepTutorialOpen(false);
@@ -333,13 +340,13 @@ export default function StepByStepTutorial({
             />
           </div>
 
-          <p className="text-center text-[2.5dvh] py-[max(2dvh,2dvw)]">
+          <p className="py-[max(2dvh,2dvw)] text-center text-[2.5dvh]">
             {text}
           </p>
 
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(30dvh,1fr))] gap-[2dvh] w-full min-w-0 whitespace-nowrap">
+          <div className="grid w-full min-w-0 grid-cols-[repeat(auto-fit,minmax(30dvh,1fr))] gap-[2dvh] whitespace-nowrap">
             <button
-              className="flex flex-row justify-center items-center p-[2dvh] rounded-[1dvh] filter active:brightness-90 disabled:brightness-75 hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+              className="flex max-h-[10dvh] flex-row items-center justify-center rounded-[1dvh] bg-zinc-800 p-[2dvh] filter hover:brightness-110 active:brightness-90 disabled:brightness-75"
               onClick={() => {
                 onStepExit();
                 setTutorialStep(tutorialStep - 1);
@@ -350,7 +357,7 @@ export default function StepByStepTutorial({
               Previous
             </button>
             <button
-              className="flex flex-row justify-center items-center p-[2dvh] rounded-[1dvh] filter active:brightness-90 disabled:brightness-75 hover:brightness-110 max-h-[10dvh] bg-zinc-800"
+              className="flex max-h-[10dvh] flex-row items-center justify-center rounded-[1dvh] bg-zinc-800 p-[2dvh] filter hover:brightness-110 active:brightness-90 disabled:brightness-75"
               onClick={() => {
                 if (tutorialStep < numSteps - 1) {
                   onStepExit();

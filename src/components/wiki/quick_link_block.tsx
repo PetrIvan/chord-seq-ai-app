@@ -13,12 +13,12 @@ export default function QuickLinkBlock({ href, title, description }: Props) {
 
   return (
     <Link
-      className="text-zinc-50 rounded-md p-3 bg-zinc-900 hover:bg-zinc-800"
+      className="rounded-md bg-zinc-900 p-3 text-zinc-50 hover:bg-zinc-800"
       href={href}
       target={isInternalLink ? undefined : "_blank"}
       rel={isInternalLink ? undefined : "noopener noreferrer"}
     >
-      <p className="font-semibold text-left">{title}</p>
+      <p className="text-left font-semibold">{title}</p>
       <p className="text-sm text-zinc-300">{description}</p>
     </Link>
   );

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
@@ -33,7 +34,7 @@ export default function SearchBar() {
       state.matchAnyVariant,
       state.setMatchAnyVariant,
     ],
-    shallow
+    shallow,
   );
 
   /* Piano dropdown (search by notes) */
@@ -70,11 +71,17 @@ export default function SearchBar() {
   const matchTypes = ["At least", "At most", "Exact"];
 
   return (
-    <div className="h-[8dvh] flex flex-row items-center justify-start space-x-[1dvw]">
-      <div className="h-[8dvh] bg-zinc-800 flex flex-row items-center justify-start rounded-[2dvh] p-[0.5dvw]">
+    <div className="flex h-[8dvh] flex-row items-center justify-start space-x-[1dvw]">
+      <div className="flex h-[8dvh] flex-row items-center justify-start rounded-[2dvh] bg-zinc-800 p-[0.5dvw]">
         {/* Search by name */}
-        <div className="h-full flex flex-row items-center justify-end">
-          <img className="w-[70%] h-[70%]" src="/search.svg" alt="Search" />
+        <div className="flex h-full flex-row items-center justify-end">
+          <Image
+            className="h-[70%] w-[70%]"
+            src="/search.svg"
+            alt="Search"
+            width={100}
+            height={100}
+          />
         </div>
         {/* Not actually visible, for accessibility */}
         <label htmlFor="search" className="visually-hidden">
@@ -82,7 +89,7 @@ export default function SearchBar() {
         </label>
         <input
           id="search"
-          className="flex-1 h-full border-[0.2dvh] p-[2dvh] bg-zinc-800 text-white text-[2.5dvh] rounded-[2dvh] placeholder-zinc-500 placeholder-opacity-50 border-transparent focus:border-transparent focus:ring-0"
+          className="h-full flex-1 rounded-[2dvh] border-[0.2dvh] border-transparent bg-zinc-800 p-[2dvh] text-[2.5dvh] text-white placeholder-zinc-500 placeholder-opacity-50 focus:border-transparent focus:ring-0"
           type="text"
           placeholder="Search a chord..."
           autoComplete="off"
@@ -94,15 +101,15 @@ export default function SearchBar() {
         />
       </div>
       {/* Search by notes */}
-      <div className="relative h-full flex flex-row items-center justify-center">
+      <div className="relative flex h-full flex-row items-center justify-center">
         <button
-          className="h-full flex flex-row items-center justify-center active:filter active:brightness-90"
+          className="flex h-full flex-row items-center justify-center active:brightness-90 active:filter"
           title="Search by notes"
           ref={openPianoButtonRef}
           onClick={() => setIsPianoOpen(!isPianoOpen)}
         >
           <svg
-            className="w-[80%] h-[90%]"
+            className="h-[90%] w-[80%]"
             viewBox="0 0 80 80"
             fill={searchNotes.length > 0 ? "#6d28d9" : "none"}
             xmlns="http://www.w3.org/2000/svg"
@@ -153,11 +160,11 @@ export default function SearchBar() {
         </button>
         {isPianoOpen && (
           <div
-            className="absolute top-[100%] bg-zinc-950 p-[2dvh] pb-[4dvh] rounded-[1dvh] flex flex-col items-center justify-center z-10"
+            className="absolute top-[100%] z-10 flex flex-col items-center justify-center rounded-[1dvh] bg-zinc-950 p-[2dvh] pb-[4dvh]"
             ref={pianoRef}
           >
             <div className="flex flex-row items-center justify-center pb-[2dvh] text-[2.5dvh]">
-              <span className="select-none mr-[2dvh]">Match:</span>
+              <span className="mr-[2dvh] select-none">Match:</span>
               <Select
                 selectName="match"
                 state={matchTypes[matchType]}
@@ -168,10 +175,10 @@ export default function SearchBar() {
                 width="16dvh"
                 onDark={true}
               />
-              <span className="select-none mr-[2dvh]">Any variant:</span>
+              <span className="mr-[2dvh] select-none">Any variant:</span>
               <input
                 type="checkbox"
-                className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+                className="h-[2.4dvh] w-[2.4dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 focus:outline-none"
                 checked={matchAnyVariant}
                 onChange={() => setMatchAnyVariant(!matchAnyVariant)}
               />
@@ -188,7 +195,7 @@ export default function SearchBar() {
       {/* Clear search */}
       {(searchNotes.length > 0 || searchQuery) && (
         <button
-          className="h-full flex flex-row items-center justify-center active:filter active:brightness-90"
+          className="flex h-full flex-row items-center justify-center active:brightness-90 active:filter"
           title="Clear search"
           onClick={() => {
             setSearchQuery("");
@@ -197,10 +204,12 @@ export default function SearchBar() {
             setMatchAnyVariant(true);
           }}
         >
-          <img
-            className="w-[80%] h-[80%]"
+          <Image
+            className="h-[80%] w-[80%]"
             src="/close.svg"
             alt="Clear search"
+            width={100}
+            height={100}
           />
         </button>
       )}
@@ -213,7 +222,7 @@ export default function SearchBar() {
           <input
             type="checkbox"
             id="include-variants"
-            className="h-[2.4dvh] w-[2.4dvh] border-[0.2dvh] bg-zinc-800 rounded-[0.5dvh] focus:outline-none"
+            className="h-[2.4dvh] w-[2.4dvh] rounded-[0.5dvh] border-[0.2dvh] bg-zinc-800 focus:outline-none"
             checked={includeVariants}
             onChange={() => setIncludeVariants(!includeVariants)}
           />

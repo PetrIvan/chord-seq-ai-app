@@ -78,6 +78,12 @@
     "summary": ""
   },
   {
+    "slug": "features/change-log#2024-09-20",
+    "title": "Change Log",
+    "heading": "2024-09-20",
+    "summary": "Technical improvements and bug fixes. Refactored the codebase to adhere to ESLint and Prettier rules. Applied stylistic codebase changes."
+  },
+  {
     "slug": "features/change-log#2024-09-04",
     "title": "Change Log",
     "heading": "2024-09-04",
@@ -903,7 +909,7 @@
     "slug": "technical/contribute#how-to-contribute",
     "title": "Contribute",
     "heading": "How to contribute",
-    "summary": "Here are the general steps to follow when contributing to ChordSeqAI: Find an issue or feature request: Before making changes, check the issue tracker and feature requests to see if there is an existing issue or feature request that you can work on. If not, feel free to create a new issue or feature request to discuss your proposed changes. Fork the repository: Before making any changes, fork the ChordSeqAI repository on GitHub. Create a new branch: Create a new branch for your changes. Use a descriptive name that reflects the purpose of the changes. We use the format feature/your-feature-name for feature branches and bug/your-fix-name for bug-fix branches. Make your changes: Modify the codebase. Follow the coding style and conventions used in the project. Make sure to test your changes locally before submitting a pull request. Commit and push your changes: Commit your changes with a descriptive message. Push your changes to your forked repository. Submit a pull request: Once you are ready, submit a pull request to the main ChordSeqAI repository. Provide a detailed description of the changes you made and why they are necessary. Your pull request will be reviewed by the maintainers, and you may be asked to make further changes before it is merged."
+    "summary": "Here are the general steps to follow when contributing to ChordSeqAI: Find an issue or feature request: Before you start working on a new feature or bug fix, check the issue tracker and feature requests to see if there is an existing ticket for the work you want to do. If not, you can create a new issue or feature request to discuss your proposed changes with the maintainers. Fork the repository: Before making any changes, fork the ChordSeqAI repository on GitHub. Create a new branch: Create a new branch for your changes. Use a descriptive name that reflects the purpose of the changes. We use the format feature/your-feature-name for feature branches and bug/your-fix-name for bug-fix branches. Make your changes: Modify the codebase. Follow the coding style and conventions used in the project. Make sure to test your changes locally before submitting a pull request. Commit and push your changes: Commit your changes with a descriptive message. Push your changes to your forked repository. Submit a pull request: Once you are ready, submit a pull request to the main ChordSeqAI repository. Provide a detailed description of the changes you made and why they are necessary. Your pull request will be reviewed by the maintainers, and you may be asked to make further changes before it is merged."
   },
   {
     "slug": "technical/installation",

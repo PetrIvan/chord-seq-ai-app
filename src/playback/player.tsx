@@ -14,6 +14,7 @@ let lastStartPlaying: number;
 
 // Initialize Tone.js
 Tone.loaded().then(() => {
+  if (typeof window === "undefined") return;
   if (Tone.getDestination().volume) Tone.getDestination().volume.value = -8;
 
   synth = new Tone.Sampler({
@@ -93,7 +94,7 @@ export function playSequence(
   playheadPosition: number,
   setPlayheadPosition: (position: number) => void,
   setPlaying: (playing: boolean) => void,
-  muteMetronome: boolean
+  muteMetronome: boolean,
 ) {
   // Prepare the sequence
   timeNoteDuration = [];
@@ -107,7 +108,7 @@ export function playSequence(
     }
 
     const freqs = MIDIsToFreq(
-      chordToNotes[tokenToChord[chord.token][chord.variant]]
+      chordToNotes[tokenToChord[chord.token][chord.variant]],
     );
 
     for (const freq of freqs) {
@@ -137,7 +138,7 @@ export function playSequence(
     // Start the metronome
     let metronomeBeats = Array.from(
       { length: Math.ceil(totalTime * (bpm / 60)) },
-      (value, key) => key
+      (value, key) => key,
     ).map((i) => i / (bpm / 60));
     metronomePart = new Tone.Part((time) => {
       metronomeSynth.triggerAttackRelease("C4", "8n", time);
@@ -174,7 +175,7 @@ export function playSequence(
 async function updatePlayheadPosition(
   setPlayheadPosition: (position: number) => void,
   partDuration: number,
-  setPlaying: (playing: boolean) => void
+  setPlaying: (playing: boolean) => void,
 ) {
   // Stop the playback if it is not playing
   const timePosition = Tone.getTransport().seconds;
@@ -204,7 +205,7 @@ async function updatePlayheadPosition(
   setPlayheadPosition(timePosition * (bpm / 60));
   setTimeout(
     () => updatePlayheadPosition(setPlayheadPosition, partDuration, setPlaying),
-    10
+    10,
   );
 }
 

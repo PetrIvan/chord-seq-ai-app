@@ -1,7 +1,10 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
+import { useInit } from "@/state/use_init";
+
+import Image from "next/image";
 
 import Overlay from "../ui/overlay";
 
@@ -22,7 +25,7 @@ export default function NewFeaturesOverlay() {
       state.setIsNewFeaturesOverlayOpen,
       state.setIsWelcomeOverlayOpen,
     ],
-    shallow
+    shallow,
   );
 
   const [showPrev, setShowPrev] = useState(false);
@@ -35,7 +38,7 @@ export default function NewFeaturesOverlay() {
   const latestVersion = 4;
 
   // If it's the first time after the update, show the overlay
-  useEffect(() => {
+  useInit(() => {
     if (version < latestVersion) {
       // Show all features since the previous version
       let features = [];
@@ -53,7 +56,7 @@ export default function NewFeaturesOverlay() {
     }
 
     setShowPrev(true);
-  }, []);
+  });
 
   // If it is open from the help menu, show all features
   useEffect(() => {
@@ -79,10 +82,22 @@ export default function NewFeaturesOverlay() {
     1: [
       <li key={1}>
         Delete all{" "}
-        <img src="/trash-all.svg" className="inline w-[4dvh] h-[4dvh]" /> and
-        chord variants{" "}
-        <img src="/variants.svg" className="inline w-[4dvh] h-[4dvh]" /> now
-        have their own buttons.
+        <Image
+          src="/trash-all.svg"
+          alt=""
+          className="inline h-[4dvh] w-[4dvh]"
+          width={100}
+          height={100}
+        />{" "}
+        and chord variants{" "}
+        <Image
+          src="/variants.svg"
+          alt=""
+          className="inline h-[4dvh] w-[4dvh]"
+          width={100}
+          height={100}
+        />{" "}
+        now have their own buttons.
       </li>,
       <li key={2}>Added new shortcuts to make your workflow faster.</li>,
       <li key={3}>
@@ -121,10 +136,10 @@ export default function NewFeaturesOverlay() {
       <p className="w-full text-center text-[5dvh] font-semibold">
         What&apos;s new
       </p>
-      <ul className="text-[3dvh] max-w-[75%] text-justify space-y-[1dvh] list-disc list-outside">
+      <ul className="max-w-[75%] list-outside list-disc space-y-[1dvh] text-justify text-[3dvh]">
         {showFeatures.map((feature) => features[feature])}
       </ul>
-      <p className="text-[3dvh] max-w-[75%] text-justify">
+      <p className="max-w-[75%] text-justify text-[3dvh]">
         For more information, check the{" "}
         <a
           className="text-blue-400 hover:underline"
@@ -137,12 +152,12 @@ export default function NewFeaturesOverlay() {
         .
       </p>
 
-      <div className="w-[75%] h-[2px] flex flex-row items-center justify-center">
-        <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-r from-transparent to-zinc-800 border-0" />
-        <hr className="h-[2px] w-1/2 my-8 bg-gradient-to-l from-transparent to-zinc-800 border-0" />
+      <div className="flex h-[2px] w-[75%] flex-row items-center justify-center">
+        <hr className="my-8 h-[2px] w-1/2 border-0 bg-gradient-to-r from-transparent to-zinc-800" />
+        <hr className="my-8 h-[2px] w-1/2 border-0 bg-gradient-to-l from-transparent to-zinc-800" />
       </div>
 
-      <p className="text-[2.5dvh] max-w-[60%] text-center">
+      <p className="max-w-[60%] text-center text-[2.5dvh]">
         Would you like to see more features or vote for the next ones? You can
         do so on{" "}
         <a
@@ -157,7 +172,7 @@ export default function NewFeaturesOverlay() {
       </p>
       {showPrev && (
         <button
-          className="absolute bottom-[50%] left-[1dvh] w-[5dvh] h-[5dvh] filter active:brightness-90"
+          className="absolute bottom-[50%] left-[1dvh] h-[5dvh] w-[5dvh] filter active:brightness-90"
           title="Show welcome overlay (Left arrow key)"
           onClick={() => {
             setIsWelcomeOverlayOpen(true);
@@ -165,7 +180,7 @@ export default function NewFeaturesOverlay() {
           }}
         >
           <svg
-            className="w-full h-full inline-block"
+            className="inline-block h-full w-full"
             aria-hidden="true"
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

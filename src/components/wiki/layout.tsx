@@ -149,12 +149,33 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
     };
   }, []);
 
+  // Handle copy events for invisible characters
+  useEffect(() => {
+    const handleCopy = (event: ClipboardEvent) => {
+      const selection = window.getSelection();
+      const selectedText = selection?.toString();
+
+      // Strip invisible characters
+      if (selectedText) {
+        const modifiedText = selectedText.replace(/\u200B/g, "");
+        event.preventDefault();
+        event.clipboardData?.setData("text/plain", modifiedText);
+      }
+    };
+
+    document.addEventListener("copy", handleCopy);
+
+    return () => {
+      document.removeEventListener("copy", handleCopy);
+    };
+  }, []);
+
   return (
     <div className="text-zinc-300">
       {/* Background */}
       <div className="fixed inset-0 -z-20">
         <Image
-          className="filter bg-zinc-950 object-cover"
+          className="bg-zinc-950 object-cover filter"
           src="/background-blurred.png"
           alt=""
           fill
@@ -183,16 +204,16 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
         setIsSidenavOpen={setIsSidenavOpen}
         setIsSearchOpen={setIsSearchOpen}
       />
-      <div className="w-full flex flex-row">
+      <div className="flex w-full flex-row">
         <Sidenav
-          className="hidden lg:block z-20 mt-[4rem] bg-zinc-950/20 backdrop-blur-md"
+          className="z-20 mt-[4rem] hidden bg-zinc-950/20 backdrop-blur-md lg:block"
           currentPath={`/wiki${pagePath}`}
           customScrollbarEnabled={customScrollbarEnabled}
         />
 
-        <div className="lg:pl-[16rem] lg:pr-[16rem] max-w-full">
+        <div className="max-w-full lg:pl-[16rem] lg:pr-[16rem]">
           <div
-            className={`w-full flex flex-row lg:overflow-y-auto custom-scrollbar p-5 lg:pl-10 ${
+            className={`custom-scrollbar flex w-full flex-row p-5 lg:overflow-y-auto lg:pl-10 ${
               isSidenavOpen || isSearchOpen ? "fixed" : "overflow-y-auto"
             }`}
             style={{
@@ -204,13 +225,13 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
           >
             {/* Background effect */}
             <div
-              className="absolute z-20 pointer-events-none top-0 inset-x-0 max-h-screen select-none flex items-center justify-center overflow-hidden"
+              className="pointer-events-none absolute inset-x-0 top-0 z-20 flex max-h-screen select-none items-center justify-center overflow-hidden"
               style={{
                 top: isSidenavOpen || isSearchOpen ? "-6.864rem" : "",
               }}
             >
               <Image
-                className="filter opacity-65"
+                className="opacity-65 filter"
                 src="/background-effect.png"
                 alt=""
                 width={1500}
@@ -220,7 +241,7 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
             </div>
 
             {/* MDX content */}
-            <div className="flex-1 min-w-0 flex flex-col space-y-2 text-justify z-20">
+            <div className="z-20 flex min-w-0 flex-1 flex-col space-y-2 text-justify">
               <MobileTableOfContents source={source} />
               {children}
               {pagePath !== "/" && <NavigationButtons pagePath={pagePath} />}
@@ -229,7 +250,7 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
             <TableOfContents
               headings={getHeadings(source)}
               activeId={activeId}
-              className="hidden lg:block pt-[6rem] pb-5 fixed right-0 top-0 w-64 px-5 scrollbar-none"
+              className="fixed right-0 top-0 hidden w-64 px-5 pb-5 pt-[6rem] scrollbar-none lg:block"
             />
           </div>
         </div>

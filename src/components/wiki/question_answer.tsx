@@ -18,19 +18,19 @@ export default function QuestionAnswer({ question, children }: Props) {
 
   return (
     <div
-      className={`bg-zinc-900 rounded-md p-2 px-4 ${
+      className={`rounded-md bg-zinc-900 p-2 px-4 ${
         isOpen ? "[&>div>svg]:-rotate-90" : ""
       }`}
     >
       <div
-        className="flex items-center justify-between cursor-pointer font-medium text-left text-lg text-zinc-50"
+        className="flex cursor-pointer items-center justify-between text-left text-lg font-medium text-zinc-50"
         onClick={handleToggle}
       >
         {question}
 
         {/* Arrow SVG */}
         <svg
-          className="text-zinc-400 ml-5 w-4 h-4 inline-block transform rotate-90 transition-transform duration-200"
+          className="ml-5 inline-block h-4 w-4 rotate-90 transform text-zinc-400 transition-transform duration-200"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

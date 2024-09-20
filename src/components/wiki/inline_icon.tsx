@@ -10,7 +10,7 @@ export default function InlineIcon({ src, alt = "", size = "m" }: Props) {
   return (
     <Image
       className={`inline-block pb-1 ${
-        size === "s" ? "w-4 h-4" : size === "m" ? "w-5 h-5" : "w-6 h-6"
+        size === "s" ? "h-4 w-4" : size === "m" ? "h-5 w-5" : "h-6 w-6"
       } `}
       src={src}
       alt={alt}

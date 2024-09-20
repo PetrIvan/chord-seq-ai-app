@@ -36,11 +36,11 @@ export default function MobileSidenav({
     <AnimatePresence>
       {isSidenavOpen && (
         <div
-          className="lg:hidden fixed top-0 h-screen w-screen z-50 bg-zinc-950/50"
+          className="fixed top-0 z-50 h-screen w-screen bg-zinc-950/50 lg:hidden"
           onClick={() => setIsSidenavOpen(false)}
         >
           {/* Background blur */}
-          <div className="w-full h-full backdrop-blur-sm z-40" />
+          <div className="z-40 h-full w-full backdrop-blur-sm" />
 
           <div onClick={(e: any) => e.stopPropagation()}>
             <Sidenav
@@ -53,7 +53,7 @@ export default function MobileSidenav({
                 src="/close.svg"
                 title="Close (Esc)"
                 alt="Close"
-                className="absolute top-6 right-3 h-6 w-6 cursor-pointer"
+                className="absolute right-3 top-6 h-6 w-6 cursor-pointer"
                 width={100}
                 height={100}
                 onClick={() => setIsSidenavOpen(false)}

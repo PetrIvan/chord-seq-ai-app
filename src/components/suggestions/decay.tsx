@@ -24,12 +24,12 @@ export default function Decay() {
 
   return (
     <div className="flex flex-col items-center justify-center">
-      <label htmlFor="decay" className="text-white text-[2.5dvh] mb-[0.5dvw]">
+      <label htmlFor="decay" className="mb-[0.5dvw] text-[2.5dvh] text-white">
         Decay
       </label>
       <input
         id="decay"
-        className="w-[16dvh] h-[2dvh] bg-zinc-800 rounded-full appearance-none cursor-pointer accent-violet-800 range-slider"
+        className="range-slider h-[2dvh] w-[16dvh] cursor-pointer appearance-none rounded-full bg-zinc-800 accent-violet-800"
         type="range"
         style={{
           background: `linear-gradient(to right, #5b21b6 50%, #27272a 50%)`,

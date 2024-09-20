@@ -19,13 +19,13 @@ export default function NavigationButtons({ pagePath }: Props) {
   if (next) nextTitle = findPageNameInTree(next) || "Home";
 
   return (
-    <div className="w-full flex flex-row justify-between pt-8 text-zinc-300 font-semibold">
+    <div className="flex w-full flex-row justify-between pt-8 font-semibold text-zinc-300">
       <Link
-        className="flex flex-row items-center justify-start hover:text-zinc-50 w-1/2"
+        className="flex w-1/2 flex-row items-center justify-start hover:text-zinc-50"
         href={previous ? `/wiki${previous}` : "/wiki"}
       >
         <svg
-          className="w-3 h-3 inline-block mr-2 transform rotate-180"
+          className="mr-2 inline-block h-3 w-3 rotate-180 transform"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -40,15 +40,15 @@ export default function NavigationButtons({ pagePath }: Props) {
             d="m1 1 4 4 4-4"
           />
         </svg>
-        <p className="truncate max-w-full inline-block">{previousTitle}</p>
+        <p className="inline-block max-w-full truncate">{previousTitle}</p>
       </Link>
       <Link
-        className="flex flex-row items-center justify-end hover:text-zinc-50 w-1/2"
+        className="flex w-1/2 flex-row items-center justify-end hover:text-zinc-50"
         href={next ? `/wiki${next}` : "/wiki"}
       >
-        <p className="truncate max-w-full inline-block">{nextTitle}</p>
+        <p className="inline-block max-w-full truncate">{nextTitle}</p>
         <svg
-          className="w-3 h-3 inline-block ml-2"
+          className="ml-2 inline-block h-3 w-3"
           aria-hidden="true"
           xmlns="http://www.w3.org/2000/svg"
           fill="none"

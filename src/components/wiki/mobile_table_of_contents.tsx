@@ -22,18 +22,18 @@ export default function MobileTableOfContents({ source }: Props) {
     getHeadings(source).length > 0 && (
       <div className="lg:hidden">
         <div
-          className={`bg-zinc-900 rounded-md mb-4 p-2 px-4 ${
+          className={`mb-4 rounded-md bg-zinc-900 p-2 px-4 ${
             isOpen ? "[&>div>svg]:-rotate-90" : ""
           }`}
         >
           <div
-            className="flex items-center justify-between cursor-pointer"
+            className="flex cursor-pointer items-center justify-between"
             onClick={handleToggle}
           >
             On this page
             {/* Arrow SVG */}
             <svg
-              className="text-zinc-400 w-4 h-4 inline-block transform rotate-90 transition-transform duration-200"
+              className="inline-block h-4 w-4 rotate-90 transform text-zinc-400 transition-transform duration-200"
               aria-hidden="true"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

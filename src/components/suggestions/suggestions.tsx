@@ -39,7 +39,7 @@ interface Props {
   setSelectedToken: (token: number) => void;
   setSelectedVariant: (variant: number) => void;
   setIsVariantsOpenFromSuggestions: (
-    isVariantsOpenFromSuggestions: boolean
+    isVariantsOpenFromSuggestions: boolean,
   ) => void;
   defaultVariants: number[];
   isDownloadingModel: boolean;
@@ -97,7 +97,7 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
       token: number;
       duration: number;
       variant: number;
-    }[]
+    }[],
   ) {
     const collapsedChords: number[] = [];
     for (let i = 0; i < chords.length; i++) {
@@ -114,10 +114,10 @@ function arePropsEqual(prevProps: Props, newProps: Props) {
   }
 
   const prevChords = collapseChords(
-    prevProps.chords.slice(0, prevProps.selectedChord)
+    prevProps.chords.slice(0, prevProps.selectedChord),
   );
   const newChords = collapseChords(
-    newProps.chords.slice(0, newProps.selectedChord)
+    newProps.chords.slice(0, newProps.selectedChord),
   );
 
   // Compare final the states
@@ -182,7 +182,7 @@ export default function Suggestions() {
       state.isLoadingSession,
       state.customScrollbarEnabled,
     ],
-    shallow
+    shallow,
   );
 
   // Rerender on window resize (necessary to resize the suggestions grid)
@@ -306,12 +306,16 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }, [chords, selectedChord, modelPath, selectedGenres, selectedDecades]);
 
   // Actually predict the next chord when the prediction is requested (by chordProbsLoading)
+  const prevChordProbsLoading = useRef(chordProbsLoading);
   useEffect(() => {
+    // Only predict if the prediction is requested
+    if (prevChordProbsLoading.current === chordProbsLoading) return;
+    prevChordProbsLoading.current = chordProbsLoading;
     if (!chordProbsLoading) return;
 
     // Get the style if the model is conditional
     const style = normalizeStyle(selectedGenres).concat(
-      normalizeStyle(selectedDecades)
+      normalizeStyle(selectedDecades),
     );
     const inputStyle = modelPath.includes("conditional") ? style : undefined;
 
@@ -325,7 +329,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         switch (error.message) {
           case "model not loaded":
             alert(
-              "Model not loaded, probably due to timeout. Please reload the page, your progress is saved."
+              "Model not loaded, probably due to timeout. Please reload the page, your progress is saved.",
             );
             break;
           case "sequence is too long":
@@ -334,19 +338,26 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           default:
             if ("no available backend found" in error) {
               alert(
-                "No backend found. Please reload the page, your progress is saved. If the problem persists, try using a different browser."
+                "No backend found. Please reload the page, your progress is saved. If the problem persists, try using a different browser.",
               );
             }
 
             alert(
-              `An error has occurred, try reloading the page. Your progress is saved.\n${error.message}`
+              `An error has occurred, try reloading the page. Your progress is saved.\n${error.message}`,
             );
             break;
         }
         setChordProbsLoading(false);
         setErrorOccured(true);
       });
-  }, [chordProbsLoading]);
+  }, [
+    chordProbsLoading,
+    chords,
+    modelPath,
+    selectedChord,
+    selectedDecades,
+    selectedGenres,
+  ]);
 
   /* Keyboard shortcuts */
   const enabledShortcutsRef = useRef(enabledShortcuts);
@@ -361,31 +372,34 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     defaultVariantsRef.current = defaultVariants;
   }, [defaultVariants]);
 
-  function handleKeyDown(event: KeyboardEvent) {
-    if ("Digit" === event.code.substring(0, 5) && enabledShortcutsRef.current) {
-      event.preventDefault();
-      let number = parseInt(event.code.substring(5, 6));
-      if (number === 0) number = 10;
-
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
       if (
-        number - 1 < chordProbsRef.current.length &&
-        !chordProbsLoadingRef.current
+        "Digit" === event.code.substring(0, 5) &&
+        enabledShortcutsRef.current
       ) {
-        let token = chordProbsRef.current[number - 1].token;
-        let variant = defaultVariantsRef.current[token];
-        replaceChord(token, variant);
-        playChord(tokenToChord[token][variant]);
+        event.preventDefault();
+        let number = parseInt(event.code.substring(5, 6));
+        if (number === 0) number = 10;
+
+        if (
+          number - 1 < chordProbsRef.current.length &&
+          !chordProbsLoadingRef.current
+        ) {
+          let token = chordProbsRef.current[number - 1].token;
+          let variant = defaultVariantsRef.current[token];
+          replaceChord(token, variant);
+          playChord(tokenToChord[token][variant]);
+        }
       }
     }
-  }
 
-  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, []);
+  }, [replaceChord]);
 
   /* Rendering */
   // Render the suggestions
@@ -409,12 +423,12 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   function notesMatch(
     notes: number[],
     searchNotes: number[],
-    matchType: number
+    matchType: number,
   ) {
     // Remove duplicate notes
     notes = notes.filter((note, index) => notes.indexOf(note) === index);
     searchNotes = searchNotes.filter(
-      (note, index) => searchNotes.indexOf(note) === index
+      (note, index) => searchNotes.indexOf(note) === index,
     );
 
     if (matchType === 0) {
@@ -484,7 +498,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           // Normalize searchNotes to start from the lowest octave
           const lowestOctave = Math.round(Math.min(...normSearchNotes) / 12);
           normSearchNotes = normSearchNotes.map(
-            (note) => note - lowestOctave * 12
+            (note) => note - lowestOctave * 12,
           );
 
           // Check if any variant matches
@@ -517,17 +531,17 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           setSelectedVariant={setSelectedVariant}
           setVariantsOpen={setVariantsOpen}
           setIsVariantsOpenFromSuggestions={setIsVariantsOpenFromSuggestions}
-        />
+        />,
       );
     }
     return chordsList;
   }
 
   // Units
-  let oneDvhInPx = window.innerHeight / 100;
+  const [oneDvhInPx, setOneDvhInPx] = useState(window.innerHeight / 100);
   useEffect(() => {
     const handleResize = () => {
-      oneDvhInPx = window.innerHeight / 100;
+      setOneDvhInPx(window.innerHeight / 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -546,7 +560,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   const contentContainerRef = useRef<HTMLDivElement>(null);
   if (selectedChord === -1) {
     content = (
-      <p className="text-zinc-500 truncate text-[2dvw]">
+      <p className="truncate text-[2dvw] text-zinc-500">
         Select a chord to see suggestions based on context
       </p>
     );
@@ -568,8 +582,8 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     else if (chordProbsLoading) text = "Predicting suggestions...";
 
     content = (
-      <div className="h-full flex flex-col items-center justify-center">
-        <p className="text-zinc-500 truncate text-[2dvw] animate-pulse">
+      <div className="flex h-full flex-col items-center justify-center">
+        <p className="animate-pulse truncate text-[2dvw] text-zinc-500">
           {text}
         </p>
       </div>
@@ -579,8 +593,8 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
 
     if (chordList.length === 0) {
       content = (
-        <div className="h-full flex flex-col items-center justify-center">
-          <p className="text-zinc-500 text-center text-[2dvw] max-w-[50%]">
+        <div className="flex h-full flex-col items-center justify-center">
+          <p className="max-w-[50%] text-center text-[2dvw] text-zinc-500">
             Haven&apos;t found what you&apos;re looking for? Try enabling
             variants or changing the search query.
           </p>
@@ -590,8 +604,8 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
       if (forceRerender) {
         // Show a loading animation while resizing
         content = (
-          <div className="h-full flex flex-col items-center justify-center">
-            <p className="text-zinc-500 truncate text-[2dvw] animate-pulse">
+          <div className="flex h-full flex-col items-center justify-center">
+            <p className="animate-pulse truncate text-[2dvw] text-zinc-500">
               Loading...
             </p>
           </div>
@@ -601,11 +615,11 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
         let sliderWidth = 17; // px
         let prefferedColumnWidth = 25; // dvh
         const containerWidth = pxToDvh(
-          (contentContainerRef.current?.clientWidth || 0) - sliderWidth
+          (contentContainerRef.current?.clientWidth || 0) - sliderWidth,
         );
         const columnWidth = Math.max(
           prefferedColumnWidth,
-          containerWidth / Math.floor(containerWidth / prefferedColumnWidth)
+          containerWidth / Math.floor(containerWidth / prefferedColumnWidth),
         );
         const columnCount = Math.floor(containerWidth / columnWidth);
 
@@ -617,7 +631,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   // Add custom scrollbar to the suggestions virtualized grid manually, as the library does not support it
   useEffect(() => {
     let suggestions = document.getElementsByClassName(
-      "ReactVirtualized__Grid"
+      "ReactVirtualized__Grid",
     )[0];
     let scrollbarText =
       " scrollbar-thin scrollbar-track-zinc-800 scrollbar-track-rounded-full scrollbar-thumb-zinc-700 hover:scrollbar-thumb-zinc-600 active:scrollbar-thumb-zinc-500 scrollbar-thumb-rounded-full";
@@ -631,18 +645,18 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }, [customScrollbarEnabled, content]);
 
   return (
-    <div className="flex flex-col rounded-[0.5dvw] w-full h-full min-h-0">
+    <div className="flex h-full min-h-0 w-full flex-col rounded-[0.5dvw]">
       {selectedChord !== -1 && (
-        <div className="flex flex-row justify-between bg-zinc-900 p-[0.5dvw] px-[1dvw] rounded-t-[0.5dvw]">
+        <div className="flex flex-row justify-between rounded-t-[0.5dvw] bg-zinc-900 p-[0.5dvw] px-[1dvw]">
           <SearchBar />
           <Decay />
         </div>
       )}
-      <div className="flex-1 bg-zinc-900 w-full max-h-screen pl-[0.5dvw] flex flex-col justify-center items-center rounded-b-[0.5dvw] min-h-0">
+      <div className="flex max-h-screen min-h-0 w-full flex-1 flex-col items-center justify-center rounded-b-[0.5dvw] bg-zinc-900 pl-[0.5dvw]">
         <div
-          className={`w-full h-full ${
+          className={`h-full w-full ${
             selectedChord === -1
-              ? "flex flex-col justify-center items-center min-h-0"
+              ? "flex min-h-0 flex-col items-center justify-center"
               : ""
           }`}
           ref={contentContainerRef}
@@ -680,5 +694,4 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
       </div>
     </div>
   );
-},
-arePropsEqual);
+}, arePropsEqual);

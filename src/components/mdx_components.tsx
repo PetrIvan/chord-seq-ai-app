@@ -7,18 +7,18 @@ function HeadingContent(
   props: React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLHeadingElement>,
     HTMLHeadingElement
-  >
+  >,
 ) {
   return (
     <Link href={`#${props.id}`} className="relative">
-      <div className="hidden lg:flex items-center justify-center absolute w-6 h-6 mr-2 right-[100%] top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-75 transition-opacity duration-200 bg-zinc-800 rounded-md">
+      <div className="absolute right-[100%] top-1/2 mr-2 hidden h-6 w-6 -translate-y-1/2 transform items-center justify-center rounded-md bg-zinc-800 opacity-0 transition-opacity duration-200 group-hover:opacity-75 lg:flex">
         <Image
           src="/hashtag.svg"
           alt="Direct link to title"
           title={`Direct link to ${props.children}`}
           width={100}
           height={100}
-          className="w-[0.8rem] h-[0.8rem]"
+          className="h-[0.8rem] w-[0.8rem]"
         />
       </div>
 
@@ -32,13 +32,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h1: (props) => (
       <h1
         {...props}
-        className="font-semibold text-left text-3xl text-zinc-50"
+        className="text-left text-3xl font-semibold text-zinc-50"
       />
     ),
     h2: (props) => (
       <h2
         {...props}
-        className="font-semibold text-left text-2xl text-zinc-50 pt-2 scroll-mt-[7rem] lg:scroll-mt-[4rem] group"
+        className="group scroll-mt-[7rem] pt-2 text-left text-2xl font-semibold text-zinc-50 lg:scroll-mt-[4rem]"
       >
         {HeadingContent(props)}
       </h2>
@@ -46,7 +46,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h3: (props) => (
       <h3
         {...props}
-        className="font-semibold text-left text-xl text-zinc-50 pt-2 scroll-mt-[7rem] lg:scroll-mt-[4rem] group"
+        className="group scroll-mt-[7rem] pt-2 text-left text-xl font-semibold text-zinc-50 lg:scroll-mt-[4rem]"
       >
         {HeadingContent(props)}
       </h3>
@@ -54,7 +54,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h4: (props) => (
       <h4
         {...props}
-        className="font-semibold text-left text-lg text-zinc-50 pt-2 scroll-mt-[7rem] lg:scroll-mt-[4rem] group"
+        className="group scroll-mt-[7rem] pt-2 text-left text-lg font-semibold text-zinc-50 lg:scroll-mt-[4rem]"
       >
         {HeadingContent(props)}
       </h4>
@@ -62,7 +62,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h5: (props) => (
       <h5
         {...props}
-        className="font-semibold text-left text-base text-zinc-50 pt-2 scroll-mt-[7rem] lg:scroll-mt-[4rem] group"
+        className="group scroll-mt-[7rem] pt-2 text-left text-base font-semibold text-zinc-50 lg:scroll-mt-[4rem]"
       >
         {HeadingContent(props)}
       </h5>
@@ -70,7 +70,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     h6: (props) => (
       <h6
         {...props}
-        className="font-medium text-left text-base text-zinc-50 pt-2 scroll-mt-[7rem] lg:scroll-mt-[4rem] group"
+        className="group scroll-mt-[7rem] pt-2 text-left text-base font-medium text-zinc-50 lg:scroll-mt-[4rem]"
       >
         {HeadingContent(props)}
       </h6>
@@ -105,7 +105,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ol: (props) => <ol {...props} className="list-decimal pl-4" />,
     li: (props) => <li {...props} />,
     table: (props) => (
-      <div className="overflow-x-auto py-2 custom-scrollbar">
+      <div className="custom-scrollbar overflow-x-auto py-2">
         <table
           {...props}
           className="table-auto border-collapse whitespace-nowrap"
@@ -115,20 +115,20 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     th: (props) => (
       <th
         {...props}
-        className="bg-zinc-850 font-semibold p-2 first:rounded-tl-md last:rounded-tr-md"
+        className="bg-zinc-850 p-2 font-semibold first:rounded-tl-md last:rounded-tr-md"
       />
     ),
     tr: (props) => (
       <tr
         {...props}
-        className="bg-zinc-850 odd:bg-zinc-900 first:[&>td]:last:rounded-bl-md last:[&>td]:last:rounded-br-md"
+        className="bg-zinc-850 odd:bg-zinc-900 last:[&>td]:last:rounded-br-md first:[&>td]:last:rounded-bl-md"
       />
     ),
     td: (props) => <td {...props} className="p-2" />,
     code: (props) => (
       <code
         {...props}
-        className="font-mono bg-zinc-800 rounded-md px-1 text-base text-zinc-50"
+        className="rounded-md bg-zinc-800 px-1 font-mono text-base text-zinc-50"
         style={{
           wordBreak: "keep-all", // Prevents breaking within words
           whiteSpace: "normal", // Allows text wrapping
