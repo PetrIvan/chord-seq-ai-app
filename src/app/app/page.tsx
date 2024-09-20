@@ -15,6 +15,10 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/app",
   },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 const App = dynamic(() => import("@/components/app"), {
