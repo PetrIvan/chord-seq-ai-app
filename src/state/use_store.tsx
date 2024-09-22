@@ -175,6 +175,8 @@ interface StoreState {
   // UI
   customScrollbarEnabled: boolean;
   setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) => void;
+  isMobile: boolean;
+  setIsMobile: (isMobile: boolean) => void;
 
   // Wiki
   wikiSidenavOpen: Map<string, boolean>;
@@ -487,6 +489,8 @@ export const useStore = createWithEqualityFn<StoreState>()(
       customScrollbarEnabled: true,
       setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) =>
         set({ customScrollbarEnabled }),
+      isMobile: false,
+      setIsMobile: (isMobile: boolean) => set({ isMobile }),
 
       // Wiki
       wikiSidenavOpen: new Map(),

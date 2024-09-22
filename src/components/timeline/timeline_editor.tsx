@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { usePinch, useDrag } from "@use-gesture/react";
 import { useInit } from "@/state/use_init";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
@@ -23,6 +24,7 @@ export default function TimelineEditor() {
     stateWindow,
     initializeStateWindow,
     isStepByStepTutorialOpen,
+    isMobile,
   ] = useStore(
     (state) => [
       state.signature,
@@ -34,6 +36,7 @@ export default function TimelineEditor() {
       state.stateWindow,
       state.initializeStateWindow,
       state.isStepByStepTutorialOpen,
+      state.isMobile,
     ],
     shallow,
   );
@@ -172,7 +175,41 @@ export default function TimelineEditor() {
     zoomRef.current = zoom;
   }, [zoom]);
 
-  const handleZoom = useCallback(
+  // Zoom in and out on pinch (touchpad/phone)
+  usePinch(
+    ({ origin: [ox], delta: [d] }) => {
+      if (isStepByStepTutorialOpenRef.current) return;
+
+      const newZoom = zoom + d;
+      const clampedZoom = Math.min(Math.max(newZoom, 0.25), 5);
+
+      setZoom(clampedZoom);
+
+      // Zoom in on the center of the timeline
+      if (!timelineRef.current) return;
+
+      const rect = timelineRef.current.getBoundingClientRect();
+      const x = pxToDvw(ox - rect.left) - timelineStart;
+
+      const zoomChange = clampedZoom - zoomRef.current;
+      const relativePosition =
+        (x - timelinePositionRef.current) / zoomRef.current;
+      const positionChange = zoomChange * relativePosition;
+
+      setTimelinePosition(
+        Math.min(0, timelinePositionRef.current - positionChange),
+      );
+    },
+    {
+      target: timelineRef,
+      eventOptions: { passive: false },
+      scaleBounds: { min: 0.25, max: 5 },
+      from: () => [zoom, 0],
+    },
+  );
+
+  // Zoom in and out on scroll (mouse), move the view (touchpad)
+  const handleScroll = useCallback(
     (event: WheelEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
 
@@ -197,25 +234,49 @@ export default function TimelineEditor() {
         (x - timelinePositionRef.current) / zoomRef.current;
       const positionChange = zoomChange * relativePosition;
 
+      // Move the view to zoom on the cursor and scroll horizontally (deltaX on touchpad)
       setTimelinePosition(
-        Math.min(0, timelinePositionRef.current - positionChange),
+        Math.min(
+          0,
+          timelinePositionRef.current - positionChange - pxToDvw(event.deltaX),
+        ),
       );
     },
     [pxToDvw, setTimelinePosition, setZoom, timelineStart, zoom],
+  );
+
+  // Move the view on drag (mobile)
+  const bindTimelineDrag = useDrag(
+    ({ xy: [x, y], delta: [dx] }) => {
+      if (isStepByStepTutorialOpenRef.current) return;
+      if (movingPlayheadRef.current) return;
+      if (!isMobile) return;
+
+      // Only drag if not on the ticks
+      const rect = timelineRef.current?.getBoundingClientRect();
+      if (!rect || !isOnTimeline(y, rect)) return;
+
+      setTimelinePosition(
+        Math.min(0, timelinePositionRef.current + pxToDvw(dx)),
+      );
+    },
+    {
+      axis: "x",
+    },
   );
 
   useEffect(() => {
     const timelineEl = timelineRef.current;
     if (!timelineEl) return;
 
-    timelineEl.addEventListener("wheel", handleZoom, {
+    timelineEl.addEventListener("wheel", handleScroll, {
       passive: false,
     });
 
     return () => {
-      timelineEl.removeEventListener("wheel", handleZoom);
+      timelineEl.removeEventListener("wheel", handleScroll);
     };
-  }, [zoom, timelinePosition, handleZoom]);
+  }, [zoom, timelinePosition, handleScroll]);
 
   /* Window resize logic */
   // The width referenced is that of the timeline
@@ -245,13 +306,13 @@ export default function TimelineEditor() {
 
   /* Playhead logic */
   const [playing, setPlaying] = useState(false);
-  const [holdingMouse, setHoldingMouse] = useState(false);
+  const [movingPlayhead, setMovingPlayhead] = useState(false);
 
-  const holdingMouseRef = useRef(holdingMouse);
+  const movingPlayheadRef = useRef(movingPlayhead);
 
   useEffect(() => {
-    holdingMouseRef.current = holdingMouse;
-  }, [holdingMouse]);
+    movingPlayheadRef.current = movingPlayhead;
+  }, [movingPlayhead]);
 
   const signatureRef = useRef(signature);
 
@@ -287,15 +348,21 @@ export default function TimelineEditor() {
     );
   };
 
+  function getPosFromEvent(event: MouseEvent | TouchEvent) {
+    return "touches" in event
+      ? [event.touches[0].clientX, event.touches[0].clientY]
+      : [event.clientX, event.clientY];
+  }
+
   // Set the playhead position based on current cursor position
   const handlePlayheadUpdate = useCallback(
-    (event: MouseEvent) => {
+    (event: MouseEvent | TouchEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
 
-      if (!timelineRef.current || !holdingMouseRef.current) return;
+      if (!timelineRef.current || !movingPlayheadRef.current) return;
 
       const rect = timelineRef.current.getBoundingClientRect();
-      const x = event.clientX - rect.left;
+      const x = getPosFromEvent(event)[0] - rect.left;
       let newPlayheadPosition = Math.max(
         0,
         xToPosition(x - dvwToPx(timelinePositionRef.current)),
@@ -309,22 +376,27 @@ export default function TimelineEditor() {
     [dvwToPx, pxToDvw, setPlayheadPosition, xToPosition],
   );
 
-  const handleMouseDown = useCallback(
-    (event: MouseEvent) => {
+  const handlePlayheadMoveStart = useCallback(
+    (event: MouseEvent | TouchEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
 
       const rect = timelineRef?.current?.getBoundingClientRect();
+      const pos = getPosFromEvent(event);
 
-      if (!rect || !isOnTicks(event.clientY, rect) || event.button !== 0)
+      if (
+        !rect ||
+        !isOnTicks(pos[1], rect) ||
+        ("button" in event && event.button !== 0)
+      )
         return;
 
       // Playhead should update both on mouse move and click
-      setHoldingMouse(true);
+      setMovingPlayhead(true);
       if (timelineRef.current) {
         let newPlayheadPosition = Math.max(
           0,
           xToPosition(
-            event.clientX - rect.left - dvwToPx(timelinePositionRef.current),
+            pos[0] - rect.left - dvwToPx(timelinePositionRef.current),
           ),
         );
         newPlayheadPosition = pxToDvw(newPlayheadPosition);
@@ -335,27 +407,33 @@ export default function TimelineEditor() {
       }
 
       window.addEventListener("mousemove", handlePlayheadUpdate);
+      window.addEventListener("touchmove", handlePlayheadUpdate);
     },
     [dvwToPx, handlePlayheadUpdate, pxToDvw, setPlayheadPosition, xToPosition],
   );
 
-  const handleMouseUp = useCallback(() => {
-    setHoldingMouse(false);
+  const handlePlayheadMoveEnd = useCallback(() => {
+    setMovingPlayhead(false);
     window.removeEventListener("mousemove", handlePlayheadUpdate);
+    window.removeEventListener("touchmove", handlePlayheadUpdate);
   }, [handlePlayheadUpdate]);
 
   useEffect(() => {
     const timelineEl = timelineRef.current;
     if (!timelineEl) return;
 
-    timelineEl.addEventListener("mousedown", handleMouseDown);
-    window.addEventListener("mouseup", handleMouseUp);
+    timelineEl.addEventListener("mousedown", handlePlayheadMoveStart);
+    timelineEl.addEventListener("touchstart", handlePlayheadMoveStart);
+    window.addEventListener("mouseup", handlePlayheadMoveEnd);
+    window.addEventListener("touchend", handlePlayheadMoveEnd);
 
     return () => {
-      timelineEl.removeEventListener("mousedown", handleMouseDown);
-      window.removeEventListener("mouseup", handleMouseUp);
+      timelineEl.removeEventListener("mousedown", handlePlayheadMoveStart);
+      timelineEl.removeEventListener("touchstart", handlePlayheadMoveStart);
+      window.removeEventListener("mouseup", handlePlayheadMoveEnd);
+      window.removeEventListener("touchend", handlePlayheadMoveEnd);
     };
-  }, [handleMouseDown, handleMouseUp]);
+  }, [handlePlayheadMoveStart, handlePlayheadMoveEnd]);
 
   /* Grid layout sizing logic */
   // To make the signature and the timeline controls match
@@ -392,11 +470,12 @@ export default function TimelineEditor() {
       <Signature />
       <div
         ref={timelineRef}
-        className={`relative h-full flex-1 rounded-br-[1dvh] bg-zinc-900 px-[1dvw] ${
+        className={`relative h-full flex-1 touch-none rounded-br-[1dvh] bg-zinc-900 px-[1dvw] ${
           widthInPx > 500 && "rounded-tr-[1dvh]"
         } flex flex-col overflow-hidden ${
           middleMouseDragging && "cursor-grabbing"
         }`}
+        {...bindTimelineDrag()}
       >
         <Playhead timelineStart={timelineStart} />
         <Ticks

@@ -17,15 +17,13 @@ import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
 export default function App() {
-  const [setCustomScrollbar] = useStore(
-    (state) => [state.setCustomScrollbarEnabled],
+  const [setCustomScrollbar, setIsMobile] = useStore(
+    (state) => [state.setCustomScrollbarEnabled, state.setIsMobile],
     shallow,
   );
 
   // Next.js 13+ implementation, the default isMobile from react-device-detect
   // is not working anymore (see https://stackoverflow.com/a/77174374/3058839)
-  const [isMobile, setIsMobile] = useState(false);
-
   useEffect(() => {
     document.title = "ChordSeqAI"; // Change the title when the page loads
     const userAgent = navigator.userAgent;
@@ -34,7 +32,7 @@ export default function App() {
 
     // Disable custom scrollbar for Firefox
     if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
-  }, [setCustomScrollbar]);
+  }, [setCustomScrollbar, setIsMobile]);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
 
@@ -53,10 +51,6 @@ export default function App() {
   // Show a message if the aspect ratio or the device is not supported
   let info = "";
 
-  if (isMobile) {
-    info =
-      "This app is currently not available on mobile devices, please use a desktop.";
-  }
   if (aspectRatio <= 0.96) {
     info =
       "This app is not supported on this screen size, please use a landscape orientation.";
