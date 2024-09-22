@@ -17,8 +17,12 @@ import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
 export default function App() {
-  const [setCustomScrollbar, setIsMobile] = useStore(
-    (state) => [state.setCustomScrollbarEnabled, state.setIsMobile],
+  const [setCustomScrollbar, isMobile, setIsMobile] = useStore(
+    (state) => [
+      state.setCustomScrollbarEnabled,
+      state.isMobile,
+      state.setIsMobile,
+    ],
     shallow,
   );
 
@@ -30,8 +34,9 @@ export default function App() {
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
 
-    // Disable custom scrollbar for Firefox
-    if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
+    // Disable custom scrollbar for Firefox and mobile devices
+    if (/Firefox/i.test(userAgent) || selectors.isMobile)
+      setCustomScrollbar(false);
   }, [setCustomScrollbar, setIsMobile]);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);

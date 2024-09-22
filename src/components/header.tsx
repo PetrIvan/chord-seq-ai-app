@@ -2,7 +2,6 @@
 
 import React from "react";
 
-import { getSelectorsByUserAgent } from "react-device-detect";
 import { useLayoutEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -35,14 +34,6 @@ export default function Header({
   sidenavEnabled = true,
   borderEnabled = true,
 }: Props) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useLayoutEffect(() => {
-    const userAgent = navigator.userAgent;
-    const selectors = getSelectorsByUserAgent(userAgent);
-    setIsMobile(selectors.isMobile);
-  }, []);
-
   const parts = pagePath.split("/").slice(1);
 
   return (
@@ -112,7 +103,7 @@ export default function Header({
             />
           )}
           <Link href="/wiki">Wiki</Link>
-          {!isMobile && <Link href="/app">App</Link>}
+          <Link href="/app">App</Link>
           <Link
             className="selection-none"
             href="https://github.com/PetrIvan/chord-seq-ai-app"
