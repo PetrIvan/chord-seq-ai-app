@@ -177,6 +177,8 @@ interface StoreState {
   setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) => void;
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
+  showFullscreenButton: boolean;
+  setShowFullscreenButton: (showFullscreenButton: boolean) => void;
 
   // Wiki
   wikiSidenavOpen: Map<string, boolean>;
@@ -491,6 +493,9 @@ export const useStore = createWithEqualityFn<StoreState>()(
         set({ customScrollbarEnabled }),
       isMobile: false,
       setIsMobile: (isMobile: boolean) => set({ isMobile }),
+      showFullscreenButton: false,
+      setShowFullscreenButton: (showFullscreenButton: boolean) =>
+        set({ showFullscreenButton }),
 
       // Wiki
       wikiSidenavOpen: new Map(),

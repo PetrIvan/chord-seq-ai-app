@@ -17,11 +17,19 @@ import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
 export default function App() {
-  const [setCustomScrollbar, isMobile, setIsMobile] = useStore(
+  const [
+    setCustomScrollbar,
+    isMobile,
+    setIsMobile,
+    showFullscreenButton,
+    setShowFullscreenButton,
+  ] = useStore(
     (state) => [
       state.setCustomScrollbarEnabled,
       state.isMobile,
       state.setIsMobile,
+      state.showFullscreenButton,
+      state.setShowFullscreenButton,
     ],
     shallow,
   );
@@ -34,10 +42,21 @@ export default function App() {
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
 
+    // If it is already installed, it will be fullscreen by default
+    const isFullscreen = window.matchMedia(
+      "(display-mode: fullscreen)",
+    ).matches;
+
+    const isFullscreenSupported = document.fullscreenEnabled;
+
+    setShowFullscreenButton(
+      isFullscreenSupported && !isFullscreen && selectors.isMobile,
+    );
+
     // Disable custom scrollbar for Firefox and mobile devices
     if (/Firefox/i.test(userAgent) || selectors.isMobile)
       setCustomScrollbar(false);
-  }, [setCustomScrollbar, setIsMobile]);
+  }, [setCustomScrollbar, setIsMobile, setShowFullscreenButton]);
 
   const [aspectRatio, setAspectRatio] = useState(16 / 9);
 
@@ -87,7 +106,9 @@ export default function App() {
       <NewFeaturesOverlay />
       <SupportUsOverlay />
       <div className="grid min-h-screen min-w-full grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] gap-[1dvw] p-[1dvw]">
-        <div className="grid w-full min-w-0 grid-cols-[25fr_7fr_5fr] gap-[1dvw]">
+        <div
+          className={`grid w-full min-w-0 ${showFullscreenButton ? "grid-cols-[25fr_7fr_7fr]" : "grid-cols-[25fr_7fr_5fr]"} gap-[1dvw]`}
+        >
           <ModelSelection />
           <TransposeImportExport />
           <SupportHelp />

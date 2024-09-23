@@ -15,6 +15,7 @@ export default function SupportHelp() {
     setIsSupportUsAfterExport,
     setIsSupportUsLandingPage,
     dontShowSupportUsOverlay,
+    showFullscreenButton,
   ] = useStore(
     (state) => [
       state.setIsSupportUsOverlayOpen,
@@ -24,6 +25,7 @@ export default function SupportHelp() {
       state.setIsSupportUsAfterExport,
       state.setIsSupportUsAfterExport,
       state.dontShowSupportUsOverlay,
+      state.showFullscreenButton,
     ],
     shallow,
   );
@@ -102,6 +104,29 @@ export default function SupportHelp() {
           className="h-full w-full"
         />
       </button>
+      {/* Full screen button */}
+      {showFullscreenButton && (
+        <button
+          className="flex h-full w-full select-none flex-col items-center justify-center filter active:brightness-90"
+          title="Full screen"
+          onClick={() => {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              document.documentElement.requestFullscreen();
+            }
+          }}
+        >
+          <Image
+            src={document.fullscreenElement ? "/minimize.svg" : "/maximize.svg"}
+            alt="Full screen"
+            width={100}
+            height={100}
+            className="h-full w-full"
+          />
+        </button>
+      )}
+
       <StepByStepTutorial
         step={8}
         text="That's it for now! If you get stuck, this is where you can find help."
