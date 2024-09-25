@@ -72,12 +72,16 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Show a message if the aspect ratio or the device is not supported
+  // Show a message if the aspect ratio is not supported
   let info = "";
 
   if (aspectRatio <= 0.96) {
-    info =
-      "This app is not supported on this screen size, please use a landscape orientation.";
+    if (isMobile) {
+      info = "Please rotate your device to landscape orientation.";
+    } else {
+      info =
+        "This app is not supported on this screen size, please use a landscape orientation.";
+    }
   }
   if (aspectRatio >= 4) {
     info =
