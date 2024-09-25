@@ -23,6 +23,8 @@ export default function TimelineEditor() {
     setPlayheadPosition,
     stateWindow,
     initializeStateWindow,
+    resizingAnyChord,
+    setIsPinchZooming,
     isStepByStepTutorialOpen,
     isMobile,
   ] = useStore(
@@ -35,6 +37,8 @@ export default function TimelineEditor() {
       state.setPlayheadPosition,
       state.stateWindow,
       state.initializeStateWindow,
+      state.resizingChord,
+      state.setIsPinchZooming,
       state.isStepByStepTutorialOpen,
       state.isMobile,
     ],
@@ -177,8 +181,10 @@ export default function TimelineEditor() {
 
   // Zoom in and out on pinch (touchpad/phone)
   usePinch(
-    ({ origin: [ox], delta: [d] }) => {
+    ({ origin: [ox], delta: [d], last }) => {
       if (isStepByStepTutorialOpenRef.current) return;
+
+      setIsPinchZooming(!last);
 
       const newZoom = zoom + d;
       const clampedZoom = Math.min(Math.max(newZoom, 0.25), 5);
@@ -246,10 +252,17 @@ export default function TimelineEditor() {
   );
 
   // Move the view on drag (mobile)
+  const resizingAnyChordRef = useRef(resizingAnyChord);
+
+  useEffect(() => {
+    resizingAnyChordRef.current = resizingAnyChord;
+  }, [resizingAnyChord]);
+
   const bindTimelineDrag = useDrag(
     ({ xy: [x, y], delta: [dx] }) => {
       if (isStepByStepTutorialOpenRef.current) return;
       if (movingPlayheadRef.current) return;
+      if (resizingAnyChordRef.current) return;
       if (!isMobile) return;
 
       // Only drag if not on the ticks

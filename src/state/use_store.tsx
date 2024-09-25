@@ -63,6 +63,8 @@ interface StoreState {
   setTimelinePosition: (state: number) => void;
   playheadPosition: number; // Where the playhead is (on screen), in dvw
   setPlayheadPosition: (state: number) => void;
+  isPinchZooming: boolean; // Whether the user is pinch zooming (on mobile/touchpad)
+  setIsPinchZooming: (state: boolean) => void;
 
   // State window (undo/redo)
   stateWindow: [Data][];
@@ -291,6 +293,8 @@ export const useStore = createWithEqualityFn<StoreState>()(
       playheadPosition: 0,
       setPlayheadPosition: (playheadPosition: number) =>
         set({ playheadPosition }),
+      isPinchZooming: false,
+      setIsPinchZooming: (isPinchZooming: boolean) => set({ isPinchZooming }),
 
       // State window
       stateWindow: [],
