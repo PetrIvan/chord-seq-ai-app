@@ -10,7 +10,7 @@ export default function QuickButtons() {
   }, []);
 
   return (
-    <div className="flex flex-col items-center space-x-0 space-y-4 md:flex-row md:space-x-20 md:space-y-0">
+    <div className="flex flex-col items-center space-x-0 space-y-4 sm:flex-row sm:space-x-20 sm:space-y-0">
       <Link
         href="https://github.com/PetrIvan/chord-seq-ai-app"
         target="_blank"

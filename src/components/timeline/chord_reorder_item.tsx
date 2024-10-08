@@ -17,6 +17,7 @@ interface Props {
   setIsReordering: (isReordering: boolean) => void;
   resizingChord: boolean;
   isMobile: boolean;
+  setEnabledShortcuts: (value: boolean) => void;
 }
 
 export default function ChordReorderItem({
@@ -26,6 +27,7 @@ export default function ChordReorderItem({
   setIsReordering,
   resizingChord,
   isMobile,
+  setEnabledShortcuts,
 }: Props) {
   const controls = useDragControls();
 
@@ -58,6 +60,7 @@ export default function ChordReorderItem({
       if (e.button !== 0) return;
 
       initialPointerPosition.current = { x: e.clientX, y: e.clientY };
+      setEnabledShortcuts(false);
 
       longPressTimerRef.current = setTimeout(() => {
         setIsReordering(true);
@@ -67,25 +70,32 @@ export default function ChordReorderItem({
         longPressTimerRef.current = null;
       }, 500);
     },
-    [preventStart, setIsReordering, controls],
+    [preventStart, setIsReordering, setEnabledShortcuts, controls],
   );
 
-  const handlePointerUpLocal = useCallback((e?: TouchEvent | MouseEvent) => {
-    if (
-      typeof TouchEvent !== "undefined" &&
-      e instanceof TouchEvent &&
-      e.touches.length !== 0
-    )
-      return;
+  const handlePointerUpLocal = useCallback(
+    (e?: TouchEvent | MouseEvent) => {
+      if (
+        typeof TouchEvent !== "undefined" &&
+        e instanceof TouchEvent &&
+        e.touches.length !== 0
+      )
+        return;
 
-    if (longPressTimerRef.current) {
-      clearTimeout(longPressTimerRef.current);
-      longPressTimerRef.current = null;
-    }
-    if (isDraggingThisRef.current) handleReorderEndRef.current();
+      if (longPressTimerRef.current) {
+        setEnabledShortcuts(true);
+        clearTimeout(longPressTimerRef.current);
+        longPressTimerRef.current = null;
+      }
+      if (isDraggingThisRef.current) {
+        setEnabledShortcuts(true);
+        handleReorderEndRef.current();
+      }
 
-    setIsDraggingThis(false);
-  }, []);
+      setIsDraggingThis(false);
+    },
+    [setEnabledShortcuts],
+  );
 
   // Prevent reordering during resizing chords
   useEffect(() => {

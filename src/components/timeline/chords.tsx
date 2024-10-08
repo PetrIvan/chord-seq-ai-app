@@ -27,6 +27,7 @@ export default function Chords() {
     isReordering,
     setIsReordering,
     isMobile,
+    setEnabledShortcuts,
   ] = useStore(
     (state) => [
       state.timelinePosition,
@@ -38,6 +39,7 @@ export default function Chords() {
       state.isReordering,
       state.setIsReordering,
       state.isMobile,
+      state.setEnabledShortcuts,
     ],
     shallow,
   );
@@ -165,6 +167,7 @@ export default function Chords() {
               setIsReordering={setIsReordering}
               resizingChord={resizingChord}
               isMobile={isMobile}
+              setEnabledShortcuts={setEnabledShortcuts}
             />
           ))}
         </Reorder.Group>
