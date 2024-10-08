@@ -26,6 +26,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
     resizingAnyChord,
     setResizingChord,
     isPinchZooming,
+    isReordering,
     isStepByStepTutorialOpen,
   ] = useStore(
     (state) => [
@@ -38,6 +39,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       state.resizingChord,
       state.setResizingChord,
       state.isPinchZooming,
+      state.isReordering,
       state.isStepByStepTutorialOpen,
     ],
     shallow,
@@ -46,12 +48,12 @@ export default function Chord({ index, token, duration, variant }: Props) {
   const chordElementRef = useRef<HTMLButtonElement>(null);
 
   /* Units */
-  const [oneDvwInPx, setOneDvhInPx] = useState(window.innerWidth / 100);
+  const [oneDvwInPx, setOneDvwInPx] = useState(window.innerWidth / 100);
 
   // Update on window resize
   useEffect(() => {
     const handleResize = () => {
-      setOneDvhInPx(window.innerWidth / 100);
+      setOneDvwInPx(window.innerWidth / 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -92,6 +94,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
   const zoomRef = useRef(zoom);
   const chordsRef = useRef(chords);
   const signatureRef = useRef(signature);
+  const isPinchZoomingRef = useRef(isPinchZooming);
+  const isReorderingRef = useRef(isReordering);
 
   useEffect(() => {
     zoomRef.current = zoom;
@@ -105,6 +109,14 @@ export default function Chord({ index, token, duration, variant }: Props) {
     signatureRef.current = signature;
   }, [signature]);
 
+  useEffect(() => {
+    isPinchZoomingRef.current = isPinchZooming;
+  }, [isPinchZooming]);
+
+  useEffect(() => {
+    isReorderingRef.current = isReordering;
+  }, [isReordering]);
+
   /* Resizing logic */
   function getPosFromEvent(event: MouseEvent | TouchEvent) {
     return "touches" in event
@@ -114,8 +126,9 @@ export default function Chord({ index, token, duration, variant }: Props) {
 
   const isAtResizePosition = useCallback(
     (e: MouseEvent | TouchEvent, element: HTMLButtonElement) => {
-      // Don't allow resizing while pinch zooming
-      if (isPinchZooming) return false;
+      // Don't allow resizing while pinch zooming or reordering
+      if (isPinchZoomingRef.current) return false;
+      if (isReorderingRef.current) return false;
 
       // Allows resizing only when the mouse is near the right edge of the chord
       const [clientX, clientY] = getPosFromEvent(e);
@@ -127,7 +140,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
 
       return isNearRightEdge && isInBoxVertically;
     },
-    [isPinchZooming],
+    [],
   );
 
   useEffect(() => {
@@ -272,7 +285,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
           } flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-[1dvh] py-[2dvh] outline-none`}
           style={{ width: `${width}dvw` }}
           onClick={
-            resizingThisChordRef.current
+            resizingThisChordRef.current || isReordering
               ? () => {}
               : () => {
                   changeSelected();

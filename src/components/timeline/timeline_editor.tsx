@@ -25,6 +25,7 @@ export default function TimelineEditor() {
     initializeStateWindow,
     resizingAnyChord,
     setIsPinchZooming,
+    isReordering,
     isStepByStepTutorialOpen,
     isMobile,
   ] = useStore(
@@ -39,6 +40,7 @@ export default function TimelineEditor() {
       state.initializeStateWindow,
       state.resizingChord,
       state.setIsPinchZooming,
+      state.isReordering,
       state.isStepByStepTutorialOpen,
       state.isMobile,
     ],
@@ -109,6 +111,12 @@ export default function TimelineEditor() {
     isStepByStepTutorialOpenRef.current = isStepByStepTutorialOpen;
   }, [isStepByStepTutorialOpen]);
 
+  const isReorderingRef = useRef(isReordering);
+
+  useEffect(() => {
+    isReorderingRef.current = isReordering;
+  }, [isReordering]);
+
   const isOnTimeline = (clientY: number, rect: DOMRect) => {
     const fromTop = clientY - rect.top;
     const fromBottom = rect.bottom - clientY;
@@ -121,6 +129,7 @@ export default function TimelineEditor() {
   const handleTimelineDrag = useCallback(
     (event: MouseEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
+      if (isReorderingRef.current) return;
 
       if (timelineRef.current && middleMouseDraggingRef.current) {
         const dx = pxToDvw(event.clientX) - lastPositionRef.current;
@@ -135,6 +144,7 @@ export default function TimelineEditor() {
   const handleDragStart = useCallback(
     (event: MouseEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
+      if (isReorderingRef.current) return;
 
       setLastPosition(pxToDvw(event.clientX));
       if (
@@ -183,6 +193,7 @@ export default function TimelineEditor() {
   usePinch(
     ({ origin: [ox], delta: [d], last }) => {
       if (isStepByStepTutorialOpenRef.current) return;
+      if (isReorderingRef.current) return;
 
       setIsPinchZooming(!last);
 
@@ -218,6 +229,7 @@ export default function TimelineEditor() {
   const handleScroll = useCallback(
     (event: WheelEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
+      if (isReorderingRef.current) return;
 
       event.preventDefault();
 
@@ -263,6 +275,7 @@ export default function TimelineEditor() {
       if (isStepByStepTutorialOpenRef.current) return;
       if (movingPlayheadRef.current) return;
       if (resizingAnyChordRef.current) return;
+      if (isReorderingRef.current) return;
       if (!isMobile) return;
 
       // Only drag if not on the ticks
@@ -371,6 +384,7 @@ export default function TimelineEditor() {
   const handlePlayheadUpdate = useCallback(
     (event: MouseEvent | TouchEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
+      if (isReorderingRef.current) return;
 
       if (!timelineRef.current || !movingPlayheadRef.current) return;
 
@@ -392,6 +406,7 @@ export default function TimelineEditor() {
   const handlePlayheadMoveStart = useCallback(
     (event: MouseEvent | TouchEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
+      if (isReorderingRef.current) return;
 
       const rect = timelineRef?.current?.getBoundingClientRect();
       const pos = getPosFromEvent(event);
