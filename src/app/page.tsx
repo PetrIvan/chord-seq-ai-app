@@ -211,7 +211,7 @@ export default function Home() {
               >
                 GitHub Issues
               </a>{" "}
-              or contact me by{" "}
+              or contact us by{" "}
               <a
                 className="text-blue-400 hover:underline"
                 href="mailto:petr.ivan.junior@gmail.com"

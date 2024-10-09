@@ -12,7 +12,7 @@ import SupportUsOverlay from "./overlays/support_us_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -58,10 +58,10 @@ export default function App() {
       setCustomScrollbar(false);
   }, [setCustomScrollbar, setIsMobile, setShowFullscreenButton]);
 
-  const [aspectRatio, setAspectRatio] = useState(16 / 9);
+  const [aspectRatio, setAspectRatio] = useState(0);
 
   // On window resize, update the aspect ratio
-  useEffect(() => {
+  useLayoutEffect(() => {
     setAspectRatio(window.innerWidth / window.innerHeight); // Initial aspect ratio
 
     function handleResize() {
