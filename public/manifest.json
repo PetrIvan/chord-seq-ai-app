@@ -2,6 +2,7 @@
   "theme_color": "#6d28d9",
   "background_color": "#18181b",
   "display": "fullscreen",
+  "orientation": "landscape",
   "scope": "/",
   "start_url": "/",
   "name": "ChordSeqAI",
@@ -32,7 +33,7 @@
   "screenshots": [
     {
       "src": "/screenshot.jpg",
-      "sizes": "1920x878",
+      "sizes": "1920x914",
       "type": "image/gif",
       "form_factor": "wide",
       "label": "ChordSeqAI App"

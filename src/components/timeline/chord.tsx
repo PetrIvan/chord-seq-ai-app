@@ -25,6 +25,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
     zoom,
     resizingAnyChord,
     setResizingChord,
+    isPinchZooming,
+    isReordering,
     isStepByStepTutorialOpen,
   ] = useStore(
     (state) => [
@@ -36,6 +38,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
       state.zoom,
       state.resizingChord,
       state.setResizingChord,
+      state.isPinchZooming,
+      state.isReordering,
       state.isStepByStepTutorialOpen,
     ],
     shallow,
@@ -44,12 +48,12 @@ export default function Chord({ index, token, duration, variant }: Props) {
   const chordElementRef = useRef<HTMLButtonElement>(null);
 
   /* Units */
-  const [oneDvwInPx, setOneDvhInPx] = useState(window.innerWidth / 100);
+  const [oneDvwInPx, setOneDvwInPx] = useState(window.innerWidth / 100);
 
   // Update on window resize
   useEffect(() => {
     const handleResize = () => {
-      setOneDvhInPx(window.innerWidth / 100);
+      setOneDvwInPx(window.innerWidth / 100);
     };
 
     window.addEventListener("resize", handleResize);
@@ -90,6 +94,8 @@ export default function Chord({ index, token, duration, variant }: Props) {
   const zoomRef = useRef(zoom);
   const chordsRef = useRef(chords);
   const signatureRef = useRef(signature);
+  const isPinchZoomingRef = useRef(isPinchZooming);
+  const isReorderingRef = useRef(isReordering);
 
   useEffect(() => {
     zoomRef.current = zoom;
@@ -103,24 +109,46 @@ export default function Chord({ index, token, duration, variant }: Props) {
     signatureRef.current = signature;
   }, [signature]);
 
+  useEffect(() => {
+    isPinchZoomingRef.current = isPinchZooming;
+  }, [isPinchZooming]);
+
+  useEffect(() => {
+    isReorderingRef.current = isReordering;
+  }, [isReordering]);
+
   /* Resizing logic */
-  function isAtResizePosition(e: MouseEvent, element: HTMLButtonElement) {
-    // Allows resizing only when the mouse is near the right edge of the chord
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = element.getBoundingClientRect();
-    const edgeSize = 10;
-
-    const isNearRightEdge = left + width - clientX < edgeSize;
-    const isInBoxVertically = clientY > top && clientY < top + height;
-
-    return isNearRightEdge && isInBoxVertically;
+  function getPosFromEvent(event: MouseEvent | TouchEvent) {
+    return "touches" in event
+      ? [event.touches[0].clientX, event.touches[0].clientY]
+      : [event.clientX, event.clientY];
   }
+
+  const isAtResizePosition = useCallback(
+    (e: MouseEvent | TouchEvent, element: HTMLButtonElement) => {
+      // Don't allow resizing while pinch zooming or reordering
+      if (isPinchZoomingRef.current) return false;
+      if (isReorderingRef.current) return false;
+
+      // Allows resizing only when the mouse is near the right edge of the chord
+      const [clientX, clientY] = getPosFromEvent(e);
+      const { left, top, width, height } = element.getBoundingClientRect();
+      const edgeSize = 10;
+
+      const isNearRightEdge = left + width - clientX < edgeSize;
+      const isInBoxVertically = clientY > top && clientY < top + height;
+
+      return isNearRightEdge && isInBoxVertically;
+    },
+    [],
+  );
 
   useEffect(() => {
     const element = chordElementRef.current;
     if (!element) return;
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+      const clientX = getPosFromEvent(e)[0];
       if (isStepByStepTutorialOpenRef.current) {
         element.style.cursor = "pointer";
         return;
@@ -140,7 +168,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
       // 1 duration means one quarter note and a whole note spans 10 dvw (on zoom 1 and 4/4),
       // so we need to convert the mouse position to a duration
       let newDuration =
-        (pxToDvw(e.clientX - element.getBoundingClientRect().left) *
+        (pxToDvw(clientX - element.getBoundingClientRect().left) *
           4 *
           numerator) /
         (10 * zoomRef.current * denominator);
@@ -170,20 +198,25 @@ export default function Chord({ index, token, duration, variant }: Props) {
     };
 
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("touchmove", handleMouseMove);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("touchmove", handleMouseMove);
     };
-  }, [index, pxToDvw, setChords]);
+  }, [index, isAtResizePosition, pxToDvw, setChords]);
 
   useEffect(() => {
     const element = chordElementRef.current;
     if (!element) return;
 
-    const handleMouseDown = (e: MouseEvent) => {
+    const handleMouseDown = (e: MouseEvent | TouchEvent) => {
       if (isStepByStepTutorialOpenRef.current) return;
 
-      if (isAtResizePosition(e, element) && e.button === 0) {
+      if (
+        isAtResizePosition(e, element) &&
+        ("touches" in e || ("button" in e && e.button === 0))
+      ) {
         setResizingThisChord(true);
 
         // To prevent saving the chord while resizing (from use_store.tsx)
@@ -203,13 +236,17 @@ export default function Chord({ index, token, duration, variant }: Props) {
     };
 
     element.addEventListener("mousedown", handleMouseDown);
+    element.addEventListener("touchstart", handleMouseDown);
     window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchend", handleMouseUp);
 
     return () => {
       element.removeEventListener("mousedown", handleMouseDown);
+      element.removeEventListener("touchstart", handleMouseDown);
       window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchend", handleMouseUp);
     };
-  }, [setChords, setResizingChord]);
+  }, [isAtResizePosition, setChords, setResizingChord]);
 
   // Render the chord properly (a whole note (duration 4) on zoom set to 1 and signature 4/4 spans 10dvw)
   let [numerator, denominator] = signature;
@@ -248,7 +285,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
           } flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-[1dvh] py-[2dvh] outline-none`}
           style={{ width: `${width}dvw` }}
           onClick={
-            resizingThisChordRef.current
+            resizingThisChordRef.current || isReordering
               ? () => {}
               : () => {
                   changeSelected();

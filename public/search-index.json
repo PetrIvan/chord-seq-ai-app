@@ -72,6 +72,18 @@
     "summary": "This page lists the changes made to ChordSeqAI, including new features, improvements, and bug fixes. We recommend checking this page regularly to stay up-to-date with the latest updates and enhancements. Dates are according to UTC+0 in the format YYYY-MM-DD marking the release date."
   },
   {
+    "slug": "features/change-log#october-2024-updates",
+    "title": "Change Log",
+    "heading": "October 2024 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2024-10-09",
+    "title": "Change Log",
+    "heading": "2024-10-09",
+    "summary": "Added support for more devices; reorder chords by dragging. Mobile devices and touchpad interactions are now supported. Chords can be reordered by long-pressing on a chord and dragging it to a new position. Minor bug fixes and improvements."
+  },
+  {
     "slug": "features/change-log#september-2024-updates",
     "title": "Change Log",
     "heading": "September 2024 updates",
@@ -333,13 +345,13 @@
     "slug": "features/keyboard-shortcuts",
     "title": "Keyboard Shortcuts",
     "heading": "Keyboard Shortcuts",
-    "summary": "ChordSeqAI provides a variety of keyboard shortcuts to help you navigate the app more efficiently. These shortcuts can be used to perform common actions without having to use the mouse, saving you time and effort. This page lists all the available keyboard shortcuts in ChordSeqAI as well as some mouse actions that can be used to interact with the app."
+    "summary": "ChordSeqAI provides a variety of keyboard shortcuts to help you navigate the app more efficiently. These shortcuts can be used to perform common actions without having to use the mouse, saving you time and effort. This page lists all the available keyboard shortcuts in ChordSeqAI as well as some cursor actions that can be used to interact with the app."
   },
   {
     "slug": "features/keyboard-shortcuts#timeline",
     "title": "Keyboard Shortcuts",
     "heading": "Timeline",
-    "summary": "| Functionality | Shortcut | |----------------------------------------------|------------------------| | Undo | Ctrl + Z | | Redo | Ctrl + Y | | Open chord variant overlay | V | | Add chord | A | | Delete the selected chord | Delete | | Delete all chords | Ctrl + Delete | | Move selection to the right | Right Arrow | | Move selection to the left | Left Arrow | | Deselect a chord | Esc | | Zoom in/out | Mouse wheel | | Move the view | Mouse wheel drag |"
+    "summary": "| Functionality | Shortcut | |----------------------------------------------|------------------------| | Undo | Ctrl + Z | | Redo | Ctrl + Y | | Open chord variant overlay | V | | Add chord | A | | Delete the selected chord | Delete | | Delete all chords | Ctrl + Delete | | Move selection to the right | Right Arrow | | Move selection to the left | Left Arrow | | Deselect a chord | Esc | | Zoom in/out | Mouse wheel/pinch | | Move the view (mouse) | Mouse wheel drag | | Move the view (touchpad) | Two-finger swipe | | Move the view (mobile) | Drag |"
   },
   {
     "slug": "features/keyboard-shortcuts#playback",
@@ -459,13 +471,13 @@
     "slug": "features/timeline#view",
     "title": "Timeline",
     "heading": "View",
-    "summary": "The timeline displays the chords in a horizontal layout. Each chord is represented by a colored block with the chord symbol, its length represents the duration. The chords are arranged in a sequence from left to right, representing the progression of the song. To move the view, click and drag the scroll wheel across the timeline. You can also zoom in and out by scrolling up and down."
+    "summary": "The timeline displays the chords in a horizontal layout. Each chord is represented by a colored block with the chord symbol, its length represents the duration. The chords are arranged in a sequence from left to right, representing the progression of the song. To move the view, click and drag the scroll wheel across the timeline. You can also zoom in and out by scrolling up and down. On a touchpad, you can use the pinch gesture to zoom in and out, and a two-finger horizontal swipe to move the view. On a touchscreen, you can use the pinch gesture to zoom in and out, and drag to move the view."
   },
   {
     "slug": "features/timeline#chord",
     "title": "Timeline",
     "heading": "Chord",
-    "summary": "Each chord can be selected by clicking on it, which will highlight the chord. The selection is used for various operations like adding a chord after it, deleting it, or changing its variant. Selecting a chord also shows suggestions via the AI model. To deselect a chord, click on it again or use Esc. You can also change the selection by using the arrow keys (Left Arrow/Right Arrow) to move to the previous or next chord. Reaching the end of the timeline in either direction will deselect the current chord; using the arrow keys with no chord selected will select the first or last chord (Right Arrow/Left Arrow, respectively). You can change the duration of the chord by dragging its right edge. It will snap to the nearest beat, which is determined by the time signature."
+    "summary": "Each chord can be selected by clicking on it, which will highlight the chord. The selection is used for various operations like adding a chord after it, deleting it, or changing its variant. Selecting a chord also shows suggestions via the AI model. To deselect a chord, click on it again or use Esc. You can also change the selection by using the arrow keys (Left Arrow/Right Arrow) to move to the previous or next chord. Reaching the end of the timeline in either direction will deselect the current chord; using the arrow keys with no chord selected will select the first or last chord (Right Arrow/Left Arrow, respectively). You can change the duration of the chord by dragging its right edge. It will snap to the nearest beat, which is determined by the time signature. Chords can be reordered by long-pressing on a chord and dragging it to a new position."
   },
   {
     "slug": "features/timeline#playhead",

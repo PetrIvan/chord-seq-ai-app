@@ -35,7 +35,7 @@ export default function NewFeaturesOverlay() {
   }, [showPrev]);
 
   const [showFeatures, setShowFeatures] = useState<number[]>([]);
-  const latestVersion = 4;
+  const latestVersion = 5;
 
   // If it's the first time after the update, show the overlay
   useInit(() => {
@@ -80,7 +80,7 @@ export default function NewFeaturesOverlay() {
 
   let features: { [key: number]: JSX.Element[] } = {
     1: [
-      <li key={1}>
+      <li key={0}>
         Delete all{" "}
         <Image
           src="/trash-all.svg"
@@ -99,19 +99,19 @@ export default function NewFeaturesOverlay() {
         />{" "}
         now have their own buttons.
       </li>,
-      <li key={2}>Added new shortcuts to make your workflow faster.</li>,
-      <li key={3}>
+      <li key={1}>Added new shortcuts to make your workflow faster.</li>,
+      <li key={2}>
         Improved the layout to be responsive on more screen sizes.
       </li>,
     ],
-    2: [<li key={5}>Reworked MIDI import to be more reliable.</li>],
+    2: [<li key={3}>Reworked MIDI import to be more reliable.</li>],
     3: [
-      <li key={7}>
+      <li key={4}>
         Improved models to be more accurate and suggest chords faster.
       </li>,
     ],
     4: [
-      <li key={9}>
+      <li key={5}>
         Created a{" "}
         <a
           className="text-blue-400 hover:underline"
@@ -122,6 +122,14 @@ export default function NewFeaturesOverlay() {
           brand-new wiki
         </a>{" "}
         integrated into the app.
+      </li>,
+    ],
+    5: [
+      <li key={6}>
+        Mobile devices and touchpad interactions are now supported.
+      </li>,
+      <li key={7}>
+        Added the ability to reorder chords by dragging and dropping them.
       </li>,
     ],
   };

@@ -20,7 +20,6 @@ export default function SettingsDropdown({
   const handleBMPChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = parseInt(event.target.value, 10);
 
-    console.log(event.target.value);
     if ((newValue > 0 && newValue < 999) || event.target.value === "") {
       setLocalBpm(newValue);
 

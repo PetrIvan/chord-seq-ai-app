@@ -10,10 +10,16 @@ interface Props {
 }
 
 export default function Ticks({ top, availableSpace, timelineStart }: Props) {
-  const [signature, zoom, timelinePosition] = useStore(
-    (state) => [state.signature, state.zoom, state.timelinePosition],
-    shallow,
-  );
+  const [signature, zoom, timelinePosition, isStepByStepTutorialOpen] =
+    useStore(
+      (state) => [
+        state.signature,
+        state.zoom,
+        state.timelinePosition,
+        state.isStepByStepTutorialOpen,
+      ],
+      shallow,
+    );
 
   const [tickIds, setTickIds] = useState<number[]>([]);
 
@@ -58,7 +64,11 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
       className={`flex max-w-full flex-row justify-start ${
         top ? "items-start" : "mt-[2dvh] items-end"
       }`}
-      style={{ transform: `translateX(${timelinePosition}dvw)` }}
+      style={{
+        transform: isStepByStepTutorialOpen
+          ? "none"
+          : `translateX(${timelinePosition}dvw)`,
+      }}
     >
       {tickIds.map((id) => tick(id))}
     </div>

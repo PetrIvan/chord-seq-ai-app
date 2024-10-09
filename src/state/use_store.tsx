@@ -63,6 +63,10 @@ interface StoreState {
   setTimelinePosition: (state: number) => void;
   playheadPosition: number; // Where the playhead is (on screen), in dvw
   setPlayheadPosition: (state: number) => void;
+  isPinchZooming: boolean; // Whether the user is pinch zooming (on mobile/touchpad)
+  setIsPinchZooming: (state: boolean) => void;
+  isReordering: boolean; // Whether the user is reordering chords
+  setIsReordering: (state: boolean) => void;
 
   // State window (undo/redo)
   stateWindow: [Data][];
@@ -175,6 +179,10 @@ interface StoreState {
   // UI
   customScrollbarEnabled: boolean;
   setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) => void;
+  isMobile: boolean;
+  setIsMobile: (isMobile: boolean) => void;
+  showFullscreenButton: boolean;
+  setShowFullscreenButton: (showFullscreenButton: boolean) => void;
 
   // Wiki
   wikiSidenavOpen: Map<string, boolean>;
@@ -287,6 +295,10 @@ export const useStore = createWithEqualityFn<StoreState>()(
       playheadPosition: 0,
       setPlayheadPosition: (playheadPosition: number) =>
         set({ playheadPosition }),
+      isPinchZooming: false,
+      setIsPinchZooming: (isPinchZooming: boolean) => set({ isPinchZooming }),
+      isReordering: false,
+      setIsReordering: (isReordering: boolean) => set({ isReordering }),
 
       // State window
       stateWindow: [],
@@ -487,6 +499,11 @@ export const useStore = createWithEqualityFn<StoreState>()(
       customScrollbarEnabled: true,
       setCustomScrollbarEnabled: (customScrollbarEnabled: boolean) =>
         set({ customScrollbarEnabled }),
+      isMobile: false,
+      setIsMobile: (isMobile: boolean) => set({ isMobile }),
+      showFullscreenButton: false,
+      setShowFullscreenButton: (showFullscreenButton: boolean) =>
+        set({ showFullscreenButton }),
 
       // Wiki
       wikiSidenavOpen: new Map(),

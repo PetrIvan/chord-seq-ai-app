@@ -12,34 +12,56 @@ import SupportUsOverlay from "./overlays/support_us_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
 export default function App() {
-  const [setCustomScrollbar] = useStore(
-    (state) => [state.setCustomScrollbarEnabled],
+  const [
+    setCustomScrollbar,
+    isMobile,
+    setIsMobile,
+    showFullscreenButton,
+    setShowFullscreenButton,
+  ] = useStore(
+    (state) => [
+      state.setCustomScrollbarEnabled,
+      state.isMobile,
+      state.setIsMobile,
+      state.showFullscreenButton,
+      state.setShowFullscreenButton,
+    ],
     shallow,
   );
 
   // Next.js 13+ implementation, the default isMobile from react-device-detect
   // is not working anymore (see https://stackoverflow.com/a/77174374/3058839)
-  const [isMobile, setIsMobile] = useState(false);
-
   useEffect(() => {
     document.title = "ChordSeqAI"; // Change the title when the page loads
     const userAgent = navigator.userAgent;
     const selectors = getSelectorsByUserAgent(userAgent);
     setIsMobile(selectors.isMobile);
 
-    // Disable custom scrollbar for Firefox
-    if (/Firefox/i.test(userAgent)) setCustomScrollbar(false);
-  }, [setCustomScrollbar]);
+    // If it is already installed, it will be fullscreen by default
+    const isFullscreen = window.matchMedia(
+      "(display-mode: fullscreen)",
+    ).matches;
 
-  const [aspectRatio, setAspectRatio] = useState(16 / 9);
+    const isFullscreenSupported = document.fullscreenEnabled;
+
+    setShowFullscreenButton(
+      isFullscreenSupported && !isFullscreen && selectors.isMobile,
+    );
+
+    // Disable custom scrollbar for Firefox and mobile devices
+    if (/Firefox/i.test(userAgent) || selectors.isMobile)
+      setCustomScrollbar(false);
+  }, [setCustomScrollbar, setIsMobile, setShowFullscreenButton]);
+
+  const [aspectRatio, setAspectRatio] = useState(0);
 
   // On window resize, update the aspect ratio
-  useEffect(() => {
+  useLayoutEffect(() => {
     setAspectRatio(window.innerWidth / window.innerHeight); // Initial aspect ratio
 
     function handleResize() {
@@ -50,16 +72,16 @@ export default function App() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Show a message if the aspect ratio or the device is not supported
+  // Show a message if the aspect ratio is not supported
   let info = "";
 
-  if (isMobile) {
-    info =
-      "This app is currently not available on mobile devices, please use a desktop.";
-  }
   if (aspectRatio <= 0.96) {
-    info =
-      "This app is not supported on this screen size, please use a landscape orientation.";
+    if (isMobile) {
+      info = "Please rotate your device to landscape orientation.";
+    } else {
+      info =
+        "This app is not supported on this screen size, please use a landscape orientation.";
+    }
   }
   if (aspectRatio >= 4) {
     info =
@@ -88,7 +110,9 @@ export default function App() {
       <NewFeaturesOverlay />
       <SupportUsOverlay />
       <div className="grid min-h-screen min-w-full grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] gap-[1dvw] p-[1dvw]">
-        <div className="grid w-full min-w-0 grid-cols-[25fr_7fr_5fr] gap-[1dvw]">
+        <div
+          className={`grid w-full min-w-0 ${showFullscreenButton ? "grid-cols-[25fr_7fr_7fr]" : "grid-cols-[25fr_7fr_5fr]"} gap-[1dvw]`}
+        >
           <ModelSelection />
           <TransposeImportExport />
           <SupportHelp />

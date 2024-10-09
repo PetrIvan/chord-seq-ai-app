@@ -21,8 +21,16 @@ export default function Overlay({
   callOnClose,
   otherShortcuts,
 }: Props) {
-  const [customScrollbarEnabled, setEnabledShortcuts] = useStore(
-    (state) => [state.customScrollbarEnabled, state.setEnabledShortcuts],
+  const [
+    customScrollbarEnabled,
+    isStepByStepTutorialOpen,
+    setEnabledShortcuts,
+  ] = useStore(
+    (state) => [
+      state.customScrollbarEnabled,
+      state.isStepByStepTutorialOpen,
+      state.setEnabledShortcuts,
+    ],
     shallow,
   );
 
@@ -58,7 +66,10 @@ export default function Overlay({
 
   return (
     isOverlayOpen && (
-      <div className="fixed inset-0 z-30 flex flex-col items-center justify-center bg-zinc-950 bg-opacity-50">
+      <div
+        className="fixed inset-0 z-30 flex flex-col items-center justify-center bg-zinc-950 bg-opacity-50"
+        style={isStepByStepTutorialOpen ? { zIndex: 150 } : {}}
+      >
         <div
           className={
             `relative h-[80dvh] w-[70dvw] rounded-[0.5dvw] bg-zinc-900 p-[2dvh] ` +
