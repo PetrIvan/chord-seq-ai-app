@@ -10,7 +10,7 @@ export default function Home() {
       <div className="relative bg-zinc-950 p-4 shadow-lg shadow-pink-500/10">
         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center">
           <p className="text-sm text-zinc-300 sm:text-base">
-            The AI music co-producer I'm helping build,{" "}
+            The AI music co-producer I&apos;m helping build,{" "}
             <a
               href="https://www.producthunt.com/products/mozart-ai"
               target="_blank"
