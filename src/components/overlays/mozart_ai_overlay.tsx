@@ -69,7 +69,7 @@ export default function MozartAIOverlay() {
         Mozart AI is now live!
       </p>
       <p className="max-w-[85%] text-center text-[2.5dvh]">
-        The AI music co-producer I'm helping build,{" "}
+        The AI music co-producer I&apos;m helping build,{" "}
         <TrackedLink
           href="https://www.producthunt.com/products/mozart-ai"
           className="text-blue-400 hover:underline"
@@ -77,7 +77,7 @@ export default function MozartAIOverlay() {
         >
           Mozart AI
         </TrackedLink>
-        , is now live on Product Hunt! We'd love your support.
+        , is now live on Product Hunt! We&apos;d love your support.
       </p>
       <Image
         src="/mozart-ai-daw.webp"
