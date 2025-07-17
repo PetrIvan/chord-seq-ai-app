@@ -7,6 +7,30 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div>
+      <div className="relative bg-zinc-950 p-4 shadow-lg shadow-pink-500/10">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-center">
+          <p className="text-sm text-zinc-300 sm:text-base">
+            The AI music co-producer I'm helping build,{" "}
+            <a
+              href="https://www.producthunt.com/products/mozart-ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold text-white underline decoration-dotted hover:decoration-solid"
+            >
+              Mozart AI
+            </a>
+            , is now live on Product Hunt!
+          </p>
+          <a
+            href="https://www.producthunt.com/products/mozart-ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block shrink-0 rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-zinc-950 shadow-sm transition-transform duration-200 ease-in-out hover:scale-105 hover:bg-zinc-200"
+          >
+            Get 50% off <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+      </div>
       <div className="relative flex flex-col bg-[url('/background.jpg')] bg-cover bg-scroll bg-center">
         <Header
           isTop={true}

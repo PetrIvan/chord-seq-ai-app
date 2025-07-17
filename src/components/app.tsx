@@ -9,6 +9,7 @@ import WelcomeOverlay from "./overlays/welcome_overlay";
 import NewFeaturesOverlay from "./overlays/new_features_overlay";
 import MidiImportOverlay from "./overlays/midi_import_overlay";
 import SupportUsOverlay from "./overlays/support_us_overlay";
+import MozartAIOverlay from "./overlays/mozart_ai_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
@@ -109,6 +110,7 @@ export default function App() {
       <WelcomeOverlay />
       <NewFeaturesOverlay />
       <SupportUsOverlay />
+      <MozartAIOverlay />
       <div className="grid min-h-screen min-w-full grid-rows-[9dvh_min(30dvw,27.5dvh)_auto] gap-[1dvw] p-[1dvw]">
         <div
           className={`grid w-full min-w-0 ${showFullscreenButton ? "grid-cols-[25fr_7fr_7fr]" : "grid-cols-[25fr_7fr_5fr]"} gap-[1dvw]`}

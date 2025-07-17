@@ -148,6 +148,12 @@ interface StoreState {
   watchedVideoTutorial: boolean;
   setWatchedVideoTutorial: (watchedVideoTutorial: boolean) => void;
 
+  // Mozart AI overlay
+  mozartAIOverlay: boolean;
+  setMozartAIOverlay: (mozartAIOverlay: boolean) => void;
+  isMozartAIOverlayOpen: boolean;
+  setIsMozartAIOverlayOpen: (isMozartAIOverlayOpen: boolean) => void;
+
   // New features overlay
   version: number;
   setVersion: (version: number) => void;
@@ -460,6 +466,14 @@ export const useStore = createWithEqualityFn<StoreState>()(
       setWatchedVideoTutorial: (watchedVideoTutorial: boolean) =>
         set({ watchedVideoTutorial }),
 
+      // Mozart AI overlay
+      mozartAIOverlay: true,
+      setMozartAIOverlay: (mozartAIOverlay: boolean) =>
+        set({ mozartAIOverlay }),
+      isMozartAIOverlayOpen: false,
+      setIsMozartAIOverlayOpen: (isMozartAIOverlayOpen: boolean) =>
+        set({ isMozartAIOverlayOpen }),
+
       // New features overlay
       version: 0,
       setVersion: (version: number) => set({ version }),
@@ -530,6 +544,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         timesExported: state.timesExported,
         dontShowSupportUsOverlay: state.dontShowSupportUsOverlay,
         version: state.version,
+        mozartAIOverlay: state.mozartAIOverlay,
       }),
     },
   ),
