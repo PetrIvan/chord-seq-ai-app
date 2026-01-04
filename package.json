@@ -25,7 +25,7 @@
     "gray-matter": "^4.0.3",
     "lodash": "^4.17.21",
     "midi-writer-js": "^3.1.1",
-    "next": "^14.2.32",
+    "next": "^14.2.35",
     "next-mdx-remote": "^5.0.0",
     "next-pwa": "^5.6.0",
     "nextjs-toploader": "^3.6.15",
