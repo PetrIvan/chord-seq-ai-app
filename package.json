@@ -23,7 +23,7 @@
     "framer-motion": "^11.3.30",
     "fuse.js": "^7.0.0",
     "gray-matter": "^4.0.3",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "midi-writer-js": "^3.1.1",
     "next": "^14.2.32",
     "next-mdx-remote": "^5.0.0",
