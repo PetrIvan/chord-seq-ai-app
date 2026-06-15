@@ -147,7 +147,10 @@ export async function predict(
 
           // Clear the first element of the cache if it's too big
           if (predictionCache.size > maxCacheSize) {
-            predictionCache.delete(predictionCache.keys().next().value);
+            const firstKey = predictionCache.keys().next().value;
+            if (firstKey) {
+              predictionCache.delete(firstKey);
+            }
           }
 
           resolve(chordProbs);

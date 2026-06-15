@@ -97,8 +97,11 @@ export default function ChordReorderItem({
     [setEnabledShortcuts],
   );
 
-  // Prevent reordering during resizing chords
+  // Prevent reordering during resizing chords. handlePointerUpLocal commits the
+  // reorder and updates the global shortcut store, so it must run as a side
+  // effect here, not during render.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- ends an in-progress drag (store update) in response to an external resize signal
     if (resizingChord) handlePointerUpLocal();
   }, [resizingChord, handlePointerUpLocal]);
 
@@ -149,7 +152,7 @@ export default function ChordReorderItem({
       className="h-full"
       dragListener={false}
       dragControls={controls}
-      onPointerDown={(e) => {
+      onPointerDown={(e: React.PointerEvent) => {
         handlePointerDownLocal(e);
       }}
       // Apply shake when dragging

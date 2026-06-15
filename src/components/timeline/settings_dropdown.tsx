@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 interface Props {
-  dropdownRef: React.RefObject<HTMLDivElement>;
+  dropdownRef: React.RefObject<HTMLDivElement | null>;
   loop: boolean;
   setLoop: (newLoop: boolean) => void;
   bpm: number;
@@ -50,7 +50,7 @@ export default function SettingsDropdown({
           className="h-[6dvh] w-[12dvh] rounded-[1dvh] border-[0.2dvh] bg-zinc-800 p-[2dvh] text-[2.5dvh]"
           title="Change BPM (Up/Down arrow keys)"
           value={localBpm}
-          onInput={handleBMPChange}
+          onChange={handleBMPChange}
         />
       </div>
     </div>

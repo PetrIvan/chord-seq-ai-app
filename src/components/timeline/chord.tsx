@@ -265,9 +265,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
   return (
     <>
       <div
-        className={`h-full ${
-          resizingAnyChordRef.current && "cursor-ew-resize"
-        }`}
+        className={`h-full ${resizingAnyChord && "cursor-ew-resize"}`}
         style={{ paddingInline: `${chordPadding}dvw` }}
         ref={highlightElementRef}
       >
@@ -285,7 +283,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
           } flex h-full min-h-0 min-w-0 items-center justify-center overflow-hidden whitespace-nowrap rounded-[1dvh] py-[2dvh] outline-none`}
           style={{ width: `${width}dvw` }}
           onClick={
-            resizingThisChordRef.current || isReordering
+            resizingThisChord || isReordering
               ? () => {}
               : () => {
                   changeSelected();
@@ -304,7 +302,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
           step={1}
           text="Click on the chord to select it"
           position="right"
-          elementRef={highlightElementRef}
+          elementRef={highlightElementRef as React.RefObject<HTMLElement>}
           canContinue={selectedChord === index}
           autoContinue={true}
         />
@@ -314,7 +312,7 @@ export default function Chord({ index, token, duration, variant }: Props) {
           step={5}
           text="Select the second chord"
           position="right"
-          elementRef={highlightElementRef}
+          elementRef={highlightElementRef as React.RefObject<HTMLElement>}
           canContinue={selectedChord === index}
           autoContinue={true}
         />

@@ -1,7 +1,7 @@
 import Select from "../ui/select";
 
 interface Props {
-  dropdownRef: React.RefObject<HTMLDivElement>;
+  dropdownRef: React.RefObject<HTMLDivElement | null>;
   setIsExportDropdownOpen: (state: boolean) => void;
   handleExport: (format: string) => void;
   format: string;

@@ -51,29 +51,31 @@ export default function MidiImportOverlay() {
   const [quantizationMode, setQuantizationMode] = useState<string>("closest");
   const [importBpm, setImportBpm] = useState<boolean>(true);
 
-  // Update the tracks and quantization when the MIDI file changes
-  useEffect(() => {
-    if (midiFile.tracks.length === 0) return;
+  // Update the tracks and quantization when the MIDI file changes. Adjusting
+  // state during render (guarded by the previous value) is React's recommended
+  // alternative to syncing derived state in an effect.
+  const [prevMidiFile, setPrevMidiFile] = useState(midiFile);
+  if (midiFile !== prevMidiFile) {
+    setPrevMidiFile(midiFile);
 
-    // Filter out tracks with no notes
-    let tempTracks = midiFile.tracks.filter((track) => track.notes.length > 0);
-    setTracks(tempTracks);
+    if (midiFile.tracks.length > 0) {
+      // Filter out tracks with no notes
+      const tempTracks = midiFile.tracks.filter(
+        (track) => track.notes.length > 0,
+      );
+      setTracks(tempTracks);
 
-    // Include only tracks that are not percussion
-    let tempIncludedTracks = new Array(tempTracks.length);
-    for (let i = 0; i < tempTracks.length; i++) {
-      tempIncludedTracks[i] = !tempTracks[i].instrument.percussion;
+      // Include only tracks that are not percussion
+      setIncludedTracks(tempTracks.map((track) => !track.instrument.percussion));
+
+      // Set the default quantization
+      let defaultQuantization = 4;
+      if (midiFile.header.timeSignatures.length > 0)
+        defaultQuantization = midiFile.header.timeSignatures[0].timeSignature[0];
+
+      setQuantization(defaultQuantization);
     }
-
-    setIncludedTracks(tempIncludedTracks);
-
-    // Set the default quantization
-    let defaultQuantization = 4;
-    if (midiFile.header.timeSignatures.length > 0)
-      defaultQuantization = midiFile.header.timeSignatures[0].timeSignature[0];
-
-    setQuantization(defaultQuantization);
-  }, [midiFile]);
+  }
 
   // Main function to import the MIDI file
   const importMidi = (

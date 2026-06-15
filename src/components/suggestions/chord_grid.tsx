@@ -1,7 +1,8 @@
 import { AutoSizer, Grid, GridCellProps } from "react-virtualized";
+import type { ReactElement } from "react";
 
 export default function ChordGrid(
-  chordList: JSX.Element[],
+  chordList: ReactElement[],
   columnCount: number,
 ) {
   // Units for responsive design

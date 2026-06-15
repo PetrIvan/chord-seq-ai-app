@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { wikiTree, WikiTreeNode } from "@/data/wiki_tree";
 
+export const dynamic = "force-static";
+
 // Get all the leaf nodes and their slug paths
 function getWikiPaths(tree: WikiTreeNode, parentPath = ""): string[] {
   const paths: string[] = [];

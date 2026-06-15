@@ -13,8 +13,9 @@ import MozartAIOverlay from "./overlays/mozart_ai_overlay";
 
 import { getSelectorsByUserAgent } from "react-device-detect";
 
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useStore } from "@/state/use_store";
+import { useAspectRatio } from "@/state/use_client_env";
 import { shallow } from "zustand/shallow";
 
 export default function App() {
@@ -59,19 +60,7 @@ export default function App() {
       setCustomScrollbar(false);
   }, [setCustomScrollbar, setIsMobile, setShowFullscreenButton]);
 
-  const [aspectRatio, setAspectRatio] = useState(0);
-
-  // On window resize, update the aspect ratio
-  useLayoutEffect(() => {
-    setAspectRatio(window.innerWidth / window.innerHeight); // Initial aspect ratio
-
-    function handleResize() {
-      setAspectRatio(window.innerWidth / window.innerHeight);
-    }
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  const aspectRatio = useAspectRatio(0);
 
   // Show a message if the aspect ratio is not supported
   let info = "";

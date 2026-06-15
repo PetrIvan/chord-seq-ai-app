@@ -135,7 +135,7 @@ export default function ModelSelection() {
           step={7}
           text="You can specify the genre and decade here"
           position="below"
-          elementRef={openStyleDropdownButtonRef}
+          elementRef={openStyleDropdownButtonRef as React.RefObject<HTMLElement>}
         />
       </>
     );
