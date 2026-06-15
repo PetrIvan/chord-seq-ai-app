@@ -6,6 +6,7 @@ import cloneDeep from "lodash/cloneDeep";
 import isEqual from "lodash/isEqual";
 
 import { genres, decades } from "@/data/conditions";
+import { Chord } from "@/state/chord";
 import { tokenToChord } from "@/data/token_to_chord";
 import { Midi } from "@tonejs/midi";
 import {
@@ -23,31 +24,18 @@ const deepCompareUpdate = (partial: any, state: any) => {
 };
 
 interface Data {
-  chords: { index: number; token: number; duration: number; variant: number }[];
+  chords: Chord[];
   signature: [number, number];
   selected: number;
 }
 
 interface StoreState {
   // Chords
-  chords: { index: number; token: number; duration: number; variant: number }[];
-  setChords: (
-    state: {
-      index: number;
-      token: number;
-      duration: number;
-      variant: number;
-    }[],
-    ignoreStateWindow?: boolean,
-  ) => void;
+  chords: Chord[];
+  setChords: (state: Chord[], ignoreStateWindow?: boolean) => void;
   selectedChord: number; // Index of the selected chord
   setSelectedChord: (state: number, ignoreStateWindow?: boolean) => void;
-  addChord: () => {
-    index: number;
-    token: number;
-    duration: number;
-    variant: number;
-  }[];
+  addChord: () => Chord[];
   deleteChord: () => void;
   replaceChord: (token: number, variant: number) => void;
   clearChords: () => void;
@@ -202,15 +190,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
     (set, get) => ({
       // Chords
       chords: [],
-      setChords: (
-        chords: {
-          index: number;
-          token: number;
-          duration: number;
-          variant: number;
-        }[],
-        ignoreStateWindow?: boolean,
-      ) => {
+      setChords: (chords: Chord[], ignoreStateWindow?: boolean) => {
         set((state) => deepCompareUpdate({ chords }, state));
         if (!ignoreStateWindow) get().saveStateWindow();
       },
