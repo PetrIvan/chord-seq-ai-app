@@ -13,6 +13,13 @@
 /.next/
 /out/
 
+# onnxruntime-web wasm binaries (generated from node_modules by scripts/copy-ort-wasm.mjs)
+/public/wasm/
+# Serwist-generated service worker
+/public/sw.js
+/public/sw.js.map
+/public/swe-worker-*.js
+
 # production
 /build
 
