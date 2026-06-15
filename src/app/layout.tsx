@@ -60,7 +60,20 @@ export default function RootLayout({
     <>
       <html lang="en" className={`${openSans.variable}`}>
         <body className="custom-scrollbar font-sans text-white">
-          <SerwistProvider swUrl="/sw.js" cacheOnNavigation reloadOnOnline>
+          {/*
+            In dev the worker is served live by the Serwist route at
+            /serwist/sw.js, which sends `Service-Worker-Allowed: /` so it still
+            gets root scope. In the static production export GitHub Pages can't
+            send that header, so we register the root copy at /sw.js that the
+            postbuild step writes (see scripts/copy-sw.mjs).
+          */}
+          <SerwistProvider
+            swUrl={
+              process.env.NODE_ENV === "production" ? "/sw.js" : "/serwist/sw.js"
+            }
+            cacheOnNavigation
+            reloadOnOnline
+          >
             <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
             {children}
           </SerwistProvider>
