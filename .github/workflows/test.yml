@@ -1,0 +1,52 @@
+name: Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+# The jobs only check out the repo and run tests; no write access is needed.
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: Unit tests (Vitest)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup
+      - name: Run unit tests
+        run: npm test
+
+  e2e:
+    name: E2E smokes (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node and dependencies
+        uses: ./.github/actions/setup
+      - name: Build static export
+        # The e2e smokes run against the production static export (served by
+        # `serve out`), so build it before Playwright starts its web server.
+        # Building first also fails fast, before the expensive browser install.
+        run: npm run build
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Run e2e smokes
+        run: npm run test:e2e
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
