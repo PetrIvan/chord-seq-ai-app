@@ -12,6 +12,9 @@
 # next.js
 /.next/
 /out/
+# Guard against a stray next.config.js: Next 16 loads it in preference to our
+# next.config.ts, silently dropping output: "export" (see .github/workflows/nextjs.yml).
+/next.config.js
 
 # onnxruntime-web wasm binaries (generated from node_modules by scripts/copy-ort-wasm.mjs)
 /public/wasm/

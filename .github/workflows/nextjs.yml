@@ -54,13 +54,15 @@ jobs:
           node-version: "22"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Setup Pages
+        # Deliberately no `static_site_generator: next`. That option makes
+        # configure-pages write a ./next.config.js, which it cannot do for our
+        # next.config.ts, so it drops a minimal JS config that Next 16 loads in
+        # preference to ours. That injected config lacks `output: "export"`, so
+        # the static site is never written to out/ and the build fails at the
+        # postbuild copy step. Our next.config.ts already sets output: "export"
+        # and images.unoptimized, and the site is served from a root custom
+        # domain, so no basePath injection is needed.
         uses: actions/configure-pages@v4
-        with:
-          # Automatically inject basePath in your Next.js configuration file and disable
-          # server side image optimization (https://nextjs.org/docs/api-reference/next/image#unoptimized).
-          #
-          # You may remove this line if you want to manage the configuration yourself.
-          static_site_generator: next
       - name: Restore cache
         uses: actions/cache@v3
         with:
