@@ -11,6 +11,11 @@
     "postbuild": "node ./scripts/copy-sw.mjs",
     "start": "next start",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "serve:out": "serve out --listen 3000 --no-port-switching",
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
   },
   "overrides": {
@@ -52,6 +57,7 @@
     "zustand": "^4.5.7"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.0",
     "@serwist/turbopack": "^9.5.11",
     "@tailwindcss/forms": "^0.5.7",
     "@types/lodash": "^4.17.24",
@@ -59,17 +65,21 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/react-virtualized": "^9.21.30",
+    "@vitest/coverage-v8": "^4.1.9",
     "autoprefixer": "^10.5.0",
     "esbuild": "^0.28.1",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.9",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.15",
     "prettier": "^3.8.4",
     "prettier-plugin-tailwindcss": "^0.6.6",
     "react-virtualized": "^9.22.5",
+    "serve": "^14.2.6",
     "serwist": "^9.5.11",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }
