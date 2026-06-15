@@ -53,6 +53,9 @@ jobs:
         with:
           node-version: "22"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
+      - name: Pin npm to match local lockfile generation
+        # node 22 ships npm 10, but our lockfile is generated with npm 11, which npm 10's `npm ci` rejects.
+        run: npm install -g npm@11
       - name: Setup Pages
         # Deliberately no `static_site_generator: next`. That option makes
         # configure-pages write a ./next.config.js, which it cannot do for our
