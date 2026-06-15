@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface Props {
-  dropdownRef: React.RefObject<HTMLDivElement>;
+  dropdownRef: React.RefObject<HTMLDivElement | null>;
   transpose: (delta: number) => void;
 }
 

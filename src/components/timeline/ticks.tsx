@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 
@@ -21,10 +21,8 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
       shallow,
     );
 
-  const [tickIds, setTickIds] = useState<number[]>([]);
-
   // Only add ticks that are necessary (could be optimized further)
-  useEffect(() => {
+  const tickIds = useMemo(() => {
     let [signatureNumerator] = signature;
     let tickSpace = (zoom * 10) / signatureNumerator;
     let numTicks =
@@ -36,7 +34,7 @@ export default function Ticks({ top, availableSpace, timelineStart }: Props) {
     for (let i = 0; i < numTicks; i++) {
       ids.push(i);
     }
-    setTickIds(ids);
+    return ids;
   }, [availableSpace, signature, zoom, timelinePosition, timelineStart]);
 
   // Render a tick

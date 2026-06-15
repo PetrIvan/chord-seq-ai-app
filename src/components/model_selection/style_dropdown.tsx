@@ -4,7 +4,7 @@ import { genres, decades } from "@/data/conditions";
 import { shallow } from "zustand/shallow";
 
 interface Props {
-  styleDropdownRef: React.RefObject<HTMLDivElement>;
+  styleDropdownRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function StyleDropdown({ styleDropdownRef }: Props) {

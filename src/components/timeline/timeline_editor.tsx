@@ -270,6 +270,13 @@ export default function TimelineEditor() {
     resizingAnyChordRef.current = resizingAnyChord;
   }, [resizingAnyChord]);
 
+  // Declared before the drag/playhead callbacks below that read this ref.
+  const [movingPlayhead, setMovingPlayhead] = useState(false);
+  const movingPlayheadRef = useRef(movingPlayhead);
+  useEffect(() => {
+    movingPlayheadRef.current = movingPlayhead;
+  }, [movingPlayhead]);
+
   const bindTimelineDrag = useDrag(
     ({ xy: [x, y], delta: [dx] }) => {
       if (isStepByStepTutorialOpenRef.current) return;
@@ -332,13 +339,6 @@ export default function TimelineEditor() {
 
   /* Playhead logic */
   const [playing, setPlaying] = useState(false);
-  const [movingPlayhead, setMovingPlayhead] = useState(false);
-
-  const movingPlayheadRef = useRef(movingPlayhead);
-
-  useEffect(() => {
-    movingPlayheadRef.current = movingPlayhead;
-  }, [movingPlayhead]);
 
   const signatureRef = useRef(signature);
 

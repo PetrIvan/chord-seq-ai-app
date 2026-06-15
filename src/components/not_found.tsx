@@ -1,29 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { getSelectorsByUserAgent } from "react-device-detect";
-
 import Image from "next/image";
 import Header from "@/components/header";
+import { useCustomScrollbar } from "@/state/use_client_env";
 
 export default function NotFound() {
-  // Scrollbar customization
-  const [customScrollbarEnabled, setCustomScrollbarEnabled] = useState(true);
-
-  useEffect(() => {
-    const userAgent = navigator.userAgent;
-    const isMobile = getSelectorsByUserAgent(userAgent).isMobile;
-    document.body.classList.add("custom-scrollbar");
-
-    // Disable custom scrollbar for Firefox and mobile devices
-    if (/Firefox/i.test(userAgent) || isMobile) {
-      setCustomScrollbarEnabled(false);
-      // Remove custom-scrollbar class from all elements
-      document.querySelectorAll(".custom-scrollbar").forEach((element) => {
-        element.classList.remove("custom-scrollbar");
-      });
-    }
-  }, []);
+  // Scrollbar customization (disabled on Firefox and mobile)
+  const customScrollbarEnabled = useCustomScrollbar();
 
   return (
     <div className="h-[100dvh] w-full text-zinc-300">

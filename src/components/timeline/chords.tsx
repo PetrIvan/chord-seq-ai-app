@@ -56,50 +56,42 @@ export default function Chords() {
     assignKeys(chords),
   );
 
-  const chordsWithKeyRef = useRef(chordsWithKey);
+  // Keep chordsWithKey in sync with the chords prop (preserving the existing
+  // keys), but not while reordering. Adjusting state during render, guarded by
+  // the previous prop value, is React's recommended alternative to syncing in
+  // an effect.
+  const [prevChords, setPrevChords] = useState(chords);
+  if (chords !== prevChords && !isReordering) {
+    setPrevChords(chords);
 
-  useEffect(() => {
-    chordsWithKeyRef.current = chordsWithKey;
-  }, [chordsWithKey]);
-
-  const isReorderingRef = useRef(isReordering);
-
-  useEffect(() => {
-    isReorderingRef.current = isReordering;
-  }, [isReordering]);
-
-  useEffect(() => {
-    if (isReorderingRef.current) return; // Skip updating while dragging
-
-    if (chords.length !== chordsWithKeyRef.current.length) {
-      // If a chord was added/removed, assign new keys
+    if (chords.length !== chordsWithKey.length) {
+      // A chord was added/removed: assign new keys.
       setChordsWithKey(assignKeys(chords));
-      return;
-    }
+    } else {
+      // Detect updates to chord properties (but not the index).
+      let updatedChords = cloneDeep(chordsWithKey);
+      let changed = false;
 
-    // Detect updates to chord properties (but not the index)
-    let updatedChords = cloneDeep(chordsWithKeyRef.current);
-    let changed = false;
+      for (let i = 0; i < chords.length; i++) {
+        const chordChanged =
+          chords[i].token !== chordsWithKey[i].token ||
+          chords[i].duration !== chordsWithKey[i].duration ||
+          chords[i].variant !== chordsWithKey[i].variant;
 
-    for (let i = 0; i < chords.length; i++) {
-      const chordChanged =
-        chords[i].token !== chordsWithKeyRef.current[i].token ||
-        chords[i].duration !== chordsWithKeyRef.current[i].duration ||
-        chords[i].variant !== chordsWithKeyRef.current[i].variant;
+        if (chordChanged) {
+          updatedChords[i] = {
+            ...chords[i],
+            key: chordsWithKey[i].key,
+          };
+          changed = true;
+        }
+      }
 
-      if (chordChanged) {
-        updatedChords[i] = {
-          ...chords[i],
-          key: chordsWithKeyRef.current[i].key,
-        };
-        changed = true;
+      if (changed) {
+        setChordsWithKey(updatedChords);
       }
     }
-
-    if (changed) {
-      setChordsWithKey(updatedChords);
-    }
-  }, [chords, assignKeys]);
+  }
 
   function reindexChords(chords: Chords) {
     const newChords = cloneDeep(chords);

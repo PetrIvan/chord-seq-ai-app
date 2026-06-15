@@ -2,7 +2,7 @@ interface Props {
   setSelectedModel: (model: number) => void;
   setShowModelDropdown: (show: boolean) => void;
   models: [string, string, number][];
-  modelDropdownRef: React.RefObject<HTMLDivElement>;
+  modelDropdownRef: React.RefObject<HTMLDivElement | null>;
   customScrollbarEnabled: boolean;
 }
 

@@ -3,7 +3,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useSearch } from "@/wiki/use_search";
 import { useRouter } from "nextjs-toploader/app";
-import { isEqual } from "lodash";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -48,6 +47,8 @@ export default function Search({
     };
   }, []);
 
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+
   const closeDropdown = useCallback(() => {
     setHighlightedIndex(-1);
     setQuery("");
@@ -57,25 +58,24 @@ export default function Search({
   }, [isOverlay, setIsSearchOpen]);
 
   // Keyboard shortcuts
-  const [highlightedIndex, setHighlightedIndex] = useState(-1);
-  const prevResults = useRef(results);
   const router = useRouter();
   const listItemRefs = useRef<HTMLLIElement[]>([]);
 
-  useEffect(() => {
-    // Reset the highlighted index if the results change
-    if (!isEqual(results, prevResults.current)) {
-      if (
-        highlightedIndex > -1 &&
-        results[highlightedIndex].slug !==
-          prevResults.current[highlightedIndex].slug
-      ) {
-        setHighlightedIndex(-1);
-      }
-
-      prevResults.current = results;
+  // Reset the highlighted index when the results change. Adjusting state during
+  // render (guarded by the previous value) is React's recommended alternative
+  // to syncing in an effect. `results` is a useState value from useSearch, so a
+  // reference check is enough — it only changes identity when the results do.
+  const [prevResults, setPrevResults] = useState(results);
+  if (results !== prevResults) {
+    if (
+      highlightedIndex > -1 &&
+      results[highlightedIndex].slug !== prevResults[highlightedIndex].slug
+    ) {
+      setHighlightedIndex(-1);
     }
-  }, [highlightedIndex, results, query]);
+
+    setPrevResults(results);
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

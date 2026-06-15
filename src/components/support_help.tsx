@@ -131,7 +131,7 @@ export default function SupportHelp() {
         step={8}
         text="That's it for now! If you get stuck, this is where you can find help."
         position="below-left"
-        elementRef={helpButtonRef}
+        elementRef={helpButtonRef as React.RefObject<HTMLElement>}
       />
     </section>
   );

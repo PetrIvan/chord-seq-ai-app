@@ -1,5 +1,14 @@
 import * as ort from "onnxruntime-web/webgpu";
 
+// Serve the WebAssembly binaries as static assets from /wasm/ (populated by
+// scripts/copy-ort-wasm.mjs). Without this, ORT resolves them relative to the
+// worker chunk URL, where they don't exist under static export.
+ort.env.wasm.wasmPaths = "/wasm/";
+// GitHub Pages can't send COOP/COEP headers, so SharedArrayBuffer (and threaded
+// wasm) isn't available. Pin to a single thread; WebGPU is the primary EP and
+// single-threaded wasm is the fallback.
+ort.env.wasm.numThreads = 1;
+
 // A global variable to store the model (avoids loading it every time we want to make a prediction)
 let currentSession: ort.InferenceSession | null = null;
 
@@ -13,13 +22,13 @@ self.onmessage = async (event) => {
     // Check if the model path is a valid URL
     let modelName = "";
     try {
-      let url = new URL(modelPath, location.origin);
+      let url = new URL(modelPath, self.location.origin);
       modelName = /^\/models\/([^/]+)\.onnx$/.exec(url.pathname)?.[1] || "";
     } catch {
       self.reportError("Invalid model path.");
       return;
     }
-    const response = await fetch(`/models/${modelName}.onnx`);
+    const response = await fetch(`${self.location.origin}/models/${modelName}.onnx`);
 
     if (!response.ok) {
       self.reportError(`Failed to fetch model: ${response.statusText}.`);

@@ -7,7 +7,6 @@ import React, {
   useMemo,
 } from "react";
 import { useStore } from "@/state/use_store";
-import { useIsMount } from "@/state/use_is_mount";
 import { shallow } from "zustand/shallow";
 import { isEqual } from "lodash";
 import * as Tone from "tone";
@@ -194,16 +193,21 @@ export default function TimelineControls({
   }, [addChord, scrollToChord, selectedChord]);
 
   // Scroll to the selected chord when the selection changes, but not on mount
-  const isMount = useIsMount();
+  const isMountRef = useRef(true);
   const prevSelectedChordRef = useRef(selectedChord);
   useEffect(() => {
-    if (selectedChord === -1 || chords.length === 0 || isMount) return;
+    if (isMountRef.current) {
+      isMountRef.current = false;
+      return;
+    }
+
+    if (selectedChord === -1 || chords.length === 0) return;
 
     // Prevent scrolling to the same chord
     if (prevSelectedChordRef.current === selectedChord) return;
     prevSelectedChordRef.current = selectedChord;
     scrollToChord(chords, selectedChord);
-  }, [chords, isMount, scrollToChord, selectedChord]);
+  }, [chords, scrollToChord, selectedChord]);
 
   /* Playback utilities */
   const playheadPositionRef = React.useRef(playheadPosition);
@@ -242,15 +246,10 @@ export default function TimelineControls({
 
   // Change the metronome state
   const changeMetronome = useCallback(() => {
-    setMuteMetronome(!muteMetronomeRef.current);
-  }, [setMuteMetronome]);
+    setMuteMetronome(!muteMetronome);
+  }, [muteMetronome, setMuteMetronome]);
 
   // Keep track of the player states
-  const muteMetronomeRef = useRef(muteMetronome);
-  useEffect(() => {
-    muteMetronomeRef.current = muteMetronome;
-  }, [muteMetronome]);
-
   const bpmRef = useRef(bpm);
   useEffect(() => {
     bpmRef.current = bpm;
@@ -605,7 +604,7 @@ export default function TimelineControls({
           step={0}
           text="Add a blank chord by clicking on the plus icon"
           position="below"
-          elementRef={addButtonRef}
+          elementRef={addButtonRef as React.RefObject<HTMLElement>}
           canContinue={chords.length > 0}
           autoContinue={true}
         />
@@ -613,7 +612,7 @@ export default function TimelineControls({
           step={4}
           text="Add another chord"
           position="below"
-          elementRef={addButtonRef}
+          elementRef={addButtonRef as React.RefObject<HTMLElement>}
           canContinue={chords.length > 1}
           autoContinue={true}
         />

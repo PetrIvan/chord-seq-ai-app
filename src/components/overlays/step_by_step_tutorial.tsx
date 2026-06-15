@@ -43,13 +43,15 @@ export default function StepByStepTutorial({
   const [initialized, setInitialized] = useState(false);
   const numSteps = 9;
 
-  // Listen to window resize events to recalculate positions
-  const [forceRerender, setForceRerender] = useState(false);
+  // Listen to window resize events to recalculate positions. The counter is
+  // bumped on every resize to re-trigger the measurement effect below (a
+  // width-only resize leaves oneDvhInPx unchanged, so it can't be relied on).
+  const [resizeCount, setResizeCount] = useState(0);
   const [oneDvhInPx, setOneDvhInPx] = useState(window.innerHeight / 100);
 
   useEffect(() => {
     function handleResize() {
-      setForceRerender(true);
+      setResizeCount((count) => count + 1);
       setOneDvhInPx(window.innerHeight / 100);
     }
 
@@ -59,12 +61,6 @@ export default function StepByStepTutorial({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-
-  useEffect(() => {
-    if (forceRerender) {
-      setForceRerender(false);
-    }
-  }, [forceRerender]);
 
   // Calculate and set the position of the dialog box
   const [windowBox, setWindowBox] = useState({
@@ -140,7 +136,7 @@ export default function StepByStepTutorial({
     elementRef,
     isStepByStepTutorialOpen,
     tutorialStep,
-    forceRerender,
+    resizeCount,
     oneDvhInPx,
     position,
     step,
@@ -173,6 +169,7 @@ export default function StepByStepTutorial({
       prevOpenRef.current = isStepByStepTutorialOpen;
 
       if (canContinue) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- part of a step state machine that also advances the tutorial store and mutates the DOM, so it must run as an effect
         setContinued(true);
         return;
       }
@@ -206,8 +203,10 @@ export default function StepByStepTutorial({
     }
   }, [elementRef, step, tutorialStep, isStepByStepTutorialOpen]);
 
-  // Handle closing the tutorial
+  // Handle closing the tutorial. onStepExit resets the highlighted element's
+  // z-index (DOM mutation), so this must run as an effect, not during render.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- runs DOM cleanup on close
     if (!isStepByStepTutorialOpen) onStepExit();
   }, [isStepByStepTutorialOpen, onStepExit, setEnabledShortcuts]);
 

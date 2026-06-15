@@ -2,6 +2,7 @@ import Script from "next/script";
 import { Open_Sans } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
+import { SerwistProvider } from "@serwist/turbopack/react";
 import "./globals.css";
 
 const jsonLd = {
@@ -59,8 +60,24 @@ export default function RootLayout({
     <>
       <html lang="en" className={`${openSans.variable}`}>
         <body className="custom-scrollbar font-sans text-white">
-          <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
-          {children}
+          {/*
+            The service worker only runs in the production export. /sw.js is the
+            root copy written by the postbuild step (scripts/copy-sw.mjs) so it
+            gets root scope on GitHub Pages, which can't send a
+            Service-Worker-Allowed header. It is disabled in development to avoid
+            interfering with HMR. reloadOnOnline is off because reloading the
+            page when connectivity returns would discard unsaved work (and, with
+            a controlling worker, can cause a reload loop).
+          */}
+          <SerwistProvider
+            swUrl="/sw.js"
+            disable={process.env.NODE_ENV !== "production"}
+            cacheOnNavigation
+            reloadOnOnline={false}
+          >
+            <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
+            {children}
+          </SerwistProvider>
         </body>
         <Script
           defer

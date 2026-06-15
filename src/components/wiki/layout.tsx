@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { getSelectorsByUserAgent } from "react-device-detect";
 import { useBreakpoint } from "@/state/use_breakpoint";
+import { useCustomScrollbar } from "@/state/use_client_env";
 
 import Image from "next/image";
 
@@ -23,23 +23,8 @@ interface Props {
 }
 
 export default function WikiLayout({ pagePath, source, children }: Props) {
-  // Scrollbar customization
-  const [customScrollbarEnabled, setCustomScrollbarEnabled] = useState(true);
-
-  useEffect(() => {
-    const userAgent = navigator.userAgent;
-    const isMobile = getSelectorsByUserAgent(userAgent).isMobile;
-    document.body.classList.add("custom-scrollbar");
-
-    // Disable custom scrollbar for Firefox and mobile devices
-    if (/Firefox/i.test(userAgent) || isMobile) {
-      setCustomScrollbarEnabled(false);
-      // Remove custom-scrollbar class from all elements
-      document.querySelectorAll(".custom-scrollbar").forEach((element) => {
-        element.classList.remove("custom-scrollbar");
-      });
-    }
-  }, []);
+  // Scrollbar customization (disabled on Firefox and mobile)
+  const customScrollbarEnabled = useCustomScrollbar();
 
   // Scroll logic with sidenav and search
   const [isTop, setIsTop] = useState(true);
@@ -86,14 +71,18 @@ export default function WikiLayout({ pagePath, source, children }: Props) {
     };
   }, [isSidenavOpen, isSearchOpen, topOffset]);
 
-  // Close sidenav and search on breakpoint
+  // Close sidenav and search when crossing up to the lg breakpoint. Adjusting
+  // state during render (guarded by the previous value) is React's recommended
+  // alternative to doing it in an effect.
   const isAboveLg = useBreakpoint("lg");
-  useEffect(() => {
+  const [prevIsAboveLg, setPrevIsAboveLg] = useState(isAboveLg);
+  if (isAboveLg !== prevIsAboveLg) {
+    setPrevIsAboveLg(isAboveLg);
     if (isAboveLg) {
       setIsSidenavOpen(false);
       setIsSearchOpen(false);
     }
-  }, [isAboveLg]);
+  }
 
   // Detect which header is currently active based on visibility of the section
   useEffect(() => {

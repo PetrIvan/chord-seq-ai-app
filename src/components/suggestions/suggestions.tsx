@@ -556,7 +556,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }
 
   // Render the content
-  let content: JSX.Element;
+  let content: React.ReactElement;
   const contentContainerRef = useRef<HTMLDivElement>(null);
   if (selectedChord === -1) {
     content = (
@@ -667,7 +667,7 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           step={2}
           text="Wait for the AI model to load, it may take a while"
           position="above"
-          elementRef={contentContainerRef}
+          elementRef={contentContainerRef as React.RefObject<HTMLElement>}
           // Allow only when chords are predicted
           canContinue={
             !isDownloadingModel &&
@@ -681,14 +681,14 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
           step={3}
           text="Click on any chord to use it in your song"
           position="above"
-          elementRef={contentContainerRef}
+          elementRef={contentContainerRef as React.RefObject<HTMLElement>}
           canContinue={chords[0]?.token !== -1}
         />
         <StepByStepTutorial
           step={6}
           text="Choose the second chord; the color indicates the predicted probability"
           position="above"
-          elementRef={contentContainerRef}
+          elementRef={contentContainerRef as React.RefObject<HTMLElement>}
           canContinue={chords[1]?.token !== -1}
         />
       </div>

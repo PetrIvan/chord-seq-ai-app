@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useRef } from "react";
+import type { ReactElement } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 import { useInit } from "@/state/use_init";
@@ -58,13 +59,16 @@ export default function NewFeaturesOverlay() {
     setShowPrev(true);
   });
 
-  // If it is open from the help menu, show all features
-  useEffect(() => {
+  // If it is open from the help menu, show all features. Adjusting state during
+  // render (guarded by the previous value) is React's recommended alternative
+  // to syncing in an effect.
+  const [prevShowPrev, setPrevShowPrev] = useState(showPrev);
+  if (showPrev !== prevShowPrev) {
+    setPrevShowPrev(showPrev);
     if (showPrev) {
-      let features = Array.from(Array(latestVersion + 1).keys()).slice(1);
-      setShowFeatures(features);
+      setShowFeatures(Array.from(Array(latestVersion + 1).keys()).slice(1));
     }
-  }, [showPrev]);
+  }
 
   // Keyboard shortcuts
   const otherShortcuts = (e: KeyboardEvent) => {
@@ -78,7 +82,7 @@ export default function NewFeaturesOverlay() {
     setShowPrev(true);
   };
 
-  let features: { [key: number]: JSX.Element[] } = {
+  let features: { [key: number]: ReactElement[] } = {
     1: [
       <li key={0}>
         Delete all{" "}
