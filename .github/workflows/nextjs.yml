@@ -75,8 +75,9 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
         # Use the package.json "build" script: it copies the onnxruntime-web wasm
-        # binaries into public/wasm, builds the wiki search index, and runs
-        # `next build --webpack` (Serwist requires the webpack builder).
+        # binaries into public/wasm, builds the wiki search index, runs
+        # `next build` (Turbopack), and copies the Serwist service worker to the
+        # site root so it gets root scope on GitHub Pages.
         run: ${{ steps.detect-package-manager.outputs.manager }} run build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

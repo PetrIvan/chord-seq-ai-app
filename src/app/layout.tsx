@@ -2,6 +2,7 @@ import Script from "next/script";
 import { Open_Sans } from "next/font/google";
 import NextTopLoader from "nextjs-toploader";
 import type { Metadata } from "next";
+import { SerwistProvider } from "@serwist/turbopack/react";
 import "./globals.css";
 
 const jsonLd = {
@@ -59,8 +60,10 @@ export default function RootLayout({
     <>
       <html lang="en" className={`${openSans.variable}`}>
         <body className="custom-scrollbar font-sans text-white">
-          <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
-          {children}
+          <SerwistProvider swUrl="/sw.js" cacheOnNavigation reloadOnOnline>
+            <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
+            {children}
+          </SerwistProvider>
         </body>
         <Script
           defer

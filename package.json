@@ -6,7 +6,8 @@
     "predev": "node ./scripts/copy-ort-wasm.mjs",
     "dev": "next dev",
     "prebuild": "node ./scripts/copy-ort-wasm.mjs",
-    "build": "node ./src/wiki/build_index.mjs && next build --webpack",
+    "build": "node ./src/wiki/build_index.mjs && next build",
+    "postbuild": "node ./scripts/copy-sw.mjs",
     "start": "next start",
     "lint": "eslint .",
     "pretty": "prettier --write \"./**/*.{js,jsx,mjs,cjs,ts,tsx,json}\""
@@ -21,7 +22,6 @@
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^16.2.9",
-    "@serwist/next": "^9.5.11",
     "@tonejs/midi": "^2.0.28",
     "@use-gesture/react": "^10.3.1",
     "framer-motion": "^12.40.0",
@@ -50,6 +50,7 @@
     "zustand": "^4.5.7"
   },
   "devDependencies": {
+    "@serwist/turbopack": "^9.5.11",
     "@tailwindcss/forms": "^0.5.7",
     "@types/lodash": "^4.17.24",
     "@types/node": "^22.19.21",
@@ -57,6 +58,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/react-virtualized": "^9.21.30",
     "autoprefixer": "^10.5.0",
+    "esbuild": "^0.28.1",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.9",
     "postcss": "^8.5.15",
