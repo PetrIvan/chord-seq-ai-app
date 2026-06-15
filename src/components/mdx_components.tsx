@@ -90,12 +90,23 @@ export function getMdxComponents(): MDXComponents {
           href.startsWith("#") ||
           !href.startsWith("http"));
 
+      // Internal links use next/link for client-side navigation (instant routing
+      // with the top progress bar); external links are plain anchors opened in a
+      // new tab.
+      if (isInternalLink) {
+        return (
+          <Link className="text-blue-400 hover:underline" href={href} {...props}>
+            {children}
+          </Link>
+        );
+      }
+
       return (
         <a
           className="text-blue-400 hover:underline"
           href={href}
-          target={isInternalLink ? undefined : "_blank"}
-          rel={isInternalLink ? undefined : "noopener noreferrer"}
+          target="_blank"
+          rel="noopener noreferrer"
           {...props}
         >
           {children}
