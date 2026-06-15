@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import { chordToNotes } from "@/data/chord_to_notes";
 import { tokenToChord } from "@/data/token_to_chord";
+import { samplerConfig, reverbDecay } from "./instrument_config";
 
 let synth: Tone.Sampler;
 let metronomeSynth: Tone.Sampler;
@@ -17,18 +18,9 @@ Tone.loaded().then(() => {
   if (typeof window === "undefined") return;
   if (Tone.getDestination().volume) Tone.getDestination().volume.value = -8;
 
-  synth = new Tone.Sampler({
-    urls: {
-      C4: "C4.mp3",
-      "D#4": "Ds4.mp3",
-      "F#4": "Fs4.mp3",
-      A4: "A4.mp3",
-    },
-    release: 1,
-    baseUrl: "https://tonejs.github.io/audio/salamander/",
-  }).toDestination();
+  synth = new Tone.Sampler(samplerConfig).toDestination();
 
-  const reverb = new Tone.Reverb(3).toDestination();
+  const reverb = new Tone.Reverb(reverbDecay).toDestination();
   synth.connect(reverb);
 
   metronomeSynth = new Tone.Sampler({
@@ -51,6 +43,41 @@ function MIDIToFreq(midi: number) {
 
 function MIDIsToFreq(midi: number[]) {
   return midi.map((note) => MIDIToFreq(note));
+}
+
+// Flatten a chord sequence into timed note events (frequencies) and report the
+// total length in seconds. Shared by live playback (playSequence) and offline
+// audio rendering (audio_render.tsx) so both stay perfectly in sync.
+export function chordsToNoteEvents(
+  chords: { index: number; token: number; duration: number; variant: number }[],
+  bpm: number,
+): {
+  events: { time: number; note: number; duration: number }[];
+  totalTime: number;
+} {
+  const events: { time: number; note: number; duration: number }[] = [];
+  let totalTime = 0;
+
+  for (const chord of chords) {
+    const duration = chord.duration / (bpm / 60); // Duration in seconds
+
+    if (chord.token === -1) {
+      totalTime += duration;
+      continue;
+    }
+
+    const freqs = MIDIsToFreq(
+      chordToNotes[tokenToChord[chord.token][chord.variant]],
+    );
+
+    for (const freq of freqs) {
+      events.push({ time: totalTime, note: freq, duration: duration });
+    }
+
+    totalTime += duration;
+  }
+
+  return { events, totalTime };
 }
 
 export function playNotes(notes: number[]) {
@@ -97,30 +124,8 @@ export function playSequence(
   muteMetronome: boolean,
 ) {
   // Prepare the sequence
-  timeNoteDuration = [];
-  let totalTime = 0;
-  for (const chord of chords) {
-    const duration = chord.duration / (bpm / 60); // Duration in seconds
-
-    if (chord.token === -1) {
-      totalTime += duration;
-      continue;
-    }
-
-    const freqs = MIDIsToFreq(
-      chordToNotes[tokenToChord[chord.token][chord.variant]],
-    );
-
-    for (const freq of freqs) {
-      timeNoteDuration.push({
-        time: totalTime,
-        note: freq,
-        duration: duration,
-      });
-    }
-
-    totalTime += duration;
-  }
+  const { events, totalTime } = chordsToNoteEvents(chords, bpm);
+  timeNoteDuration = events;
 
   // Play the sequence
   Tone.loaded().then(() => {

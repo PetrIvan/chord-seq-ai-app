@@ -3,9 +3,11 @@ import Select from "../ui/select";
 interface Props {
   dropdownRef: React.RefObject<HTMLDivElement | null>;
   setIsExportDropdownOpen: (state: boolean) => void;
-  handleExport: (format: string) => void;
+  handleExport: (format: string) => Promise<void>;
   format: string;
   setFormat: (format: string) => void;
+  formats: string[];
+  isRendering: boolean;
 }
 
 export default function ExportDropdown({
@@ -14,6 +16,8 @@ export default function ExportDropdown({
   setIsExportDropdownOpen,
   format,
   setFormat,
+  formats,
+  isRendering,
 }: Props) {
   return (
     <div
@@ -25,20 +29,21 @@ export default function ExportDropdown({
         selectName="format"
         state={format}
         setState={setFormat}
-        allStates={[".chseq", ".mid"]}
+        allStates={formats}
         width="15dvh"
         enabledShortcuts={true}
         onDark={true}
       />
       <button
-        className="rounded-[0.5dvw] bg-zinc-800 p-[0.5dvw] hover:bg-zinc-900"
+        className="rounded-[0.5dvw] bg-zinc-800 p-[0.5dvw] hover:bg-zinc-900 disabled:cursor-not-allowed disabled:opacity-60"
         title="Export (Enter)"
+        disabled={isRendering}
         onClick={() => {
-          handleExport(format);
-          setIsExportDropdownOpen(false);
+          // Keep the dropdown open while audio renders, then close it.
+          handleExport(format).then(() => setIsExportDropdownOpen(false));
         }}
       >
-        Export
+        {isRendering ? "Rendering..." : "Export"}
       </button>
     </div>
   );

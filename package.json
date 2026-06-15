@@ -19,6 +19,7 @@
     "postcss": "^8.5.15"
   },
   "dependencies": {
+    "@breezystack/lamejs": "^1.2.7",
     "@mdx-js/loader": "^3.0.1",
     "@mdx-js/react": "^3.0.1",
     "@next/mdx": "^16.2.9",

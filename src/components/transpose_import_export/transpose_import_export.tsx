@@ -7,9 +7,13 @@ import Image from "next/image";
 
 import { transpositionMap } from "@/data/transposition_map";
 import { getMidiBlob, extractMidiFile } from "@/playback/midi_io";
+import { getWavBlob, getMp3Blob } from "@/playback/audio_render";
 
 import TransposeDropdown from "./transpose_dropdown";
 import ExportDropdown from "./export_dropdown";
+
+// Available export formats, also used to cycle the selection with the arrow keys.
+const exportFormats = [".chseq", ".mid", ".wav", ".mp3"];
 
 export default function TransposeImportExport() {
   const [
@@ -187,8 +191,14 @@ export default function TransposeImportExport() {
 
   /* Export */
   const [format, setFormat] = useState(".chseq");
+  const [isRendering, setIsRendering] = useState(false);
 
   const formatRef = useRef(format);
+  const isRenderingRef = useRef(isRendering);
+
+  useEffect(() => {
+    isRenderingRef.current = isRendering;
+  }, [isRendering]);
 
   useEffect(() => {
     formatRef.current = format;
@@ -208,7 +218,11 @@ export default function TransposeImportExport() {
 
   // Export given the format
   const handleExport = useCallback(
-    (format: string) => {
+    async (format: string) => {
+      // Audio rendering is async and can take a moment; ignore re-entry while
+      // a render is already in flight.
+      if (isRenderingRef.current) return;
+
       incrementTimesExported();
       if (format === ".chseq") {
         const jsonData = JSON.stringify({
@@ -223,6 +237,23 @@ export default function TransposeImportExport() {
         const blob = getMidiBlob(chords, bpm, signature);
 
         downloadFile(blob, "chords.mid");
+      }
+      if (format === ".wav" || format === ".mp3") {
+        setIsRendering(true);
+        try {
+          const blob =
+            format === ".wav"
+              ? await getWavBlob(chords, bpm)
+              : await getMp3Blob(chords, bpm);
+
+          downloadFile(blob, `chords${format}`);
+        } catch (error) {
+          alert(
+            "Couldn't render the audio. Make sure the sequence isn't empty and you're online (instrument samples are loaded from the web).",
+          );
+        } finally {
+          setIsRendering(false);
+        }
       }
     },
     [bpm, chords, incrementTimesExported, signature],
@@ -274,14 +305,23 @@ export default function TransposeImportExport() {
       transposeChords(parseInt(input.value, 10));
       setShowTransposeDropdown(false);
     }
-    // Confirm the export
+    // Confirm the export (keep the dropdown open while audio renders, then close)
     if (showExportDropdownRef.current) {
-      handleExport(formatRef.current);
-      setShowExportDropdown(false);
+      handleExport(formatRef.current).then(() => setShowExportDropdown(false));
     }
   }, [transposeChords, handleExport]);
 
   const keyEventHandlers: Record<string, () => void> = useMemo(() => {
+    // Step through the export formats, wrapping around at either end.
+    const cycleFormat = (direction: 1 | -1) => {
+      const i = exportFormats.indexOf(formatRef.current);
+      setFormat(
+        exportFormats[
+          (i + direction + exportFormats.length) % exportFormats.length
+        ],
+      );
+    };
+
     return {
       KeyT: () => {
         setShowTransposeDropdown(!showTransposeDropdownRef.current);
@@ -299,10 +339,8 @@ export default function TransposeImportExport() {
           if (!input) return;
           input.value = Math.min(parseInt(input.value, 10) + 1, 11).toString();
         }
-        // Change the export format
-        if (showExportDropdownRef.current) {
-          setFormat(formatRef.current === ".chseq" ? ".mid" : ".chseq");
-        }
+        // Cycle to the previous export format
+        if (showExportDropdownRef.current) cycleFormat(-1);
       },
       ArrowDown: () => {
         // Decrement the value in the transpose dropdown
@@ -311,10 +349,8 @@ export default function TransposeImportExport() {
           if (!input) return;
           input.value = Math.max(parseInt(input.value, 10) - 1, -11).toString();
         }
-        // Change the export format
-        if (showExportDropdownRef.current) {
-          setFormat(formatRef.current === ".chseq" ? ".mid" : ".chseq");
-        }
+        // Cycle to the next export format
+        if (showExportDropdownRef.current) cycleFormat(1);
       },
       Enter: () => handleEnterKey(),
       NumpadEnter: () => handleEnterKey(),
@@ -414,6 +450,8 @@ export default function TransposeImportExport() {
           handleExport={handleExport}
           format={format}
           setFormat={setFormat}
+          formats={exportFormats}
+          isRendering={isRendering}
         />
       )}
     </section>
