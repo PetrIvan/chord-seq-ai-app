@@ -4,7 +4,6 @@ import path from "path";
 import type { Metadata, ResolvingMetadata } from "next";
 
 import { compileMDX } from "next-mdx-remote/rsc";
-import { useMDXComponents } from "@/components/mdx_components";
 
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
@@ -13,30 +12,20 @@ import remarkGfm from "remark-gfm";
 import { wikiTree, WikiTreeNode } from "@/data/wiki_tree.ts";
 import { findPageNameInTree } from "@/wiki/utils";
 
-import Blocks from "@/components/wiki/blocks";
-import InlineIcon from "@/components/wiki/inline_icon";
-import LargeImage from "@/components/wiki/large_image";
-import QuestionAnswer from "@/components/wiki/question_answer";
-import QuickLinkBlock from "@/components/wiki/quick_link_block";
+import { getMdxComponents } from "@/components/mdx_components";
 
 import NotFound from "@/components/not_found";
 import WikiLayout from "@/components/wiki/layout";
 
 interface WikiPageProps {
-  params: { slug?: string[] };
+  params: Promise<{ slug?: string[] }>;
 }
 
 export default async function WikiPage({ params }: WikiPageProps) {
-  let pagePath = `/${(params.slug || []).join("/")}`;
-  const components = useMDXComponents({
-    Blocks,
-    InlineIcon,
-    LargeImage,
-    QuestionAnswer,
-    QuickLinkBlock,
-  });
+  const { slug } = await params;
+  let pagePath = `/${(slug || []).join("/")}`;
 
-  const mdx = await getMDX(params.slug, components);
+  const mdx = await getMDX(slug, getMdxComponents());
 
   if (!mdx || !mdx.content) return <NotFound />;
 
@@ -51,7 +40,8 @@ export async function generateMetadata(
   { params }: WikiPageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
-  const mdx = await getMDX(params.slug, {});
+  const { slug } = await params;
+  const mdx = await getMDX(slug, {});
 
   if (!mdx) return { title: "404 - Page Not Found" };
 
@@ -70,7 +60,7 @@ export async function generateMetadata(
       images: [{ url: "/og.png" }],
     },
     alternates: {
-      canonical: `/wiki${params.slug ? "/" + params.slug.join("/") : ""}`,
+      canonical: `/wiki${slug ? "/" + slug.join("/") : ""}`,
     },
   };
 }
