@@ -61,18 +61,19 @@ export default function RootLayout({
       <html lang="en" className={`${openSans.variable}`}>
         <body className="custom-scrollbar font-sans text-white">
           {/*
-            In dev the worker is served live by the Serwist route at
-            /serwist/sw.js, which sends `Service-Worker-Allowed: /` so it still
-            gets root scope. In the static production export GitHub Pages can't
-            send that header, so we register the root copy at /sw.js that the
-            postbuild step writes (see scripts/copy-sw.mjs).
+            The service worker only runs in the production export. /sw.js is the
+            root copy written by the postbuild step (scripts/copy-sw.mjs) so it
+            gets root scope on GitHub Pages, which can't send a
+            Service-Worker-Allowed header. It is disabled in development to avoid
+            interfering with HMR. reloadOnOnline is off because reloading the
+            page when connectivity returns would discard unsaved work (and, with
+            a controlling worker, can cause a reload loop).
           */}
           <SerwistProvider
-            swUrl={
-              process.env.NODE_ENV === "production" ? "/sw.js" : "/serwist/sw.js"
-            }
+            swUrl="/sw.js"
+            disable={process.env.NODE_ENV !== "production"}
             cacheOnNavigation
-            reloadOnOnline
+            reloadOnOnline={false}
           >
             <NextTopLoader color="#5B21B6" height={4} showSpinner={false} />
             {children}
