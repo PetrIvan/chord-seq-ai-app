@@ -124,6 +124,13 @@ async function getMDX(
         remarkPlugins: [remarkGfm],
       },
       parseFrontmatter: true,
+      // next-mdx-remote 6 strips every expression-valued JSX attribute
+      // (e.g. width={1920}) by default as an anti-RCE guard for untrusted MDX.
+      // Our wiki MDX is first-party content committed in src/content/wiki, so
+      // that guard is misapplied and silently deletes props like LargeImage's
+      // width/height. Disable it; blockDangerousJS stays on for call-expression
+      // protection.
+      blockJS: false,
     },
     components,
   });
