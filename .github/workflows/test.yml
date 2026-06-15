@@ -5,6 +5,10 @@ on:
     branches: ["main"]
   pull_request:
 
+# The jobs only check out the repo and run tests; no write access is needed.
+permissions:
+  contents: read
+
 jobs:
   unit:
     name: Unit tests (Vitest)
