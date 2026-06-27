@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
+import yaml from "js-yaml";
 import { remark } from "remark";
 import strip from "strip-markdown";
 import { readFile } from "fs/promises";
@@ -29,6 +29,16 @@ function getAllMdxFiles(dirPath, arrayOfFiles = []) {
   return arrayOfFiles;
 }
 
+// Minimal gray-matter replacement: parse the YAML frontmatter that opens each wiki .mdx
+function parseFrontmatter(raw) {
+  const match = /^---\r?\n([\s\S]*?)\r?\n---\r?\n?/.exec(raw);
+  if (!match) return { data: {}, content: raw };
+  return {
+    data: yaml.load(match[1]) || {},
+    content: raw.slice(match[0].length),
+  };
+}
+
 async function extractPlainTextFromMDX(mdxContent) {
   // Process the MDX content with remark and strip-markdown
   const processedContent = await remark().use(strip).process(mdxContent);
@@ -44,7 +54,7 @@ async function buildSearchIndex() {
 
   for (const file of mdxFiles) {
     const content = fs.readFileSync(file, "utf8");
-    const { data, content: mdxContent } = matter(content);
+    const { data, content: mdxContent } = parseFrontmatter(content);
 
     // Remove MDX-specific characters from the content
     // CONTINUE HERE, add something
