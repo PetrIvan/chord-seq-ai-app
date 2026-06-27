@@ -5,9 +5,9 @@ import { test, expect } from "@playwright/test";
 // audio rendering (WebGPU + network), which would make them slow and flaky.
 
 // Several overlays auto-open on a fresh visit and would cover the editor: the
-// welcome overlay (first visit), the Mozart AI overlay (mozartAIOverlay flag),
-// and the new-features overlay (stored version < latest). Seed the persisted
-// Zustand state so none of them open, keeping the runs deterministic.
+// welcome overlay (first visit), the promo overlay (stored promoVersion < the
+// promo's), and the new-features overlay (stored version < latest). Seed the
+// persisted Zustand state so none of them open, keeping the runs deterministic.
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem(
@@ -15,7 +15,7 @@ test.beforeEach(async ({ page }) => {
       JSON.stringify({
         state: {
           welcomeFirstTime: false,
-          mozartAIOverlay: false,
+          promoVersion: 9999,
           version: 9999,
         },
         version: 0,
