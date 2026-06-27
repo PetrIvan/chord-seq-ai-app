@@ -72,6 +72,30 @@
     "summary": "This page lists the changes made to ChordSeqAI, including new features, improvements, and bug fixes. We recommend checking this page regularly to stay up-to-date with the latest updates and enhancements. Dates are according to UTC+0 in the format YYYY-MM-DD marking the release date."
   },
   {
+    "slug": "features/change-log#june-2026-updates",
+    "title": "Change Log",
+    "heading": "June 2026 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2026-06-15",
+    "title": "Change Log",
+    "heading": "2026-06-15",
+    "summary": "Audio export, a major platform upgrade, and automated testing. Added audio export: chord progressions can now be exported as WAV (lossless 16-bit PCM) or MP3, in addition to .chseq and MIDI. The audio is rendered in the browser using the same instrument and effects as live playback. Upgraded the app to Next.js 16 and React 19, and switched the build to Turbopack. Added an automated test suite (unit, integration, and end-to-end) that runs in CI to catch regressions before release. Fixed a service worker issue that could cause the app to reload repeatedly. Restored client-side navigation for internal wiki links, so moving between wiki pages no longer triggers a full page reload. Various dependency updates and maintenance fixes."
+  },
+  {
+    "slug": "features/change-log#january-2025-updates",
+    "title": "Change Log",
+    "heading": "January 2025 updates",
+    "summary": ""
+  },
+  {
+    "slug": "features/change-log#2025-01-13",
+    "title": "Change Log",
+    "heading": "2025-01-13",
+    "summary": "Minor fixes. Fixed an invalid \"contact us\" link."
+  },
+  {
     "slug": "features/change-log#october-2024-updates",
     "title": "Change Log",
     "heading": "October 2024 updates",
@@ -537,7 +561,7 @@
     "slug": "features/transpose-import-export#export",
     "title": "Transpose, Import, Export",
     "heading": "Export",
-    "summary": "To export a chord progression, click on the export icon (E) and select the format you want to export to. The .chseq format is recommended for saving your progress; exporting MIDI files can be useful for use with other music production software. Many Digital Audio Workstations (DAWs) support drag-and-drop to import MIDI files, so you can drag the exported file directly to your DAW."
+    "summary": "To export a chord progression, click on the export icon (E) and select the format you want to export to. Four formats are available: .chseq — the native format, recommended for saving your progress so you can re-import it later without losing any information. .mid — a standard MIDI file, useful for other music production software. Many Digital Audio Workstations (DAWs) support drag-and-drop to import MIDI files, so you can drag the exported file directly to your DAW. .wav — rendered audio in lossless 16-bit PCM WAV, ready to listen to or drop into any DAW or tool that expects audio rather than MIDI. .mp3 — the same rendered audio in the compressed MP3 format, for a smaller file when lossless quality isn't required. The .wav and .mp3 formats render the progression to audio in your browser using the same instrument and effects as live playback, so the export sounds like what you hear in the app. Because the rendering happens locally, the button shows a Rendering... state while it works; it stays disabled until the render finishes and the download starts automatically."
   },
   {
     "slug": "features/troubleshooting",
@@ -549,7 +573,7 @@
     "slug": "getting-started/faq",
     "title": "FAQ",
     "heading": "FAQ",
-    "summary": "Here you will find answers to frequently asked questions about ChordSeqAI. If you have a question that is not answered here, feel free to contact us. \\<QuestionAnswer question=\"What is ChordSeqAI?\" ChordSeqAI is a web app that uses AI to suggest the next chord in a chord progression. It is designed to help musicians compose chord progressions by providing suggestions based on the preceding chords. \\<QuestionAnswer question=\"How can ChordSeqAI be used for professional music production?\" You can export the produced chord progression as a MIDI file and use it in a different music production software (e.g. in DAWs). \\<QuestionAnswer question=\"Which devices are supported by ChordSeqAI?\" chordSeqAI is currently optimized for desktop and laptop devices. Touchscreen devices are not fully supported. \\<QuestionAnswer question=\"Is attribution required for the chord progressions?\" Everything you produce using this app is yours, therefore no attribution is needed. \\<QuestionAnswer question=\"What information do the models use to produce suggestions?\" The preceding chords without their variants are used. The duration of a chord is ignored for now, identical consecutive chords get merged. \\<QuestionAnswer question=\"How can I contribute to the project?\" If you like the project and want to contribute, you can help by spreading the word, giving feedback, supporting us financially, or contributing to the codebase. \\<QuestionAnswer question=\"What kind of user data does ChordSeqAI track?\" ChordSeqAI employs Umami Analytics for basic usage statistics, focusing on privacy and anonymity. We collect minimal, anonymized data solely to enhance app functionality and user experience. No personal or detailed usage data is tracked. Check out the privacy section for more information."
+    "summary": "Here you will find answers to frequently asked questions about ChordSeqAI. If you have a question that is not answered here, feel free to contact us. \\<QuestionAnswer question=\"What is ChordSeqAI?\" ChordSeqAI is a web app that uses AI to suggest the next chord in a chord progression. It is designed to help musicians compose chord progressions by providing suggestions based on the preceding chords. \\<QuestionAnswer question=\"How can ChordSeqAI be used for professional music production?\" You can export the produced chord progression as a MIDI file and use it in a different music production software (e.g. in DAWs). You can also export rendered audio as WAV or MP3 if you need the sound directly rather than MIDI. \\<QuestionAnswer question=\"Which devices are supported by ChordSeqAI?\" chordSeqAI is currently optimized for desktop and laptop devices. Touchscreen devices are not fully supported. \\<QuestionAnswer question=\"Is attribution required for the chord progressions?\" Everything you produce using this app is yours, therefore no attribution is needed. \\<QuestionAnswer question=\"What information do the models use to produce suggestions?\" The preceding chords without their variants are used. The duration of a chord is ignored for now, identical consecutive chords get merged. \\<QuestionAnswer question=\"How can I contribute to the project?\" If you like the project and want to contribute, you can help by spreading the word, giving feedback, supporting us financially, or contributing to the codebase. \\<QuestionAnswer question=\"What kind of user data does ChordSeqAI track?\" ChordSeqAI employs Umami Analytics for basic usage statistics, focusing on privacy and anonymity. We collect minimal, anonymized data solely to enhance app functionality and user experience. No personal or detailed usage data is tracked. Check out the privacy section for more information."
   },
   {
     "slug": "getting-started/guided-tour",
@@ -669,7 +693,7 @@
     "slug": "getting-started/usage#transpose,-import,-export",
     "title": "Usage",
     "heading": "Transpose, Import, Export",
-    "summary": "Transposition (T) can be accomplished via the left icon at the top right menu. Negative semitone values can be entered to transpose down. You can import (I) and export (E) the sequence you are composing in the .chseq format (recommended for saving), but you can also use MIDI files."
+    "summary": "Transposition (T) can be accomplished via the left icon at the top right menu. Negative semitone values can be entered to transpose down. You can import (I) and export (E) the sequence you are composing in the .chseq format (recommended for saving), but you can also use MIDI files, or export rendered audio as WAV or MP3."
   },
   {
     "slug": "getting-started/usage#chord-variants",

@@ -136,11 +136,11 @@ interface StoreState {
   watchedVideoTutorial: boolean;
   setWatchedVideoTutorial: (watchedVideoTutorial: boolean) => void;
 
-  // Mozart AI overlay
-  mozartAIOverlay: boolean;
-  setMozartAIOverlay: (mozartAIOverlay: boolean) => void;
-  isMozartAIOverlayOpen: boolean;
-  setIsMozartAIOverlayOpen: (isMozartAIOverlayOpen: boolean) => void;
+  // Promo overlay
+  promoVersion: number;
+  setPromoVersion: (promoVersion: number) => void;
+  isPromoOverlayOpen: boolean;
+  setIsPromoOverlayOpen: (isPromoOverlayOpen: boolean) => void;
 
   // New features overlay
   version: number;
@@ -446,13 +446,12 @@ export const useStore = createWithEqualityFn<StoreState>()(
       setWatchedVideoTutorial: (watchedVideoTutorial: boolean) =>
         set({ watchedVideoTutorial }),
 
-      // Mozart AI overlay
-      mozartAIOverlay: true,
-      setMozartAIOverlay: (mozartAIOverlay: boolean) =>
-        set({ mozartAIOverlay }),
-      isMozartAIOverlayOpen: false,
-      setIsMozartAIOverlayOpen: (isMozartAIOverlayOpen: boolean) =>
-        set({ isMozartAIOverlayOpen }),
+      // Promo overlay
+      promoVersion: 0,
+      setPromoVersion: (promoVersion: number) => set({ promoVersion }),
+      isPromoOverlayOpen: false,
+      setIsPromoOverlayOpen: (isPromoOverlayOpen: boolean) =>
+        set({ isPromoOverlayOpen }),
 
       // New features overlay
       version: 0,
@@ -524,7 +523,7 @@ export const useStore = createWithEqualityFn<StoreState>()(
         timesExported: state.timesExported,
         dontShowSupportUsOverlay: state.dontShowSupportUsOverlay,
         version: state.version,
-        mozartAIOverlay: state.mozartAIOverlay,
+        promoVersion: state.promoVersion,
       }),
     },
   ),
