@@ -7,6 +7,27 @@ description: View the change log for ChordSeqAI to see the latest updates and im
 
 This page lists the changes made to ChordSeqAI, including new features, improvements, and bug fixes. We recommend checking this page regularly to stay up-to-date with the latest updates and enhancements. Dates are according to UTC+0 in the format `YYYY-MM-DD` marking the release date.
 
+## June 2026 updates
+
+### 2026-06-15
+
+Audio export, a major platform upgrade, and automated testing.
+
+- Added audio export: chord progressions can now be [exported](/wiki/features/transpose-import-export#export) as WAV (lossless 16-bit PCM) or MP3, in addition to `.chseq` and MIDI. The audio is rendered in the browser using the same instrument and effects as live playback.
+- Upgraded the app to Next.js 16 and React 19, and switched the build to Turbopack.
+- Added an automated test suite (unit, integration, and end-to-end) that runs in CI to catch regressions before release.
+- Fixed a service worker issue that could cause the app to reload repeatedly.
+- Restored client-side navigation for internal wiki links, so moving between wiki pages no longer triggers a full page reload.
+- Various dependency updates and maintenance fixes.
+
+## January 2025 updates
+
+### 2025-01-13
+
+Minor fixes.
+
+- Fixed an invalid "contact us" link.
+
 ## October 2024 updates
 
 ### 2024-10-09

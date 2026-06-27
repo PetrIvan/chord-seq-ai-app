@@ -35,4 +35,11 @@ When importing a MIDI file, an overlay will appear with the parser settings. You
 
 ## Export
 
-To export a chord progression, click on the export icon <InlineIcon src="/export.svg" /> (`E`) and select the format you want to export to. The `.chseq` format is recommended for saving your progress; exporting MIDI files can be useful for use with other music production software. Many Digital Audio Workstations (DAWs) support drag-and-drop to import MIDI files, so you can drag the exported file directly to your DAW.
+To export a chord progression, click on the export icon <InlineIcon src="/export.svg" /> (`E`) and select the format you want to export to. Four formats are available:
+
+- **`.chseq`** — the native format, recommended for saving your progress so you can re-import it later without losing any information.
+- **`.mid`** — a standard MIDI file, useful for other music production software. Many Digital Audio Workstations (DAWs) support drag-and-drop to import MIDI files, so you can drag the exported file directly to your DAW.
+- **`.wav`** — rendered audio in lossless 16-bit PCM WAV, ready to listen to or drop into any DAW or tool that expects audio rather than MIDI.
+- **`.mp3`** — the same rendered audio in the compressed MP3 format, for a smaller file when lossless quality isn't required.
+
+The `.wav` and `.mp3` formats render the progression to audio in your browser using the same instrument and effects as live playback, so the export sounds like what you hear in the app. Because the rendering happens locally, the button shows a `Rendering...` state while it works; it stays disabled until the render finishes and the download starts automatically.
