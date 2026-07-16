@@ -12,8 +12,106 @@ const maxCacheSize = 32;
 
 // Initialize the worker (predictions are made there to avoid blocking the main thread while using WebGPU)
 // Check https://onnxruntime.ai/docs/tutorials/web/env-flags-and-session-options.html#envwasmproxy for more info
-const worker = new Worker(new URL("../models/onnx_worker.ts", import.meta.url));
-let prevModelPath = "";
+const workerUrl = new URL("../models/onnx_worker.ts", import.meta.url);
+
+type Chord = {
+  index: number;
+  token: number;
+  duration: number;
+  variant: number;
+};
+
+type Prediction = { token: number; prob: number };
+
+type ActivePrediction = {
+  requestId: number;
+  chords: Chord[];
+  numChords: number;
+  cacheKey: string;
+  resolve: (predictions: Prediction[]) => void;
+  reject: (error: Error) => void;
+};
+
+let nextRequestId = 1;
+let activePrediction: ActivePrediction | null = null;
+
+function createWorker() {
+  const newWorker = new Worker(workerUrl);
+  newWorker.onmessage = handleWorkerMessage;
+  newWorker.onerror = (error) => handleWorkerError(newWorker, error);
+  return newWorker;
+}
+
+let worker = createWorker();
+
+function resetLoadingState() {
+  const state = useStore.getState();
+  state.setIsDownloadingModel(false);
+  state.setPercentageDownloaded(0);
+  state.setModelSize(0);
+  state.setIsLoadingSession(false);
+}
+
+function restartWorker() {
+  worker.terminate();
+  worker = createWorker();
+}
+
+function cancelActivePrediction() {
+  if (!activePrediction) return;
+
+  const canceled = activePrediction;
+  activePrediction = null;
+  restartWorker();
+  resetLoadingState();
+  canceled.reject(new Error("Prediction superseded."));
+}
+
+function handleWorkerMessage(event: MessageEvent) {
+  const { requestId, status, value, message, output } = event.data;
+  const active = activePrediction;
+  if (!active || requestId !== active.requestId) return;
+
+  if (status === "setDownloadingModel") {
+    useStore.getState().setIsDownloadingModel(value);
+  } else if (status === "setPercentageDownloaded") {
+    useStore.getState().setPercentageDownloaded(value);
+  } else if (status === "setModelSize") {
+    useStore.getState().setModelSize(value);
+  } else if (status === "setIsLoadingSession") {
+    useStore.getState().setIsLoadingSession(value);
+  }
+
+  if (status === "error") {
+    activePrediction = null;
+    resetLoadingState();
+    restartWorker();
+    active.reject(new Error(message || "Inference worker failed."));
+    return;
+  }
+
+  if (!output) return;
+
+  activePrediction = null;
+  try {
+    const predictions = processOutput(output as ort.Tensor, active);
+    resetLoadingState();
+    active.resolve(predictions);
+  } catch (error) {
+    resetLoadingState();
+    active.reject(error instanceof Error ? error : new Error(String(error)));
+  }
+}
+
+function handleWorkerError(failedWorker: Worker, error: ErrorEvent) {
+  if (failedWorker !== worker) return;
+
+  const active = activePrediction;
+  activePrediction = null;
+  resetLoadingState();
+  restartWorker();
+  active?.reject(new Error(error.message || "Inference worker crashed."));
+}
 
 // Process the chords into a tensor that can be fed into the model
 function process_chords(
@@ -66,13 +164,40 @@ function softmax(arr: Float32Array) {
   return exps.map((x) => x / sumExps);
 }
 
+function processOutput(
+  output: ort.Tensor,
+  pending: ActivePrediction,
+): Prediction[] {
+  const column = getColumnSlice(output, pending.numChords - 1);
+
+  // Zero out the start and end tokens, as well as the previous chord
+  column[numTokens - 1] = -Infinity;
+  column[numTokens - 2] = -Infinity;
+  column[pending.chords[pending.chords.length - 1].token] = -Infinity;
+
+  const probs = softmax(column);
+  let chordProbs: Prediction[] = [];
+  for (let i = 0; i < probs.length - 2; i++) {
+    chordProbs.push({ token: i, prob: probs[i] });
+  }
+
+  if (pending.numChords === 1) {
+    chordProbs = processFirstPreds(chordProbs);
+  } else {
+    chordProbs.sort((a, b) => b.prob - a.prob);
+  }
+
+  predictionCache.set(pending.cacheKey, chordProbs);
+  if (predictionCache.size > maxCacheSize) {
+    const firstKey = predictionCache.keys().next().value;
+    if (firstKey) predictionCache.delete(firstKey);
+  }
+
+  return chordProbs;
+}
+
 export async function predict(
-  chords: {
-    index: number;
-    token: number;
-    duration: number;
-    variant: number;
-  }[],
+  chords: Chord[],
   modelPath: string,
   style?: number[],
 ) {
@@ -91,87 +216,39 @@ export async function predict(
   if (style) {
     strData += style.join(" ");
   }
-  if (predictionCache.has(strData)) {
-    return predictionCache.get(strData);
-  }
 
-  const resultPromise = new Promise<{ token: number; prob: number }[]>(
-    (resolve, reject) => {
-      worker.onmessage = (event) => {
-        // Handle set calls from the worker (cannot transfer the store directly)
-        if (event.data.status === "setDownloadingModel") {
-          useStore.getState().setIsDownloadingModel(event.data.value);
-        } else if (event.data.status === "setPercentageDownloaded") {
-          useStore.getState().setPercentageDownloaded(event.data.value);
-        } else if (event.data.status === "setModelSize") {
-          useStore.getState().setModelSize(event.data.value);
-        } else if (event.data.status === "setIsLoadingSession") {
-          useStore.getState().setIsLoadingSession(event.data.value);
-        }
+  // Only the newest UI request matters. Cancel in-flight work before checking
+  // the cache so stale worker progress cannot overwrite a cached result.
+  cancelActivePrediction();
 
-        // Handle the output
-        if (event.data.status === "modelLoaded") {
-          // Predict after the model is loaded
-          worker.postMessage({ action: "predict", data: data, style });
-        } else if (event.data.output) {
-          const { output } = event.data;
-          /* Process the output */
-          const column = getColumnSlice(
-            output as ort.Tensor,
-            (numChords as number) - 1,
-          ); // Only a single column is needed
+  const cached = predictionCache.get(strData);
+  if (cached) return cached;
 
-          // Zero out the start and end tokens, as well as the previous chord
-          column[numTokens - 1] = -Infinity;
-          column[numTokens - 2] = -Infinity;
-          column[chords[chords.length - 1].token] = -Infinity;
+  const requestId = nextRequestId++;
 
-          // Get the softmax probabilities
-          const probs = softmax(column);
+  return new Promise<Prediction[]>((resolve, reject) => {
+    activePrediction = {
+      requestId,
+      chords,
+      numChords: numChords as number,
+      cacheKey: strData,
+      resolve,
+      reject,
+    };
 
-          // Convert it to the wanted format, skip the start and end tokens
-          let chordProbs = [];
-          for (let i = 0; i < probs.length - 2; i++) {
-            chordProbs.push({ token: i, prob: probs[i] });
-          }
-
-          // Process or sort the predictions
-          if (numChords === 1) {
-            chordProbs = processFirstPreds(chordProbs);
-          } else {
-            chordProbs.sort((a, b) => b.prob - a.prob);
-          }
-
-          // Cache the result
-          predictionCache.set(strData, chordProbs);
-
-          // Clear the first element of the cache if it's too big
-          if (predictionCache.size > maxCacheSize) {
-            const firstKey = predictionCache.keys().next().value;
-            if (firstKey) {
-              predictionCache.delete(firstKey);
-            }
-          }
-
-          resolve(chordProbs);
-        }
-      };
-
-      worker.onerror = (error) => {
-        reject(error);
-      };
-    },
-  );
-
-  // Load the model or predict
-  if (!prevModelPath || prevModelPath !== modelPath) {
-    prevModelPath = modelPath;
-    worker.postMessage({ action: "loadModel", modelPath });
-  } else {
-    worker.postMessage({ action: "predict", data: data, style });
-  }
-
-  return resultPromise;
+    try {
+      worker.postMessage({
+        action: "predict",
+        requestId,
+        modelPath,
+        data,
+        style,
+      });
+    } catch (error) {
+      activePrediction = null;
+      reject(error instanceof Error ? error : new Error(String(error)));
+    }
+  });
 }
 
 // Tokens that are transpositions of one another should have the same probability, so we average them and sort
