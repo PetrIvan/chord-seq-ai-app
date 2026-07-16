@@ -298,20 +298,18 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
   }
 
   /* Predict the next chord */
-  // Calls the prediction, split into a separate useEffect to allow the UI to update before the prediction
+  // Predict whenever the model input changes. Effect cleanup prevents a result
+  // from an older request from overwriting suggestions for newer input.
   useEffect(() => {
-    if (selectedChord === -1) return;
+    if (selectedChord === -1) {
+      setChordProbsLoading(false);
+      setErrorOccured(false);
+      return;
+    }
+
+    let active = true;
     setChordProbsLoading(true);
     setErrorOccured(false);
-  }, [chords, selectedChord, modelPath, selectedGenres, selectedDecades]);
-
-  // Actually predict the next chord when the prediction is requested (by chordProbsLoading)
-  const prevChordProbsLoading = useRef(chordProbsLoading);
-  useEffect(() => {
-    // Only predict if the prediction is requested
-    if (prevChordProbsLoading.current === chordProbsLoading) return;
-    prevChordProbsLoading.current = chordProbsLoading;
-    if (!chordProbsLoading) return;
 
     // Get the style if the model is conditional
     const style = normalizeStyle(selectedGenres).concat(
@@ -322,10 +320,12 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
     // Predict the next chord
     predict(chords.slice(0, selectedChord), modelPath, inputStyle)
       .then((result) => {
+        if (!active) return;
         setChordProbs(result as { token: number; prob: number }[]);
         setChordProbsLoading(false);
       })
       .catch((error) => {
+        if (!active) return;
         switch (error.message) {
           case "model not loaded":
             alert(
@@ -336,28 +336,25 @@ const MemoizedSuggestions = React.memo(function MemoizedSuggestions({
             alert("Maximum number of chords reached. Please start a new song.");
             break;
           default:
-            if ("no available backend found" in error) {
+            if (error.message.includes("no available backend found")) {
               alert(
                 "No backend found. Please reload the page, your progress is saved. If the problem persists, try using a different browser.",
               );
+            } else {
+              alert(
+                `An error has occurred, try reloading the page. Your progress is saved.\n${error.message}`,
+              );
             }
-
-            alert(
-              `An error has occurred, try reloading the page. Your progress is saved.\n${error.message}`,
-            );
             break;
         }
         setChordProbsLoading(false);
         setErrorOccured(true);
       });
-  }, [
-    chordProbsLoading,
-    chords,
-    modelPath,
-    selectedChord,
-    selectedDecades,
-    selectedGenres,
-  ]);
+
+    return () => {
+      active = false;
+    };
+  }, [chords, modelPath, selectedChord, selectedDecades, selectedGenres]);
 
   /* Keyboard shortcuts */
   const enabledShortcutsRef = useRef(enabledShortcuts);
