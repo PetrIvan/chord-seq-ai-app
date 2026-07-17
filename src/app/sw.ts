@@ -32,4 +32,15 @@ const serwist = new Serwist({
   },
 });
 
+// Turbopack passes dedicated-worker bootstrap data in the worker URL fragment.
+// Fetch requests never include fragments, so responding to a worker request from
+// the service worker (including with a cached or network response) makes
+// Chromium start the worker without that data. Let the browser fetch worker
+// entrypoints directly so their location retains the original #params value.
+self.addEventListener("fetch", (event) => {
+  if (event.request.destination === "worker") {
+    event.stopImmediatePropagation();
+  }
+});
+
 serwist.addEventListeners();

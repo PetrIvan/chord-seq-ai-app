@@ -49,6 +49,35 @@ test("app shell renders the editor toolbar", async ({ page }) => {
   await expect(page.getByTitle("Export (E)")).toBeVisible();
 });
 
+test("inference worker starts after the service worker takes control", async ({
+  page,
+}) => {
+  test.skip(
+    !process.env.CI,
+    "The service worker is enabled only in the production export.",
+  );
+
+  const bootstrapErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.text().includes("Missing worker bootstrap config")) {
+      bootstrapErrors.push(message.text());
+    }
+  });
+
+  await page.goto("/app");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.waitForFunction(() => navigator.serviceWorker.controller !== null);
+
+  const workerStarted = page.waitForEvent("worker", (worker) =>
+    worker.url().includes("turbopack-worker"),
+  );
+  await page.reload();
+  await workerStarted;
+  await page.waitForTimeout(500);
+
+  expect(bootstrapErrors).toEqual([]);
+});
+
 test("exporting a .chseq file triggers a download", async ({ page }) => {
   await page.goto("/app");
 
