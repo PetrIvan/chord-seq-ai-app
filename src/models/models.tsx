@@ -43,6 +43,7 @@ function createWorker() {
 }
 
 let worker = createWorker();
+let workerFailed = false;
 
 function resetLoadingState() {
   const state = useStore.getState();
@@ -55,6 +56,14 @@ function resetLoadingState() {
 function restartWorker() {
   worker.terminate();
   worker = createWorker();
+  workerFailed = false;
+}
+
+function ensureWorker() {
+  if (!workerFailed) return;
+
+  worker = createWorker();
+  workerFailed = false;
 }
 
 function cancelActivePrediction() {
@@ -109,7 +118,8 @@ function handleWorkerError(failedWorker: Worker, error: ErrorEvent) {
   const active = activePrediction;
   activePrediction = null;
   resetLoadingState();
-  restartWorker();
+  failedWorker.terminate();
+  workerFailed = true;
   active?.reject(new Error(error.message || "Inference worker crashed."));
 }
 
@@ -227,6 +237,7 @@ export async function predict(
   const requestId = nextRequestId++;
 
   return new Promise<Prediction[]>((resolve, reject) => {
+    ensureWorker();
     activePrediction = {
       requestId,
       chords,

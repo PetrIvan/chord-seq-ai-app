@@ -73,6 +73,29 @@ describe("predict", () => {
     expect(workers[0].terminate).toHaveBeenCalledOnce();
   });
 
+  it("recreates a crashed worker lazily instead of entering a restart loop", async () => {
+    const { predict } = await import("./models");
+
+    workers[0].onerror?.({
+      message: "Missing worker bootstrap config",
+    } as ErrorEvent);
+
+    expect(workers).toHaveLength(1);
+    expect(workers[0].terminate).toHaveBeenCalledOnce();
+
+    const retry = predict([], "/models/recurrent_net.onnx");
+
+    expect(workers).toHaveLength(2);
+    expect(workers[1].postMessage).toHaveBeenCalledOnce();
+
+    workers[1].onerror?.({
+      message: "Missing worker bootstrap config",
+    } as ErrorEvent);
+
+    await expect(retry).rejects.toThrow("Missing worker bootstrap config");
+    expect(workers).toHaveLength(2);
+  });
+
   it("cancels active work out-of-band when a newer prediction starts", async () => {
     const { predict } = await import("./models");
     const first = predict([], "/models/recurrent_net.onnx");
