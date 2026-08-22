@@ -6,7 +6,8 @@ import { shallow } from "zustand/shallow";
 import Select from "../ui/select";
 import Overlay from "../ui/overlay";
 
-import { getChordsFromNotes } from "@/playback/midi_io";
+import { clampMidiQuantization, getChordsFromNotes } from "@/playback/midi_io";
+import { isValidSignature } from "@/playback/sequence_io";
 
 export default function MidiImportOverlay() {
   const [
@@ -66,12 +67,16 @@ export default function MidiImportOverlay() {
       setTracks(tempTracks);
 
       // Include only tracks that are not percussion
-      setIncludedTracks(tempTracks.map((track) => !track.instrument.percussion));
+      setIncludedTracks(
+        tempTracks.map((track) => !track.instrument.percussion),
+      );
 
       // Set the default quantization
       let defaultQuantization = 4;
       if (midiFile.header.timeSignatures.length > 0)
-        defaultQuantization = midiFile.header.timeSignatures[0].timeSignature[0];
+        defaultQuantization = clampMidiQuantization(
+          midiFile.header.timeSignatures[0].timeSignature[0],
+        );
 
       setQuantization(defaultQuantization);
     }
@@ -95,7 +100,7 @@ export default function MidiImportOverlay() {
         .filter((_, i) => includedTracks[i])
         .flatMap((track) =>
           track.notes?.map((note) => ({
-            name: note.name,
+            midi: note.midi,
             duration: note.durationTicks / midiFile.header.ppq,
             time: note.ticks / midiFile.header.ppq,
           })),
@@ -107,14 +112,14 @@ export default function MidiImportOverlay() {
       // Set the time signature and BPM
       if (midiFile.header.timeSignatures.length > 0) {
         const signature = midiFile.header.timeSignatures[0].timeSignature;
-        setSignature([signature[0], signature[1]]);
+        if (isValidSignature(signature)) setSignature(signature);
       }
 
       let bpm = 120;
       if (midiFile.header.tempos.length > 0)
         bpm = Math.round(midiFile.header.tempos[0].bpm);
       if (importBpm) {
-        setBpm(bpm);
+        setBpm(Number.isFinite(bpm) ? Math.max(10, Math.min(bpm, 400)) : 120);
       }
 
       setIsMidiImportOverlayOpen(false);

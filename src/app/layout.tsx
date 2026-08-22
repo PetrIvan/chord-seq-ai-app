@@ -27,12 +27,30 @@ const jsonLd = {
     "chord progression, music composition, AI, machine learning, open-source",
 };
 
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://cloud.umami.is",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "media-src 'self' blob:",
+  "connect-src 'self' https://cloud.umami.is https://gateway.umami.is https://tonejs.github.io",
+  "worker-src 'self' blob:",
+  "child-src 'self' blob: https://www.youtube.com",
+  "frame-src https://www.youtube.com",
+  "manifest-src 'self'",
+  "form-action 'self'",
+].join("; ");
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://chordseqai.com"),
   title: "ChordSeqAI: Your Chord Progression AI Copilot",
   description:
     "Compose beautiful chord progressions in your browser, with the help of AI, for free. Open-source project, code available on GitHub.",
   manifest: "/manifest.json",
+  referrer: "strict-origin-when-cross-origin",
   icons: { icon: "/icon-512x512.png", apple: "/icon-192x192.png" },
   openGraph: {
     title: "ChordSeqAI: Your AI-Powered Chord Progression Copilot",
@@ -59,6 +77,14 @@ export default function RootLayout({
   return (
     <>
       <html lang="en" className={`${openSans.variable}`}>
+        {process.env.NODE_ENV === "production" && (
+          <head>
+            <meta
+              httpEquiv="Content-Security-Policy"
+              content={contentSecurityPolicy}
+            />
+          </head>
+        )}
         <body className="custom-scrollbar font-sans text-white">
           {/*
             The service worker only runs in the production export. /sw.js is the
@@ -81,7 +107,7 @@ export default function RootLayout({
         </body>
         <Script
           defer
-          src="https://eu.umami.is/script.js"
+          src="https://cloud.umami.is/script.js"
           data-website-id="0e11269e-4e8c-494b-929c-1f4798eac395"
         />
         <Script

@@ -3,6 +3,21 @@ import MidiWriter from "midi-writer-js";
 
 import { chordToNotes } from "@/data/chord_to_notes";
 import { tokenToChord } from "@/data/token_to_chord";
+import { MAX_IMPORT_FILE_BYTES } from "@/playback/sequence_io";
+
+const MAX_MIDI_NOTES = 100_000;
+const MAX_MIDI_TIMELINE_SLICES = 4096;
+const MAX_MIDI_NOTE_SLICES = 500_000;
+export const MIN_MIDI_QUANTIZATION = 1;
+export const MAX_MIDI_QUANTIZATION = 8;
+
+export function clampMidiQuantization(value: number): number {
+  if (!Number.isFinite(value)) return 4;
+  return Math.min(
+    MAX_MIDI_QUANTIZATION,
+    Math.max(MIN_MIDI_QUANTIZATION, Math.round(value)),
+  );
+}
 
 // Create a MIDI file from a list of chords
 export function getMidiBlob(
@@ -59,21 +74,27 @@ export function getMidiBlob(
 }
 
 export async function extractMidiFile(midiFile: Blob): Promise<Midi> {
+  if (midiFile.size > MAX_IMPORT_FILE_BYTES) {
+    throw new Error("The MIDI file is too large.");
+  }
+
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      const midi = new Midi(e.target?.result as ArrayBuffer);
-      resolve(midi);
+      try {
+        const result = e.target?.result;
+        if (!(result instanceof ArrayBuffer)) {
+          throw new Error("The MIDI file could not be read.");
+        }
+        resolve(new Midi(result));
+      } catch (error) {
+        reject(error);
+      }
     };
-    reader.onerror = (e) => reject(e);
+    reader.onerror = () =>
+      reject(reader.error ?? new Error("The MIDI file could not be read."));
     reader.readAsArrayBuffer(midiFile);
   });
-}
-
-function noteNameToMidi(noteName: string): number {
-  const note = noteName.slice(0, -1);
-  const octave = parseInt(noteName.slice(-1)) + 1;
-  return octave * 12 + "C C# D D# E F F# G G# A A# B".split(" ").indexOf(note);
 }
 
 // Similar as described in data tokenization Jupyter notebook
@@ -104,32 +125,70 @@ function getVariantRep(notes: number[]): string {
 
 // Convert a list of notes to a list of chords
 export function getChordsFromNotes(
-  notes: { name: string; duration: number; time: number }[],
+  notes: { midi: number; duration: number; time: number }[],
   quantization: number, // In beats
   quantizationMode: string,
 ): { index: number; token: number; duration: number; variant: number }[] {
+  if (
+    notes.length === 0 ||
+    notes.length > MAX_MIDI_NOTES ||
+    !Number.isInteger(quantization) ||
+    quantization < MIN_MIDI_QUANTIZATION ||
+    quantization > MAX_MIDI_QUANTIZATION ||
+    !["closest", "floor", "all notes"].includes(quantizationMode) ||
+    notes.some(
+      (note) =>
+        !Number.isInteger(note.midi) ||
+        note.midi < 0 ||
+        note.midi > 127 ||
+        !Number.isFinite(note.duration) ||
+        note.duration <= 0 ||
+        !Number.isFinite(note.time) ||
+        note.time < 0,
+    )
+  ) {
+    throw new Error("The MIDI file contains invalid note data.");
+  }
+
   // Quantize the chords
   let lastNote = notes.sort(
     (a, b) => a.time + a.duration - b.time - b.duration,
   )[notes.length - 1];
   let lastTime = Math.ceil(lastNote.time + lastNote.duration);
 
+  const timelineSlices = Math.ceil(lastTime / quantization);
+  if (
+    !Number.isSafeInteger(timelineSlices) ||
+    timelineSlices < 1 ||
+    timelineSlices > MAX_MIDI_TIMELINE_SLICES
+  ) {
+    throw new Error("The MIDI file is too long to import safely.");
+  }
+
   let quantizedNotes: { notes: number[] }[] = new Array<{ notes: number[] }>(
-    Math.ceil(lastTime / quantization),
+    timelineSlices,
   );
   for (let i = 0; i < quantizedNotes.length; i++) {
     quantizedNotes[i] = { notes: [] };
   }
+  let noteSlices = 0;
   for (const note of notes) {
     let start = note.time / quantization;
     start =
       quantizationMode === "closest" ? Math.round(start) : Math.floor(start);
     const end = Math.ceil((note.time + note.duration) / quantization);
-    const pitch = noteNameToMidi(note.name);
+    if (start < 0 || start >= timelineSlices || end > timelineSlices) {
+      throw new Error("The MIDI file contains invalid note timing.");
+    }
+
+    noteSlices += end - start;
+    if (noteSlices > MAX_MIDI_NOTE_SLICES) {
+      throw new Error("The MIDI file is too complex to import safely.");
+    }
 
     for (let i = start; i < end; i++) {
-      if (!quantizedNotes[i].notes.includes(pitch)) {
-        quantizedNotes[i].notes.push(pitch);
+      if (!quantizedNotes[i].notes.includes(note.midi)) {
+        quantizedNotes[i].notes.push(note.midi);
       }
     }
   }

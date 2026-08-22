@@ -8,6 +8,11 @@ import Image from "next/image";
 import { transpositionMap } from "@/data/transposition_map";
 import { getMidiBlob, extractMidiFile } from "@/playback/midi_io";
 import { getWavBlob, getMp3Blob } from "@/playback/audio_render";
+import {
+  MAX_IMPORT_FILE_BYTES,
+  parseChordSequence,
+  serializeChordSequence,
+} from "@/playback/sequence_io";
 
 import TransposeDropdown from "./transpose_dropdown";
 import ExportDropdown from "./export_dropdown";
@@ -110,68 +115,33 @@ export default function TransposeImportExport() {
       return;
     }
 
-    if (fileObj.name.endsWith(".chseq")) {
+    if (fileObj.size > MAX_IMPORT_FILE_BYTES) {
+      alert("The selected file is too large to import safely.");
+      event.target.value = "";
+      return;
+    }
+
+    if (fileObj.name.toLowerCase().endsWith(".chseq")) {
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
-          const data = JSON.parse(event.target?.result as string);
-
-          const importedChords = data.chords;
-          const importedSignature = data.signature;
-
-          // Assert that the imported chords are valid
-          if (
-            !Array.isArray(importedChords) ||
-            importedChords.some(
-              (chord: any) =>
-                typeof chord.index !== "number" ||
-                typeof chord.token !== "number" ||
-                typeof chord.duration !== "number" ||
-                typeof chord.variant !== "number",
-            )
-          ) {
-            throw new Error();
-          }
-
-          for (let i = 0; i < importedChords.length; i++) {
-            if (
-              importedChords[i].index !== i ||
-              importedChords[i].token > transpositionMap.length ||
-              importedChords[i].token < -1 ||
-              importedChords[i].duration < 0 ||
-              importedChords[i].variant < 0
-            ) {
-              throw new Error();
-            }
-          }
-
-          // Assert that the imported signature is valid
-          if (
-            !Array.isArray(importedSignature) ||
-            importedSignature.length !== 2 ||
-            typeof importedSignature[0] !== "number" ||
-            typeof importedSignature[1] !== "number" ||
-            importedSignature[0] < 2 ||
-            importedSignature[0] > 16 ||
-            importedSignature[1] < 1 ||
-            importedSignature[1] > 32
-          ) {
-            throw new Error();
-          }
+          const { chords: importedChords, signature: importedSignature } =
+            parseChordSequence(event.target?.result as string);
 
           setSelectedChord(-1);
-          setChords(importedChords as typeof chords);
-          setSignature(importedSignature as typeof signature);
+          setChords(importedChords);
+          setSignature(importedSignature);
         } catch (error) {
           setChords(prevChords);
           setSignature(prevSignature);
           alert("Couldn't parse the file.");
         }
       };
+      reader.onerror = () => alert("Couldn't read the file.");
       reader.readAsText(fileObj);
     }
 
-    if (fileObj.name.endsWith(".mid")) {
+    if (fileObj.name.toLowerCase().endsWith(".mid")) {
       extractMidiFile(fileObj)
         .then((midi) => {
           setMidiFile(midi);
@@ -225,13 +195,15 @@ export default function TransposeImportExport() {
 
       incrementTimesExported();
       if (format === ".chseq") {
-        const jsonData = JSON.stringify({
-          chords: chords,
-          signature: signature,
-        });
-        const blob = new Blob([jsonData], { type: "application/json" });
-
-        downloadFile(blob, "chords.chseq");
+        try {
+          const jsonData = serializeChordSequence(chords, signature);
+          const blob = new Blob([jsonData], { type: "application/json" });
+          downloadFile(blob, "chords.chseq");
+        } catch {
+          alert(
+            "Couldn't export the sequence because it exceeds the supported safety limits.",
+          );
+        }
       }
       if (format === ".mid") {
         const blob = getMidiBlob(chords, bpm, signature);
