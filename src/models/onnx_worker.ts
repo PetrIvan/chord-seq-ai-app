@@ -1,4 +1,5 @@
 import * as ort from "onnxruntime-web/webgpu";
+import { bytesToMebibytes, getModelSizeBytes } from "@/data/models";
 
 // Serve the WebAssembly binaries as static assets from /wasm/ (populated by
 // scripts/copy-ort-wasm.mjs). Without this, ORT resolves them relative to the
@@ -31,7 +32,8 @@ async function loadModel(requestId: number, modelPath: string) {
 
   postStatus(requestId, "setDownloadingModel", true);
   postStatus(requestId, "setPercentageDownloaded", 0);
-  postStatus(requestId, "setModelSize", 0);
+  const knownTotal = getModelSizeBytes(modelPath) ?? 0;
+  postStatus(requestId, "setModelSize", bytesToMebibytes(knownTotal));
 
   try {
     const url = new URL(modelPath, self.location.origin);
@@ -46,10 +48,19 @@ async function loadModel(requestId: number, modelPath: string) {
     }
 
     const contentLength = response.headers.get("content-length");
-    const total = contentLength ? parseInt(contentLength, 10) : 0;
+    const contentEncoding = response.headers.get("content-encoding");
+    const transferredTotal =
+      !contentEncoding || contentEncoding === "identity"
+        ? Number(contentLength)
+        : 0;
+    const total =
+      knownTotal ||
+      (Number.isFinite(transferredTotal) && transferredTotal > 0
+        ? transferredTotal
+        : 0);
     let loaded = 0;
     if (total > 0) {
-      postStatus(requestId, "setModelSize", total / 1024 / 1024);
+      postStatus(requestId, "setModelSize", bytesToMebibytes(total));
     }
 
     // Cached responses may omit Content-Length or expose no body reader. They
@@ -65,7 +76,7 @@ async function loadModel(requestId: number, modelPath: string) {
         postStatus(
           requestId,
           "setPercentageDownloaded",
-          total > 0 ? loaded / total : 0,
+          total > 0 ? Math.min(loaded / total, 1) : 0,
         );
         const chunk = new Uint8Array(value.byteLength);
         chunk.set(value);
@@ -75,6 +86,7 @@ async function loadModel(requestId: number, modelPath: string) {
     } else {
       buffer = await response.arrayBuffer();
     }
+    if (total > 0) postStatus(requestId, "setPercentageDownloaded", 1);
 
     currentModelPath = modelPath;
     currentModelBuffer = buffer;

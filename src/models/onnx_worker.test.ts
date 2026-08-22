@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { bytesToMebibytes, getModelSizeBytes } from "@/data/models";
 
 const ortMock = vi.hoisted(() => ({
   createSession: vi.fn(),
@@ -105,5 +106,44 @@ describe("onnx worker", () => {
         message: expect.stringContaining("WASM execution failed"),
       });
     });
+  });
+
+  it("uses the uncompressed asset size for download progress", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(new Uint8Array(8), {
+        status: 200,
+        headers: {
+          "content-encoding": "gzip",
+          "content-length": "4",
+        },
+      }),
+    );
+    const output = { dims: [1, 1, 4] };
+    ortMock.createSession.mockResolvedValue({
+      run: vi.fn().mockResolvedValue({ output }),
+    });
+
+    workerScope.onmessage?.({ data: predictionRequest() } as MessageEvent);
+
+    await vi.waitFor(() => {
+      expect(workerScope.postMessage).toHaveBeenCalledWith({
+        requestId: 7,
+        output,
+      });
+    });
+
+    const expectedBytes = getModelSizeBytes("/models/recurrent_net.onnx")!;
+    expect(workerScope.postMessage).toHaveBeenCalledWith({
+      requestId: 7,
+      status: "setModelSize",
+      value: bytesToMebibytes(expectedBytes),
+    });
+
+    const progress = workerScope.postMessage.mock.calls
+      .map(([message]) => message)
+      .filter((message) => message.status === "setPercentageDownloaded")
+      .map((message) => message.value);
+    expect(progress.at(-1)).toBe(1);
+    expect(progress.every((value) => value >= 0 && value <= 1)).toBe(true);
   });
 });
