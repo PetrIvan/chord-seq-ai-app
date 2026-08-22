@@ -1,7 +1,9 @@
+import { bytesToMebibytes, type ModelOption } from "@/data/models";
+
 interface Props {
   setSelectedModel: (model: number) => void;
   setShowModelDropdown: (show: boolean) => void;
-  models: [string, string, number][];
+  models: ModelOption[];
   modelDropdownRef: React.RefObject<HTMLDivElement | null>;
   customScrollbarEnabled: boolean;
 }
@@ -38,13 +40,13 @@ export default function modelDropdown({
             >
               <div className="relative flex w-full flex-row items-center justify-center">
                 <div>
-                  {model[0]}{" "}
+                  {model.name}{" "}
                   <span className="text-zinc-400">
-                    ({model[2].toFixed(2)} MB
-                    {model[0].includes("Conditional") ? "; style" : ""})
+                    ({bytesToMebibytes(model.sizeBytes).toFixed(2)} MB
+                    {model.name.includes("Conditional") ? "; style" : ""})
                   </span>
                 </div>
-                {model[0].includes("Conditional") && (
+                {model.name.includes("Conditional") && (
                   <span className="absolute right-0 mr-[1dvh]">✨</span>
                 )}
               </div>

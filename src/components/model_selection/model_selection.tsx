@@ -1,8 +1,9 @@
 "use client";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useStore } from "@/state/use_store";
 import { shallow } from "zustand/shallow";
 import { genres, decades } from "@/data/conditions";
+import { bytesToMebibytes, modelOptions } from "@/data/models";
 
 import ModelDropdown from "./model_dropdown";
 import StyleDropdown from "./style_dropdown";
@@ -29,30 +30,18 @@ export default function ModelSelection() {
   );
 
   // Model selection handling
-  const models: [string, string, number][] = useMemo(
-    () => [
-      ["Recurrent Network", "/models/recurrent_net.onnx", 1.44],
-      ["Transformer S", "/models/transformer_small.onnx", 4.47],
-      ["Transformer M", "/models/transformer_medium.onnx", 9.42],
-      ["Transformer L", "/models/transformer_large.onnx", 17.7],
-      ["Conditional Transformer S", "/models/conditional_small.onnx", 4.58],
-      ["Conditional Transformer M", "/models/conditional_medium.onnx", 9.6],
-      ["Conditional Transformer L", "/models/conditional_large.onnx", 18.0],
-    ],
-    [],
-  );
-
   const [selectedModel, setSelectedModel] = useState(
     Math.max(
-      models.findIndex((model) => model[1] === modelPath),
+      modelOptions.findIndex((model) => model.path === modelPath),
       0,
     ),
   );
 
   useEffect(() => {
-    setModelPath(models[selectedModel][1]);
-    setModelSize(models[selectedModel][2]);
-  }, [models, selectedModel, setModelPath, setModelSize]);
+    const model = modelOptions[selectedModel];
+    setModelPath(model.path);
+    setModelSize(bytesToMebibytes(model.sizeBytes));
+  }, [selectedModel, setModelPath, setModelSize]);
 
   // Dropdowns
   const [showModelDropdown, setShowModelDropdown] = useState(false);
@@ -135,7 +124,9 @@ export default function ModelSelection() {
           step={7}
           text="You can specify the genre and decade here"
           position="below"
-          elementRef={openStyleDropdownButtonRef as React.RefObject<HTMLElement>}
+          elementRef={
+            openStyleDropdownButtonRef as React.RefObject<HTMLElement>
+          }
         />
       </>
     );
@@ -145,15 +136,15 @@ export default function ModelSelection() {
     <section className="relative flex min-w-0 flex-row items-stretch justify-center rounded-[0.5dvw] bg-zinc-900 text-center">
       <button
         className={`flex min-w-0 flex-1 items-center justify-center whitespace-nowrap p-[1dvw] hover:bg-zinc-800 active:bg-zinc-800 rounded${
-          models[selectedModel][0].includes("Conditional") ? "-l" : ""
+          modelOptions[selectedModel].name.includes("Conditional") ? "-l" : ""
         }-[0.5dvw]`}
         title="Change model"
         ref={openModelDropdownButtonRef}
         onClick={() => setShowModelDropdown(!showModelDropdown)}
       >
-        <p className="truncate">{models[selectedModel][0]}</p>
+        <p className="truncate">{modelOptions[selectedModel].name}</p>
       </button>
-      {models[selectedModel][0].includes("Conditional") && (
+      {modelOptions[selectedModel].name.includes("Conditional") && (
         <>
           <div className="self-stretch border-r-[0.2dvw] border-white" />
           {style()}
@@ -164,7 +155,7 @@ export default function ModelSelection() {
         <ModelDropdown
           setSelectedModel={setSelectedModel}
           setShowModelDropdown={setShowModelDropdown}
-          models={models}
+          models={modelOptions}
           modelDropdownRef={modelDropdownRef}
           customScrollbarEnabled={customScrollbarEnabled}
         />
