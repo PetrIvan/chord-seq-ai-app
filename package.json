@@ -25,6 +25,10 @@
     "baseline-browser-mapping": "^2.11.0",
     "browserslist": "^4.28.7",
     "postcss": "^8.5.23",
+    "postcss-selector-parser": "^7.1.6",
+    "serve": {
+      "compression": "^1.8.2"
+    },
     "sharp": "$sharp"
   },
   "dependencies": {
@@ -54,7 +58,7 @@
     "rehype-slug": "^6.0.0",
     "remark": "^15.0.1",
     "remark-gfm": "^4.0.0",
-    "sharp": "^0.35.4",
+    "sharp": "^0.35.5",
     "strip-markdown": "^6.0.0",
     "tone": "^15.0.4",
     "zustand": "^4.5.7"
