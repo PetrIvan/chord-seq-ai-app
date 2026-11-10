@@ -22,6 +22,12 @@
     "react-scripts": {
       "typescript": "^5"
     },
+    "@serwist/build": {
+      "glob": "^14.0.4"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "^11.0.5"
+    },
     "baseline-browser-mapping": "^2.11.0",
     "browserslist": "^4.28.7",
     "postcss": "^8.5.23",
@@ -29,7 +35,8 @@
     "serve": {
       "compression": "^1.8.2"
     },
-    "sharp": "$sharp"
+    "sharp": "$sharp",
+    "zod@^4": "^4.6.7"
   },
   "dependencies": {
     "@breezystack/lamejs": "^1.2.7",
@@ -72,7 +79,7 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/react-virtualized": "^9.21.30",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.12",
     "autoprefixer": "^10.5.0",
     "esbuild": "^0.28.1",
     "eslint": "^9.39.4",
@@ -87,6 +94,6 @@
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "^3.4.4",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.12"
   }
 }
